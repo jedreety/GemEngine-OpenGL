@@ -1,0 +1,60 @@
+# Visual Studio specific files
+.vs/
+*.vcxproj.user
+*.suo
+*.user
+*.sdf
+*.cache
+*.log
+*.tlog
+*.lastbuildstate
+*.VC.db
+*.VC.opendb
+
+# Build directories
+bin/
+obj/
+Build/
+
+# Compiled object files
+*.obj
+*.o
+*.exe
+*.dll
+*.lib
+*.out
+
+# Precompiled headers
+*.pch
+*.ipch
+
+# Static libraries
+*.lib
+*.a
+
+# Debug files
+*.pdb
+*.ilk
+*.exp
+
+# Other temporary or generated files
+*.log
+*.tmp
+*.bak
+*.ncb
+*.sln.docstates
+
+# CMake generated files (if using CMake)
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CMakeLists.txt.user
+Makefile
+
+# Backup and swap files
+*.swp
+*.bak
+
+# Directories for Visual Studio Code (optional, if using)
+.vscode/
+

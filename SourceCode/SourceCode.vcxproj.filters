@@ -34,6 +34,18 @@
     <Filter Include="Source Files\Game\Engine\Graphics\Shader">
       <UniqueIdentifier>{610bafbc-6329-4911-be82-93b6809949ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Engine\GLStructure">
+      <UniqueIdentifier>{f881433b-97c7-47f6-8121-5050f47bde94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\GLStructure\Vao">
+      <UniqueIdentifier>{fc1f062e-4f6e-4425-8b54-592c7994d54b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\GLStructure\Vbo">
+      <UniqueIdentifier>{93408d78-620c-40e5-8e89-184fdf60da6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\GLStructure\Ibo">
+      <UniqueIdentifier>{d5b1f57d-d966-4559-a38a-d6cd317cee5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -54,6 +66,15 @@
     <ClCompile Include="shaderProgram.cpp">
       <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="IBO.cpp">
+      <Filter>Source Files\Game\Engine\GLStructure\Ibo</Filter>
+    </ClCompile>
+    <ClCompile Include="VBO.cpp">
+      <Filter>Source Files\Game\Engine\GLStructure\Vbo</Filter>
+    </ClCompile>
+    <ClCompile Include="VAO.cpp">
+      <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -64,6 +85,15 @@
     </ClInclude>
     <ClInclude Include="shaderProgram.h">
       <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="IBO.h">
+      <Filter>Source Files\Game\Engine\GLStructure\Ibo</Filter>
+    </ClInclude>
+    <ClInclude Include="VBO.h">
+      <Filter>Source Files\Game\Engine\GLStructure\Vbo</Filter>
+    </ClInclude>
+    <ClInclude Include="VAO.h">
+      <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

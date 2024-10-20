@@ -1,2 +1,3 @@
 C:\Users\Mehdi\OneDrive\Documents\GitHub\INFO\But1-Info-ParisRDS\Projet Perso\CPP\MinecraftClone\SourceCode\x64\Debug\SourceCode.exe
 C:\Users\Mehdi\OneDrive\Documents\MinecraftClone\SourceCode\x64\Debug\SourceCode.exe
+C:\Users\Mehdi\OneDrive\Documents\GitHub\MinecraftClone\SourceCode\x64\Debug\SourceCode.exe

@@ -1,14 +1,15 @@
 
 #include "game.h"
 
+
 // Vertices coordinates
 GLfloat vertices[] =
 { //     COORDINATES   
-	-0.5f, 0.0f,  0.5f,
-	-0.5f, 0.0f, -0.5f,
-	 0.5f, 0.0f, -0.5f,
-	 0.5f, 0.0f,  0.5f,
-	 0.0f, 0.8f,  0.0f,
+	-0.5f,  0.5f,  0.0f,
+	-0.5f, -0.5f,  0.0f,
+	 0.5f, -0.5f,  0.0f,
+	 0.5f,  0.5f,  0.0f,
+	 0.0f,  0.0f,  0.0f,
 };
 
 // Indices for vertices order
@@ -22,125 +23,135 @@ GLuint indices[] =
 	3, 0, 4
 };
 
-namespace Game
-{
-	Game::Game() {
-		// Initialize GLFW
-		load_GLFW();
 
-		// Set the OpenGL version to 3.3
-		set_openGL_version(3, 3);
-		// Tell GLFW to use the core profile
-		set_openGL_profile(GLFW_OPENGL_CORE_PROFILE);
+Game::Game() {
+	// Initialize GLFW
+	load_GLFW();
 
-		// Create the window
-		window_ = new Engine::Window();
-		// Set the window attributes
-		window_->set_width(800);
-		window_->set_height(600);
-		window_->set_title("Minecraft Clone");
-		// Initialize the window
-		window_->Init();
+	// Set the OpenGL version to 3.3
+	set_openGL_version(3, 3);
+	// Tell GLFW to use the core profile
+	set_openGL_profile(GLFW_OPENGL_CORE_PROFILE);
 
-		// Load OpenGL functions
-		load_GLAD();
+	// Create the window
+	window_ = new Engine::Window();
+	// Set the window attributes
+	window_->set_width(800);
+	window_->set_height(600);
+	window_->set_title("Minecraft Clone");
+	// Initialize the window
+	window_->Init();
 
-		// Create the shader program
-		shader_ = new Engine::Graphics::Shader();
-		shader_->create_shader("default.vert", "default.frag");
+	// Load OpenGL functions
+	load_GLAD();
 
-		// Vertices coordinates
-		GLfloat vertices[] =
-		{
-			-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
-			0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
-			0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // Upper corner
-		};
+	// Set OpenGL parameters
+	set_parameters();
 
-		// Create reference containers for the Vartex Array Object and the Vertex Buffer Object
-		GLuint VBO;
+	// Create the shader program
+	shader_ = new Engine::Graphics::Shader();
+	shader_->create_shader("default.vert", "default.frag");
 
-		// Generate the VAO and VBO with only 1 object each
-		glGenVertexArrays(1, &VAO);
-		glGenBuffers(1, &VBO);
+	// Generate the VAO (Vertex Array Object) and VBO (Vertex Buffer Object) with only one object each
+	VAO_.gen_VAO();
+	VBO_.gen_VBO();
+	IBO_.gen_IBO();
 
-		// Make the VAO the current Vertex Array Object by binding it
-		glBindVertexArray(VAO);
+	// Make the VAO the current Vertex Array Object by binding it
+	VAO_.Bind();
 
-		// Bind the VBO specifying it's a GL_ARRAY_BUFFER
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		// Introduce the vertices into the VBO
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	// Upload the vertex data to the VBO
+	VBO_.insert_vertices(vertices, sizeof(vertices));
+	
+	// Upload the indices data to the IBO
+	IBO_.insert_indices(indices, sizeof(indices));
 
-		// Configure the Vertex Attribute so that OpenGL knows how to read the VBO
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		// Enable the Vertex Attribute so that OpenGL knows to use it
-		glEnableVertexAttribArray(0);
+	// Link the VBO to the VAO with the layout 0
+	VAO_.LinkAttrib(VBO_, 0, 3, GL_FLOAT, 0, (void*)0);
 
-		// Bind both the VBO and VAO to 0 so that we don't accidentally modify the VAO and VBO we created
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
+	// Unbind both the VBO and VAO so that we don't accidentally modify them later
+	VBO_.Unbind();
+	VAO_.Unbind();
+	IBO_.Unbind();
 
+}
+
+void Game::run() {
+
+	// The main game loop
+	while (!window_->is_closed()) // Check if the window is closed
+	{
+		// Draw the frame
+
+		window_->postFrame();
+
+		// Tell OpenGL which Shader Program we want to use
+		shader_->Activate();
+		// Bind the VAO so OpenGL knows to use it
+		VAO_.Bind();
+		// Draw
+		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
+
+		window_->afterFrame();
 	}
 
-	void Game::run() {
+	VAO_.Delete();
+	VBO_.Delete();
+	IBO_.Delete();
+	shader_->Delete();
 
-		// The main game loop
-		while (!window_->is_closed()) // Check if the window is closed
-		{
-			// Draw the frame
+	std::cout << "Game loop exited" << std::endl;
 
-			window_->postFrame();
+}
 
-			// Tell OpenGL which Shader Program we want to use
-			shader_->Activate();
-			// Bind the VAO so OpenGL knows to use it
-			glBindVertexArray(VAO);
-			// Draw the triangle using the GL_TRIANGLES primitive
-			glDrawArrays(GL_TRIANGLES, 0, 3);
+Game::~Game() {
 
-			window_->afterFrame();
-		}
+	delete window_;
+	// Terminate GLFW
+	glfwTerminate();
+}
 
-		std::cout << "Game loop exited" << std::endl;
+void Game::load_GLFW() {
 
+	if (!glfwInit()) {
+		// Handle GLFW initialization failure
+		std::cerr << "Failed to initialize GLFW" << std::endl;
+		exit(EXIT_FAILURE);
 	}
+}
 
-	Game::~Game() {
+void Game::set_openGL_version(const int major, const int minor) {
+	// Set the OpenGL version to major.minor
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+}
 
-		delete window_;
-		// Terminate GLFW
-		glfwTerminate();
+void Game::set_openGL_profile(const int profile) {
+	// Set the OpenGL profile
+	glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
+}
+
+void Game::load_GLAD() {
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		// Handle GLAD initialization failure
+		glGetError();
+		std::cerr << "Failed to initialize GLAD" << std::endl;
+		exit(EXIT_FAILURE);
 	}
+}
 
-	void Game::load_GLFW() {
-
-		if (!glfwInit()) {
-			// Handle GLFW initialization failure
-			std::cerr << "Failed to initialize GLFW" << std::endl;
-			exit(EXIT_FAILURE);
-		}
-	}
-
-	void Game::set_openGL_version(const int major, const int minor) {
-		// Set the OpenGL version to major.minor
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
-	}
-
-	void Game::set_openGL_profile(const int profile) {
-		// Set the OpenGL profile
-		glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
-	}
-
-	void Game::load_GLAD() {
-
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-			// Handle GLAD initialization failure
-			glGetError();
-			std::cerr << "Failed to initialize GLAD" << std::endl;
-			exit(EXIT_FAILURE);
-		}
-	}
-
+void Game::set_parameters() {
+	// Enables the Depth Buffer
+	glEnable(GL_DEPTH_TEST);
+	// Enables Cull Facing
+	glEnable(GL_CULL_FACE);
+	// Keeps front faces
+	glCullFace(GL_FRONT);
+	// Uses counter clock-wise standard
+	glFrontFace(GL_CCW);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }

@@ -21,7 +21,7 @@
 int main(void) {
 
 	// Create and run the game
-	Game::Game Game;
+	Game Game;
 	Game.run();
 
 	return 0;

@@ -1,37 +1,48 @@
 #pragma once
 
 #include<iostream>
+
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+
 #include "window.h"
+
 #include "shaderProgram.h"
 
-namespace Game
+#include "VAO.h"
+#include "VBO.h"
+#include "IBO.h"
+
+
+class Game
 {
-	class Game
-	{
-	public:
-		Game();
-		~Game();
+public:
+	Game();
+	void run();
 
-		// Initialize GLFW
-		void load_GLFW();
+	~Game();
 
-		// Set the OpenGL version
-		void set_openGL_version(const int major, const int minor);
+	// Initialize GLFW
+	void load_GLFW();
 
-		// Set the OpenGL profile
-		void set_openGL_profile(const int profile);
+	// Set the OpenGL version
+	void set_openGL_version(const int major, const int minor);
 
-		// Load the OpenGL functions
-		void load_GLAD();
+	// Set the OpenGL profile
+	void set_openGL_profile(const int profile);
 
-		void run();
+	// Load the OpenGL functions
+	void load_GLAD();
 
-	private:
-		Engine::Window* window_;
-		Engine::Graphics::Shader* shader_;
-		GLuint VAO;
-	};
+	void set_parameters();
 
-}
+private:
+	Engine::Window* window_;
+
+	Engine::Graphics::Shader* shader_;
+
+	Engine::GL::VAO VAO_;
+	Engine::GL::VBO VBO_;
+	Engine::GL::IBO IBO_;
+};
+
