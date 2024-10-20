@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\shader">
+      <UniqueIdentifier>{c1c58d2f-0d2c-49a1-9643-3c30a5e8e33e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\texture">
+      <UniqueIdentifier>{a8ffd59c-3be0-43be-8851-f55e837e7965}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{9a61ebd4-e7c5-452c-91ae-fcb023658e38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine">
+      <UniqueIdentifier>{3d1f41da-b3d6-4401-b91d-a7c3f82240bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Window">
+      <UniqueIdentifier>{0488d518-88fe-405c-96f8-2d2e0fc106e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Graphics">
+      <UniqueIdentifier>{517f87d9-bef2-482e-ba5b-a191b8af3979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Graphics\Shader">
+      <UniqueIdentifier>{610bafbc-6329-4911-be82-93b6809949ba}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>Source Files\Game\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="shaderProgram.cpp">
+      <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="game.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="window.h">
+      <Filter>Source Files\Game\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderProgram.h">
+      <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="default.vert">
+      <Filter>Resource Files\shader</Filter>
+    </Text>
+    <Text Include="default.frag">
+      <Filter>Resource Files\shader</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
