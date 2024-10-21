@@ -43,6 +43,10 @@ namespace Engine
 
 			void Delete();
 
+			inline GLuint get_ID() const { 
+				return ID_; 
+			}
+
 
 		private:
 			// Reference to the Shader Program, vertex shader and fragment shader

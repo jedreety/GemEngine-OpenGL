@@ -21,8 +21,8 @@
 int main(void) {
 
 	// Create and run the game
-	Game Game;
-	Game.run();
+	Game GameInstance;
+	GameInstance.run();
 
 	return 0;
 }

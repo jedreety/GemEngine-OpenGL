@@ -153,6 +153,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shaderProgram.cpp" />
     <ClCompile Include="stb.cpp" />
+    <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="VAO.cpp" />
     <ClCompile Include="VBO.cpp" />
     <ClCompile Include="window.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="IBO.h" />
     <ClInclude Include="shaderProgram.h" />
+    <ClInclude Include="textureManager.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="VBO.h" />
     <ClInclude Include="window.h" />

@@ -11,7 +11,7 @@ namespace Engine
 			nb_object_ = 1;
 		}
 
-		void VAO::gen_VAO() {
+		void VAO::generate() {
 			glGenVertexArrays(nb_object_, &ID_);
 		}
 

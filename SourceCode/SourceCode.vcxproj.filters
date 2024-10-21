@@ -46,6 +46,12 @@
     <Filter Include="Source Files\Game\Engine\GLStructure\Ibo">
       <UniqueIdentifier>{d5b1f57d-d966-4559-a38a-d6cd317cee5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Engine\Graphics\Texture">
+      <UniqueIdentifier>{6159899c-056e-4267-b2ba-efd7296ac734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Graphics\Texture\TextureManager">
+      <UniqueIdentifier>{4b98a5cd-b84f-47b8-a1a0-21934770eaf5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -75,6 +81,9 @@
     <ClCompile Include="VAO.cpp">
       <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
     </ClCompile>
+    <ClCompile Include="textureManager.cpp">
+      <Filter>Source Files\Game\Engine\Graphics\Texture\TextureManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -94,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="VAO.h">
       <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
+    </ClInclude>
+    <ClInclude Include="textureManager.h">
+      <Filter>Source Files\Game\Engine\Graphics\Texture\TextureManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

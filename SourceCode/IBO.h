@@ -12,7 +12,7 @@ namespace Engine
 		public:
 
 			IBO();
-			void gen_IBO();
+			void generate();
 			void set_nb_object(const GLsizei nb_object);
 			void insert_indices(GLuint* indices, GLsizeiptr size);
 
@@ -23,11 +23,11 @@ namespace Engine
 			// Deletes the EBO
 			void Delete () const;
 
-			GLuint get_ID() const {
+			inline GLuint get_ID() const {
 				return ID_;
 			};
 
-			GLsizei get_nb_object() const {
+			inline GLsizei get_nb_object() const {
 				return nb_object_;
 			};
 

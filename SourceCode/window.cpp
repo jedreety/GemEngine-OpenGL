@@ -68,7 +68,7 @@ namespace Engine {
             glfwDestroyWindow(window_);
     }
 
-	bool Window::is_attr_set() {
+	inline bool Window::is_attr_set() const {
 		return width_ && height_ && title_;
 	}
 
@@ -82,30 +82,30 @@ namespace Engine {
 		}
 	}
 
-	void Window::set_context_current() {
+	void Window::set_context_current() const {
 		// Tell OpenGL to use the window
 		glfwMakeContextCurrent(window_);
 	}
 
-	void Window::set_callbacks() {
+	void Window::set_callbacks() const {
 		// Bind the window to the key callback function
 		glfwSetKeyCallback(window_, key_callback);
 		// Bind the window to the resize callback function
 		glfwSetFramebufferSizeCallback(window_, framebuffer_size_callback);
 	}
 
-	void Window::set_vsync() {
+	void Window::set_vsync() const {
 		// OpenGL set VSync
 		glfwSwapInterval(VSync_);
 	}
 
 			
-	void Window::clear_frame() {
-        // Clean the back buffer and assign the new color to it
+	void Window::clear_frame() const {
+        // Clean the back buffer and depth buffer and assign the new color to it
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 			
-	void Window::postFrame() {
+	void Window::postFrame() const {
         // Specify the color of the background
         glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
 		// Clear the color buffer
@@ -113,7 +113,7 @@ namespace Engine {
 
     }
 			
-	void Window::afterFrame() {
+	void Window::afterFrame() const {
         // Swap front and back buffers
         glfwSwapBuffers(window_);
 

@@ -8,6 +8,7 @@
 #include "window.h"
 
 #include "shaderProgram.h"
+#include "textureManager.h"
 
 #include "VAO.h"
 #include "VBO.h"
@@ -40,6 +41,7 @@ private:
 	Engine::Window* window_;
 
 	Engine::Graphics::Shader* shader_;
+	Engine::Graphics::Texture::TextureManager* textureManager_;
 
 	Engine::GL::VAO VAO_;
 	Engine::GL::VBO VBO_;

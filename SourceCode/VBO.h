@@ -13,7 +13,7 @@ namespace Engine
 			VBO();
 
 			// generates a VBO ID
-			void gen_VBO();
+			void generate();
 			// set the number of object of the VBO
 			void set_nb_object(const GLsizei nb_object);
 			// Introduces the vertices to the VBO
@@ -26,11 +26,11 @@ namespace Engine
 			// Deletes the VBO
 			void Delete() const;
 		
-			GLuint get_ID() const {
+			inline GLuint get_ID() const {
 				return ID_;
 			};
 
-			GLsizei get_nb_object() const {
+			inline GLsizei get_nb_object() const {
 				return nb_object_;
 			};
 

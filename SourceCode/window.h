@@ -28,55 +28,60 @@ namespace Engine
 		~Window();
 
 		// Return true if the window attributes are set
-		bool is_attr_set();
+		inline bool is_attr_set() const;
 		// Create the OpenGL window
 		void create_window();
 		// Make the window the one we will be working with
-		void set_context_current();
+		void set_context_current() const;
 		// Bind the Resize and Key call back functions
-		void set_callbacks();
+		void set_callbacks() const;
 
-		void set_vsync();
+		void set_vsync() const;
 
 			
 		// Clear the color buffer
-		void clear_frame();
+		void clear_frame() const;
 		// First thing rendered into the window
-		void postFrame();
+		void postFrame() const;
 		// Last thing rendered into the window
-		void afterFrame();
+		void afterFrame() const;
 
 		// Check if the window is closed
 		bool is_closed() { 
 			return glfwWindowShouldClose(window_); 
 		};
 
-		int get_width() const { 
+		inline int get_width() const { 
 			return width_; 
 		};
-		int get_height() const { 
+		inline int get_height() const { 
 			return height_; 
 		};
 
-		void set_width(const int width) {
+		inline void set_attr(const int width, const int height, const char* title) {
+			set_dimensions(width, height);
+			set_title(title);
+		};
+
+		inline void set_width(const int width) {
 			width_ = width; 
 		};
-		void set_height(const int height) {
+		inline void set_height(const int height) {
 			height_ = height; 
 		};
-		void set_title(const char* title) {
+		inline void set_title(const char* title) {
 			title_ = title;
 		};
-		void set_vsync(const bool vsync) {
+		inline void set_vsync(const bool vsync) {
 			VSync_ = vsync;
 		};
 
-		void set_dimention(const int width, const int height) {
+		void set_dimensions(const int width, const int height) {
 			set_width(width);
 			set_height(height);
 		}
 
-		GLFWwindow* get_windowPtr() { 
+		inline GLFWwindow* get_windowPtr() const { 
 			return window_; 
 		};
 
@@ -87,7 +92,7 @@ namespace Engine
 
 		unsigned int width_ = 0;
 		unsigned int height_ = 0;
-		bool VSync_ = 1;
+		bool VSync_ = true;
 
 	};
 	

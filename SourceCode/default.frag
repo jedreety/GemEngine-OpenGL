@@ -2,8 +2,10 @@
 // specify we are indeed using modern opengl
 
 out vec4 fragment_colour; // output of our shader
-in vec3 frag_pos; // input of our shader
+
+in vec2 TexCoord; // Receive texture coordinates from vertex shader
+uniform sampler2DArray texture_array; // texture array
 
 void main(void) {
-	fragment_colour = vec4(frag_pos * 0.75f + 0.5f, 1.0f); // set the output colour based on the vertex position
+	fragment_colour = texture(texture_array, vec3(TexCoord, 0));
 }

@@ -11,7 +11,7 @@ namespace Engine
 			nb_object_ = 1;
 		}
 
-		void VBO::gen_VBO() {
+		void VBO::generate() {
 			glGenBuffers(nb_object_, &ID_);
 		}
 
