@@ -3,23 +3,69 @@
 
 GLfloat vertices[] = {
 	// Positions          // Texture Coords
-	-0.5f,  0.5f,  0.0f,   0.0f, 1.0f, // Vertex 0
-	-0.5f, -0.5f,  0.0f,   0.0f, 0.0f, // Vertex 1
-	 0.5f, -0.5f,  0.0f,   1.0f, 0.0f, // Vertex 2
-	 0.5f,  0.5f,  0.0f,   1.0f, 1.0f, // Vertex 3
-	 0.0f,  0.0f,  0.0f,   0.5f, 0.5f  // Vertex 4
+	// Front face
+	-0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // Vertex 0
+	-0.5f, -0.5f,  0.5f,   0.0f, 0.0f,  // Vertex 1
+	 0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  // Vertex 2
+	 0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // Vertex 3
+
+	 // Back face
+	  0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // Vertex 4
+	  0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Vertex 5
+	 -0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Vertex 6
+	 -0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Vertex 7
+
+	 // Left face
+	 -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // Vertex 8
+	 -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Vertex 9
+	 -0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  // Vertex 10
+	 -0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // Vertex 11
+
+	 // Right face
+	  0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // Vertex 12
+	  0.5f, -0.5f,  0.5f,   0.0f, 0.0f,  // Vertex 13
+	  0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Vertex 14
+	  0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Vertex 15
+
+	  // Top face
+	  -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // Vertex 16
+	  -0.5f,  0.5f,  0.5f,   0.0f, 0.0f,  // Vertex 17
+	   0.5f,  0.5f,  0.5f,   1.0f, 0.0f,  // Vertex 18
+	   0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Vertex 19
+
+	   // Bottom face
+	   -0.5f, -0.5f,  0.5f,   0.0f, 1.0f,  // Vertex 20
+	   -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Vertex 21
+		0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Vertex 22
+		0.5f, -0.5f,  0.5f,   1.0f, 1.0f   // Vertex 23
 };
 
-// Indices for vertices order
-GLuint indices[] =
-{
+GLuint indices[] = {
+	// Front face (counter-clockwise)
+	0, 3, 2,
 	2, 1, 0,
-	3, 2, 0,
-	0, 1, 4,
-	1, 2, 4,
-	2, 3, 4,
-	3, 0, 4
+
+	// Back face (counter-clockwise)
+	4, 7, 6,
+	6, 5, 4,
+
+	// Left face (counter-clockwise)
+	8, 11, 10,
+	10, 9, 8,
+
+	// Right face (counter-clockwise)
+	12, 15, 14,
+	14, 13, 12,
+
+	// Top face (counter-clockwise)
+	16, 19, 18,
+	18, 17, 16,
+
+	// Bottom face (counter-clockwise)
+	20, 23, 22,
+	22, 21, 20
 };
+
 
 
 Game::Game() {
@@ -78,6 +124,9 @@ Game::Game() {
 
 	set_parameters();
 
+	camera_ = new Engine::Camera();
+	camera_->set_attr(window_->get_width(), window_->get_height(), glm::vec3(0.0f, 0.0f, 2.0f));
+
 	// Unbind both the VBO and VAO so that we don't accidentally modify them later
 	VBO_.Unbind();
 	VAO_.Unbind();
@@ -97,6 +146,9 @@ void Game::run() {
 
 		// Tell OpenGL which Shader Program we want to use
 		shader_->Activate();
+
+		camera_->Inputs(window_->get_windowPtr());
+		camera_->Matrix(shader_);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D_ARRAY, textureManager_->get_textureArrayID());

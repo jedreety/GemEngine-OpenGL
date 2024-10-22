@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Game\Engine\Graphics\Texture\TextureManager">
       <UniqueIdentifier>{4b98a5cd-b84f-47b8-a1a0-21934770eaf5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Engine\Camera">
+      <UniqueIdentifier>{2ea4c259-d07a-43e0-8c2d-2a433499db8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -84,6 +87,9 @@
     <ClCompile Include="textureManager.cpp">
       <Filter>Source Files\Game\Engine\Graphics\Texture\TextureManager</Filter>
     </ClCompile>
+    <ClCompile Include="cameraProgram.cpp">
+      <Filter>Source Files\Game\Engine\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -106,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="textureManager.h">
       <Filter>Source Files\Game\Engine\Graphics\Texture\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraProgram.h">
+      <Filter>Source Files\Game\Engine\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

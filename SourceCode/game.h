@@ -7,6 +7,8 @@
 
 #include "window.h"
 
+#include "cameraProgram.h"
+
 #include "shaderProgram.h"
 #include "textureManager.h"
 
@@ -38,7 +40,10 @@ public:
 	void set_parameters();
 
 private:
+
 	Engine::Window* window_;
+
+	Engine::Camera* camera_;
 
 	Engine::Graphics::Shader* shader_;
 	Engine::Graphics::Texture::TextureManager* textureManager_;

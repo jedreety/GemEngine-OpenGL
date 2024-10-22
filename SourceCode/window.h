@@ -92,7 +92,7 @@ namespace Engine
 
 		unsigned int width_ = 0;
 		unsigned int height_ = 0;
-		bool VSync_ = true;
+		bool VSync_ = false;
 
 	};
 	
