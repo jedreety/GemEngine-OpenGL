@@ -1,9 +1,12 @@
 #pragma once
 
 #include<iostream>
+#include <memory>
 
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+
+#include "network_client.h"
 
 #include "window.h"
 
@@ -13,8 +16,7 @@
 #include "textureManager.h"
 
 #include "VAO.h"
-#include "VBO.h"
-#include "IBO.h"
+#include "buffer.h"
 
 
 class Game
@@ -24,6 +26,8 @@ public:
 	void run();
 
 	~Game();
+
+private:
 
 	// Initialize GLFW
 	void load_GLFW();
@@ -39,17 +43,28 @@ public:
 
 	void set_parameters();
 
-private:
+	void updateDeltaTime();
 
-	Engine::Window* window_;
 
-	Engine::Camera* camera_;
+	std::unique_ptr<Engine::Window> window_;
 
-	Engine::Graphics::Shader* shader_;
-	Engine::Graphics::Texture::TextureManager* textureManager_;
+	std::unique_ptr<Engine::Camera> camera_;
+	bool positionChanged_;
+
+	std::unique_ptr<Engine::Graphics::Texture::TextureManager> textureManager_;
+	std::unique_ptr<Engine::Graphics::Shader> shader_;
 
 	Engine::GL::VAO VAO_;
-	Engine::GL::VBO VBO_;
-	Engine::GL::IBO IBO_;
-};
+	Engine::GL::Buffer VBO_;
+	Engine::GL::Buffer IBO_;
 
+	float deltaTime_ = 0.0f;
+	double last_frameTime_ = 0.0;
+
+	float fpsAccumulator_;
+	int frameCount_;
+
+	NetworkClient* networkClient_;
+	glm::vec3 playerPosition_;
+	std::unordered_map<enet_uint32, glm::vec3> otherPlayersPositions_;
+};

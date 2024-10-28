@@ -27,6 +27,11 @@ namespace Engine
 
 				Bind();
 
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 				glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, width_, height_, max_texture_units_, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 			}
 
@@ -59,7 +64,7 @@ namespace Engine
 			void TextureManager::AddTexture(const std::string& texture_name) {
 				if (textures_.size() < max_texture_units_) {
 					if (std::find(textures_.begin(), textures_.end(), texture_name) != textures_.end()) {
-						std::cerr << "ERROR::TextureManager::AddTexture: Texture already exists" << std::endl;
+						std::cerr << "ERROR::TextureManager::AddTexture: Texture " << texture_name << " already exists" << std::endl;
 					}
 					else {
 						textures_.push_back(texture_name);
@@ -68,6 +73,15 @@ namespace Engine
 						const std::string texture_path = texture_name + ".png";
 
 						unsigned char* texture_image = stbi_load(texture_path.c_str(), &width, &height, &bpp, 4);
+
+
+						if (width_ != width || height_ != height) {
+							std::cerr << "ERROR::TextureManager::AddTexture: Texture " << texture_name << " has different dimensions" << std::endl;
+							textures_.pop_back();
+							if (texture_image) stbi_image_free(texture_image);
+							return;
+						}
+
 						if (texture_image) {
 
 							Bind();
@@ -78,7 +92,7 @@ namespace Engine
 
 						}
 						else {
-							std::cerr << "Failed to load image!" << std::endl;
+							std::cerr << "Failed to load " << texture_name << " image!" << std::endl;
 						}
 					}
 				}

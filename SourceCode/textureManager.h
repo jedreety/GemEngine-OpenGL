@@ -23,12 +23,6 @@ namespace Engine
 				void Init();
 				~TextureManager();
 
-				// Check if the windows attributes are set
-				inline bool is_attr_set() const;
-
-				void generate();
-
-
 				void Bind() const ;
 				void Unbind() const ;
 				void GenerateMipMaps() const;
@@ -81,6 +75,11 @@ namespace Engine
 				GLuint width_ = 0;
 				GLuint height_ = 0;
 				std::list<std::string> textures_ = {};
+
+				// Check if the windows attributes are set
+				inline bool is_attr_set() const;
+
+				void generate();
 			};
 
 		}

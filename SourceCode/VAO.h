@@ -1,7 +1,8 @@
 #pragma once
 
+#include<iostream>
 #include<glad/glad.h>
-#include "VBO.h"
+#include "buffer.h"
 
 namespace Engine
 {
@@ -13,24 +14,27 @@ namespace Engine
 		public:
 
 			VAO();
+			~VAO();
 
 			// generates a VAO ID
 			void generate();
 
-			// set the number of object of the VAO
-			void set_nb_object(const GLsizei nb_object);
-
 			// Links a VBO to the VAO using a certain layout
-			void LinkAttrib(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
+			void link_attrib(Buffer& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
 
 			// Binds the VAO
-			void Bind();
+			void bind() const;
 
 			// Unbinds the VAO
-			void Unbind();
+			void unbind();
 
-			// Deletes the VAO
-			void Delete() const;
+			void cleanup();
+
+			// set the number of object of the VAO
+			inline void set_nb_object(const GLsizei nb_object) {
+				nb_object_ = nb_object;
+			};
+
 
 			inline GLuint get_ID() const {
 				return ID_;
@@ -41,8 +45,9 @@ namespace Engine
 			};
 
 		private:
-			GLuint ID_;
-			GLsizei nb_object_;
+			GLuint ID_ = 0;
+			GLsizei nb_object_ = 0;
+			bool is_generated_ = false;
 		};
 	}
 }

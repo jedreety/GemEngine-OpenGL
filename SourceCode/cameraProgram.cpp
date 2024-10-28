@@ -29,13 +29,28 @@ namespace Engine {
 			exit(EXIT_FAILURE);
 			return;
 		}
+
 	}
 
 	inline bool Camera::is_attr_set() const {
 		return width_ != 0 && height_ != 0 && position_ != glm::vec3();
 	}
 
-	void Camera::Matrix(const Engine::Graphics::Shader* shader) const {
+	void Camera::set_Matrix_location(const Engine::Graphics::Shader* shader) {
+		// Set the location to avoid repetition
+		projectionMatrixLocation_ = glGetUniformLocation(shader->get_ID(), "projectionMatrix");
+		viewMatrixLocation_ = glGetUniformLocation(shader->get_ID(), "viewMatrix");
+	}
+
+	void Camera::Matrix() const {
+		// Check if the location of the matrices has been set
+		if (projectionMatrixLocation_ == -1 || viewMatrixLocation_ == -1)
+		{
+			std::cerr << "ERROR::CAMERA::MATRIX : The location of the matrices has not been set." << std::endl;
+			exit(EXIT_FAILURE);
+			return;
+		}
+		
 		// Initializes matrices since otherwise they will be the null matrix
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
@@ -46,8 +61,8 @@ namespace Engine {
 		projection = glm::perspective(glm::radians(fov_), (float)width_ / height_, nearPlane_, farPlane_);
 
 		// Exports the camera matrix to the Vertex Shader
-		glUniformMatrix4fv(glGetUniformLocation(shader->get_ID(), "projectionMatrix"), 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(glGetUniformLocation(shader->get_ID(), "viewMatrix"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projectionMatrixLocation_, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(viewMatrixLocation_, 1, GL_FALSE, glm::value_ptr(view));
 
 	}
 
@@ -92,7 +107,7 @@ namespace Engine {
 		{
 			speed_ = 0.004f;
 		}
-		else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+		else
 		{
 			speed_ = 0.001f;
 		}

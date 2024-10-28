@@ -40,12 +40,6 @@
     <Filter Include="Source Files\Game\Engine\GLStructure\Vao">
       <UniqueIdentifier>{fc1f062e-4f6e-4425-8b54-592c7994d54b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Engine\GLStructure\Vbo">
-      <UniqueIdentifier>{93408d78-620c-40e5-8e89-184fdf60da6e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Engine\GLStructure\Ibo">
-      <UniqueIdentifier>{d5b1f57d-d966-4559-a38a-d6cd317cee5d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Engine\Graphics\Texture">
       <UniqueIdentifier>{6159899c-056e-4267-b2ba-efd7296ac734}</UniqueIdentifier>
     </Filter>
@@ -54,6 +48,18 @@
     </Filter>
     <Filter Include="Source Files\Game\Engine\Camera">
       <UniqueIdentifier>{2ea4c259-d07a-43e0-8c2d-2a433499db8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\GLStructure\BufferObject">
+      <UniqueIdentifier>{212cf780-0091-488e-84c4-53adcd6911d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Network">
+      <UniqueIdentifier>{f73c695f-ed5c-42e1-a7bb-77400054e88d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Network\Serveur">
+      <UniqueIdentifier>{8f7903c7-5b20-4693-ae84-a8d3ba0c92f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Network\Client">
+      <UniqueIdentifier>{1d9c856f-91ac-479f-bbef-6ba7e5dead97}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,12 +81,6 @@
     <ClCompile Include="shaderProgram.cpp">
       <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="IBO.cpp">
-      <Filter>Source Files\Game\Engine\GLStructure\Ibo</Filter>
-    </ClCompile>
-    <ClCompile Include="VBO.cpp">
-      <Filter>Source Files\Game\Engine\GLStructure\Vbo</Filter>
-    </ClCompile>
     <ClCompile Include="VAO.cpp">
       <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
     </ClCompile>
@@ -89,6 +89,15 @@
     </ClCompile>
     <ClCompile Include="cameraProgram.cpp">
       <Filter>Source Files\Game\Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="buffer.cpp">
+      <Filter>Source Files\Game\Engine\GLStructure\BufferObject</Filter>
+    </ClCompile>
+    <ClCompile Include="network_server.cpp">
+      <Filter>Source Files\Game\Network\Serveur</Filter>
+    </ClCompile>
+    <ClCompile Include="network_client.cpp">
+      <Filter>Source Files\Game\Network\Client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,12 +110,6 @@
     <ClInclude Include="shaderProgram.h">
       <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="IBO.h">
-      <Filter>Source Files\Game\Engine\GLStructure\Ibo</Filter>
-    </ClInclude>
-    <ClInclude Include="VBO.h">
-      <Filter>Source Files\Game\Engine\GLStructure\Vbo</Filter>
-    </ClInclude>
     <ClInclude Include="VAO.h">
       <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
     </ClInclude>
@@ -115,6 +118,15 @@
     </ClInclude>
     <ClInclude Include="cameraProgram.h">
       <Filter>Source Files\Game\Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer.h">
+      <Filter>Source Files\Game\Engine\GLStructure\BufferObject</Filter>
+    </ClInclude>
+    <ClInclude Include="network_server.h">
+      <Filter>Source Files\Game\Network\Serveur</Filter>
+    </ClInclude>
+    <ClInclude Include="network_client.h">
+      <Filter>Source Files\Game\Network\Client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

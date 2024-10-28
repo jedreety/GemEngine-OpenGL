@@ -1,61 +1,48 @@
 #pragma once
 
-#include<glad/glad.h>
-#include<string>
-#include<fstream>
-#include<sstream>
-#include<iostream>
-#include<cerrno>
+#include <glad/glad.h>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
 
-std::string get_file_contents(const char* filename);
+
 namespace Engine
 {
+    namespace Graphics
+    {
+        class Shader
+        {
+        public:
+            Shader();
+            ~Shader();
 
-	namespace Graphics
-	{
+            // Adds a shader of any type
+            void add_shader(GLenum shaderType, const char* shaderFile);
 
-		class Shader
-		{
-		public:
+            // Links and validates the shader program
+            void link_program();
 
-			Shader();
-			~Shader();
-				
-			// Creates the Shader Program
-			void create_shader(const char* vertexFile, const char* fragmentFile);
+            // Activates the Shader Program
+            void Activate() const;
 
-			// Creates a Vertex Shader from a file
-			void set_vertex_shader(const char* vertexFile);
-			// Creates a Fragment Shader from a file
-			void set_fragment_shader(const char* fragmentFile);
-				
-			// Read and Compile a shader file into the shader variable
-			void read_compile_shader(GLuint shader, const char* shaderFile);
-			// Attach the Vertex and Fragment Shaders to the Shader Program
-			void attach_shader();
-			// Link the Shader Program
-			void link_shader();
-			// Delete shader objects
-			void delete_shader_objects();
+            // Deletes the Shader Program
+            void Delete();
 
-			// Activates the Shader Program
-			void Activate();
+            // Getter for the program ID
+            inline GLuint get_ID() const { return ID_; }
 
-			void Delete();
+        private:
+            GLuint ID_;                      // Shader Program ID
+            std::vector<GLuint> shaders_;    // Container for shader objects
 
-			inline GLuint get_ID() const { 
-				return ID_; 
-			}
+            // Reads and compiles a shader from a file
+            void read_compile_shader(GLuint shader, const char* shaderFile);
 
-
-		private:
-			// Reference to the Shader Program, vertex shader and fragment shader
-			GLuint ID_;
-			GLuint vertexShader_;
-			GLuint fragmentShader_;
-
-		};
-
-	}
-
+            // Reads the contents of a file into a string
+            std::string get_file_contents(const char* filename) const;
+        };
+    }
 }

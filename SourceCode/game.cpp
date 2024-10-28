@@ -69,115 +69,147 @@ GLuint indices[] = {
 
 
 Game::Game() {
-	// Initialize GLFW
 	load_GLFW();
-
-	// Set the OpenGL version to 3.3
-	set_openGL_version(3, 3);
-	// Tell GLFW to use the core profile
+	set_openGL_version(4, 6);
 	set_openGL_profile(GLFW_OPENGL_CORE_PROFILE);
 
-	// Create the window
-	window_ = new Engine::Window();
-	// Set the window attributes
+	// Use make_unique for smart pointer creation
+	window_ = std::make_unique<Engine::Window>();
 	window_->set_attr(800, 600, "OpenGL Game");
-	// Initialize the window
+	window_->set_vsync(false);
 	window_->Init();
 
-	// Load OpenGL functions
 	load_GLAD();
 
-	// Create the shader program
-	shader_ = new Engine::Graphics::Shader();
-	shader_->create_shader("default.vert", "default.frag");
+	shader_ = std::make_unique<Engine::Graphics::Shader>();
+	try {
+		shader_->add_shader(GL_VERTEX_SHADER, "default.vert");
+		shader_->add_shader(GL_FRAGMENT_SHADER, "default.frag");
+		shader_->link_program();
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
-	// Create the texture manager
-	textureManager_ = new Engine::Graphics::Texture::TextureManager();
+	textureManager_ = std::make_unique<Engine::Graphics::Texture::TextureManager>();
 	textureManager_->set_attr(16, 16, 16);
 	textureManager_->Init();
-
-	// Add a texture to the texture manager
 	textureManager_->AddTexture("dirt");
-
-	// Generate the mipmaps
 	textureManager_->GenerateMipMaps();
-
-	// Set OpenGL parameters
-
-	// Generate the VAO (Vertex Array Object) and VBO (Vertex Buffer Object) with only one object each
-	VAO_.generate();
-	VBO_.generate();
-	IBO_.generate();
-
-	// Make the VAO the current Vertex Array Object by binding it
-	VAO_.Bind();
-
-	// Upload the vertex data to the VBO
-	VBO_.insert_vertices(vertices, sizeof(vertices));
-	
-	// Upload the indices data to the IBO
-	IBO_.insert_indices(indices, sizeof(indices));
-
-	// Link the VBO to the VAO with the layout 0
-	VAO_.LinkAttrib(VBO_, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
-	VAO_.LinkAttrib(VBO_, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
 	set_parameters();
 
-	camera_ = new Engine::Camera();
-	camera_->set_attr(window_->get_width(), window_->get_height(), glm::vec3(0.0f, 0.0f, 2.0f));
+	// Generate VAO and buffers
+	VAO_.generate();
+	VAO_.bind();
 
-	// Unbind both the VBO and VAO so that we don't accidentally modify them later
-	VBO_.Unbind();
-	VAO_.Unbind();
-	IBO_.Unbind();
+	VBO_.set_attr(GL_ARRAY_BUFFER, 1);
+	VBO_.generate();
+	VBO_.bind();
+	VBO_.set_data(sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	VAO_.link_attrib(VBO_, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+	VAO_.link_attrib(VBO_, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+
+	IBO_.set_attr(GL_ELEMENT_ARRAY_BUFFER, 1);
+	IBO_.generate();
+	IBO_.bind();
+	IBO_.set_data(sizeof(indices), indices, GL_STATIC_DRAW);
+
+	VAO_.unbind();
+
+	playerPosition_ = glm::vec3(0.0f, 0.0f, 2.0f);
+
+	camera_ = std::make_unique<Engine::Camera>();
+	camera_->set_attr(window_->get_width(), window_->get_height(), playerPosition_);
+	camera_->set_Matrix_location(shader_.get());
+
+	// Initialize network client
+	networkClient_ = new NetworkClient("127.0.0.1", 1234); // Use your server IP and port
+	networkClient_->Start();
 }
 
 void Game::run() {
+	GLint shaderlocation = glGetUniformLocation(shader_->get_ID(), "texture_array");
 
-
-	// The main game loop
-	while (!window_->is_closed()) // Check if the window is closed
-	{
-		// Draw the frame
-
+	// Main game loop
+	while (!window_->is_closed()) {
 		window_->postFrame();
+		updateDeltaTime();
 
-		// Tell OpenGL which Shader Program we want to use
+		// Activate shader program
 		shader_->Activate();
 
+		// Update camera
 		camera_->Inputs(window_->get_windowPtr());
-		camera_->Matrix(shader_);
+		camera_->Matrix();
 
+		// Get other players' positions
+		otherPlayersPositions_ = networkClient_->GetOtherPlayersPositions();
+
+		// Check if position has changed
+		glm::vec3 newPosition = camera_->get_position();
+		if (newPosition != playerPosition_) {
+			playerPosition_ = newPosition;
+			positionChanged_ = true;
+		}
+		else {
+			positionChanged_ = false;
+		}
+
+		// Send player position to server only if position has changed
+		if (positionChanged_) {
+			networkClient_->SendPosition(playerPosition_);
+		}
+
+		// Bind texture
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D_ARRAY, textureManager_->get_textureArrayID());
-		glUniform1i(glGetUniformLocation(shader_->get_ID(), "texture_array"), 0);
+		glUniform1i(shaderlocation, 0);
 
-		// Bind the VAO so OpenGL knows to use it
-		VAO_.Bind();
+		// Bind VAO
+		VAO_.bind();
 
-		// Draw
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		// Set model matrix for player's cube
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, playerPosition_);
+		glUniformMatrix4fv(glGetUniformLocation(shader_->get_ID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
 
+
+		// Draw elements
+		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+
+		// Render other players
+		for (const auto& player : otherPlayersPositions_) {
+			// Set model matrix for other player's cube
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, player.second);
+			glUniformMatrix4fv(glGetUniformLocation(shader_->get_ID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+
+			// Draw other player's cube
+			glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		}
+
+		// Unbind VAO (optional)
+		VAO_.unbind();
+
+		// Swap buffers and poll events
 		window_->afterFrame();
 	}
-
-	std::cout << "Game loop exited" << std::endl;
-
 }
 
 Game::~Game() {
 
-	VAO_.Delete();
-	VBO_.Delete();
-	IBO_.Delete();
 	shader_->Delete();
+	// Stop and delete network client
+	networkClient_->Stop();
+	delete networkClient_;
+	VAO_.cleanup();
+	VBO_.cleanup();
+	IBO_.cleanup();
 
-	delete textureManager_;
-	delete window_;
-	// Terminate GLFW
-	glfwTerminate();
+	glfwTerminate();  // GLFW cleanup is still required
 }
 
 void Game::load_GLFW() {
@@ -185,6 +217,7 @@ void Game::load_GLFW() {
 	if (!glfwInit()) {
 		// Handle GLFW initialization failure
 		std::cerr << "Failed to initialize GLFW" << std::endl;
+
 		exit(EXIT_FAILURE);
 	}
 }
@@ -209,18 +242,35 @@ void Game::load_GLAD() {
 		exit(EXIT_FAILURE);
 	}
 }
-
 void Game::set_parameters() {
 	// Enables the Depth Buffer
 	glEnable(GL_DEPTH_TEST);
 	// Enables Cull Facing
 	glEnable(GL_CULL_FACE);
 	// Keeps front faces
-	glCullFace(GL_FRONT);
-	// Uses counter clock-wise standard
-	glFrontFace(GL_CCW);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glCullFace(GL_BACK);
+	// Uses clock-wise standard
+	glFrontFace(GL_CW);
+}
+
+void Game::updateDeltaTime() {
+
+	const float seconds = 3.5f;
+
+	// DELTA TIME
+	double current_frameTime = glfwGetTime();
+	deltaTime_ = static_cast<float>(current_frameTime - last_frameTime_);
+	last_frameTime_ = current_frameTime;
+	
+	// FPS COUNT
+	fpsAccumulator_ += deltaTime_;
+	frameCount_++;
+
+	if (fpsAccumulator_ >= seconds) {
+		float fps = frameCount_ / fpsAccumulator_;
+		std::cout << "FPS: " << fps << std::endl;
+
+		fpsAccumulator_ = 0.0f;
+		frameCount_ = 0;
+	}
 }

@@ -6,11 +6,11 @@ layout(location = 1) in vec2 aTexCoord;
 
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
+uniform mat4 modelMatrix;
 
 out vec2 TexCoord; // Pass texture coordinates to fragment shader
-out vec3 local_position; // interpolated vertex position
 
 void main(void) {
 	TexCoord = aTexCoord;
-	gl_Position = projectionMatrix * viewMatrix * vec4(vertex_position, 1.0); // set vertex position
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertex_position, 1.0); // set vertex position
 }

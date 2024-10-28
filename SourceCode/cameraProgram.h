@@ -20,8 +20,10 @@ namespace Engine {
 		void init();
 		inline bool is_attr_set() const;
 
+		void set_Matrix_location(const Engine::Graphics::Shader* shader);
+
 		// Updates and exports the camera matrix to the Vertex Shader
-		void Matrix(const Engine::Graphics::Shader* shader) const;
+		void Matrix() const;
 		// Handles camera inputs
 		void Inputs(GLFWwindow* window);
 		void KeyInputs(GLFWwindow* window);
@@ -52,6 +54,14 @@ namespace Engine {
 			sensitivity_ = sensitivity;
 		};
 
+		inline void set_fov(const float fov) {
+			fov_ = fov;
+		};
+
+		inline glm::vec3 get_position() const {
+			return position_;
+		};
+
 	private:
 		// Stores the main vectors of the camera
 		glm::vec3 position_ = glm::vec3();
@@ -73,6 +83,9 @@ namespace Engine {
 
 		float nearPlane_ = 0.0f;
 		float farPlane_ = 0.0f;
+
+		GLint projectionMatrixLocation_ = -1;
+		GLint viewMatrixLocation_ = -1;
 
 	};
 }

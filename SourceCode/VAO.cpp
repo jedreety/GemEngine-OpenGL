@@ -7,35 +7,49 @@ namespace Engine
 	{
 
 		VAO::VAO() {
-			ID_ = 0;
 			nb_object_ = 1;
 		}
 
+		VAO::~VAO() {
+			cleanup();
+		}
+
+		void VAO::cleanup() {
+			if (is_generated_) {
+				glDeleteVertexArrays(nb_object_, &ID_);
+				ID_ = 0;
+				nb_object_ = 0;
+				is_generated_ = false;
+			}
+
+		}
+
 		void VAO::generate() {
-			glGenVertexArrays(nb_object_, &ID_);
+			if (!is_generated_) {
+				glGenVertexArrays(nb_object_, &ID_);
+				is_generated_ = true;
+			}	
 		}
 
-		void VAO::set_nb_object(const GLsizei nb_object) {
-			nb_object_ = nb_object;
+		void VAO::bind() const {
+			if (is_generated_) {
+				glBindVertexArray(ID_);
+			}
+			else {
+				std::cerr << "VAO not generated before binding." << std::endl;
+			}
+			
 		}
 
-		void VAO::LinkAttrib(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset) {
-			VBO.Bind();
-			glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
-			glEnableVertexAttribArray(layout);
-			VBO.Unbind();
-		}
-
-		void VAO::Bind() {
-			glBindVertexArray(ID_);
-		}
-
-		void VAO::Unbind() {
+		void VAO::unbind() {
 			glBindVertexArray(0);
 		}
 
-		void VAO::Delete() const {
-			glDeleteVertexArrays(1, &ID_);
+		void VAO::link_attrib(Buffer& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset) {
+			VBO.bind();
+			glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
+			glEnableVertexAttribArray(layout);
 		}
+
 	}
 }
