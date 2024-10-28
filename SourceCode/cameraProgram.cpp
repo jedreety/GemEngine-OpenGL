@@ -75,6 +75,7 @@ namespace Engine {
 
 		// Handles mouse inputs
 		MouseInputs(window);
+
 	}
 
 	void Camera::KeyInputs(GLFWwindow* window) {

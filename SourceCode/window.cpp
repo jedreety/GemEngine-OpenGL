@@ -20,6 +20,15 @@ namespace Engine {
         // Call Back of the resize 
         std::cout << "Resize W: " << width << " H: " << height << '\n';
 
+		// Retrieve the Window instance from the user pointer and Camera
+		Window* selfWindow = static_cast<Engine::Window*>(glfwGetWindowUserPointer(window));
+		Camera* selfCamera = selfWindow->get_camera();
+		
+		if (selfWindow && selfCamera) {
+			// Call the Camera's Resize method
+			selfCamera->set_dimensions(width, height);
+		}
+
 		// Set the viewport size
         glViewport(0, 0, width, height);
     }

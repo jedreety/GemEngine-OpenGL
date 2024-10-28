@@ -46,14 +46,13 @@ namespace Engine
 					max_texture_units_ = max_textures;
 				}
 
-				inline void set_texture_array_id(const GLuint slot) {
-					textureArrayID_ = slot;
-				}
-
-				inline void set_attr(const GLuint width, const GLuint height, const GLuint max_textures, const GLuint slot = 0) {
+				inline void set_attr(const GLuint width, const GLuint height, const GLuint max_textures) {
 					set_dimensions(width, height);
 					set_max_textures(max_textures);
-					set_texture_array_id(slot);
+				}
+
+				inline void set_texture_unit(const int texture_unit) {
+					texture_unit_ = GL_TEXTURE0 + texture_unit;
 				}
 
 				inline GLuint get_width() const { 
@@ -68,12 +67,16 @@ namespace Engine
 				inline GLuint get_textureArrayID() const { 
 					return textureArrayID_; 
 				}
+
 			private:
 
 				GLuint max_texture_units_ = 0;
-				GLuint textureArrayID_ = 0;
 				GLuint width_ = 0;
 				GLuint height_ = 0;
+				
+				GLuint textureArrayID_ = 0;
+				int texture_unit_ = GL_TEXTURE0;
+
 				std::list<std::string> textures_ = {};
 
 				// Check if the windows attributes are set

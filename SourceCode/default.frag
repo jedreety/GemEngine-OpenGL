@@ -7,5 +7,5 @@ in vec2 TexCoord; // Receive texture coordinates from vertex shader
 uniform sampler2DArray texture_array; // texture array
 
 void main(void) {
-	fragment_colour = texture(texture_array, vec3(TexCoord, 0));
+	fragment_colour = texture(texture_array, vec3(TexCoord, 1));
 }

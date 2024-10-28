@@ -31,6 +31,9 @@ namespace Engine
             // Deletes the Shader Program
             void Delete();
 
+			// Send a uniforms to the shader
+
+
             // Getter for the program ID
             inline GLuint get_ID() const { return ID_; }
 

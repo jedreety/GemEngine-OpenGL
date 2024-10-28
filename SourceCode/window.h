@@ -7,6 +7,7 @@ For now I will use the OPENGL windowing system, but I will eventually make my ow
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<iostream>
+#include "cameraProgram.h"
 
 
 namespace Engine
@@ -81,6 +82,17 @@ namespace Engine
 			set_height(height);
 		}
 
+		inline void set_camera(Camera* camera) {
+			camera_ = camera;
+
+			// Set the user pointer of the GLFWwindow to this Window instance
+			glfwSetWindowUserPointer(window_, this);
+		}
+
+		inline Camera* get_camera() const {
+			return camera_;
+		}
+
 		inline GLFWwindow* get_windowPtr() const { 
 			return window_; 
 		};
@@ -93,6 +105,8 @@ namespace Engine
 		unsigned int width_ = 0;
 		unsigned int height_ = 0;
 		bool VSync_ = false;
+
+		Camera* camera_ = nullptr;
 
 	};
 	

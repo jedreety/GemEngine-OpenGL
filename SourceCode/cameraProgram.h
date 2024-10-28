@@ -29,7 +29,6 @@ namespace Engine {
 		void KeyInputs(GLFWwindow* window);
 		void MouseInputs(GLFWwindow* window);
 
-
 		inline void set_attr(const int width, const int height, const glm::vec3 position) {
 			set_dimensions(width, height);
 			set_position(position);

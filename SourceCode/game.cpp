@@ -93,9 +93,11 @@ Game::Game() {
 	}
 
 	textureManager_ = std::make_unique<Engine::Graphics::Texture::TextureManager>();
-	textureManager_->set_attr(16, 16, 16);
 	textureManager_->Init();
+
 	textureManager_->AddTexture("dirt");
+	textureManager_->AddTexture("grass");
+
 	textureManager_->GenerateMipMaps();
 
 	set_parameters();
@@ -125,13 +127,20 @@ Game::Game() {
 	camera_->set_attr(window_->get_width(), window_->get_height(), playerPosition_);
 	camera_->set_Matrix_location(shader_.get());
 
+	// Dont forget to set the camera to the window
+	window_->set_camera(camera_.get());
+
 	// Initialize network client
 	networkClient_ = new NetworkClient("127.0.0.1", 1234); // Use your server IP and port
 	networkClient_->Start();
+
 }
 
 void Game::run() {
-	GLint shaderlocation = glGetUniformLocation(shader_->get_ID(), "texture_array");
+
+	GLint shaderlocation_textureArray = glGetUniformLocation(shader_->get_ID(), "texture_array");
+	GLint shaderlocation_modelMatrix = glGetUniformLocation(shader_->get_ID(), "modelMatrix");
+	networkClient_->SendPosition(playerPosition_);
 
 	// Main game loop
 	while (!window_->is_closed()) {
@@ -164,17 +173,18 @@ void Game::run() {
 		}
 
 		// Bind texture
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D_ARRAY, textureManager_->get_textureArrayID());
-		glUniform1i(shaderlocation, 0);
+		textureManager_->Bind();
+		glUniform1i(shaderlocation_textureArray, 0);
 
 		// Bind VAO
 		VAO_.bind();
 
 		// Set model matrix for player's cube
 		glm::mat4 model = glm::mat4(1.0f);
+		// Translate the cube to the player's position
 		model = glm::translate(model, playerPosition_);
-		glUniformMatrix4fv(glGetUniformLocation(shader_->get_ID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+		// Set the model matrix in the shader
+		glUniformMatrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
 
 
 		// Draw elements
@@ -184,8 +194,9 @@ void Game::run() {
 		for (const auto& player : otherPlayersPositions_) {
 			// Set model matrix for other player's cube
 			model = glm::mat4(1.0f);
+			// Translate the cube to the other player's position
 			model = glm::translate(model, player.second);
-			glUniformMatrix4fv(glGetUniformLocation(shader_->get_ID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+			glUniformMatrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
 
 			// Draw other player's cube
 			glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);

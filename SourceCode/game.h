@@ -45,7 +45,6 @@ private:
 
 	void updateDeltaTime();
 
-
 	std::unique_ptr<Engine::Window> window_;
 
 	std::unique_ptr<Engine::Camera> camera_;

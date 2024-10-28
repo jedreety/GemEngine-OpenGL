@@ -8,11 +8,9 @@ namespace Engine
 
 
 			TextureManager::TextureManager() {
-				max_texture_units_ = 0;
-				textureArrayID_ = 0;
-				width_ = 0;
-				height_ = 0;
-				textures_ = {};
+				max_texture_units_ = 16;
+				width_ = 16;
+				height_ = 16;
 			}
 
 			void TextureManager::Init() {
@@ -44,6 +42,7 @@ namespace Engine
 			}
 
 			void TextureManager::Bind() const {
+				glActiveTexture(texture_unit_);
 				glBindTexture(GL_TEXTURE_2D_ARRAY, textureArrayID_);
 			}
 
