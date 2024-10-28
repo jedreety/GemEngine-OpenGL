@@ -41,11 +41,8 @@ namespace Engine
             GLuint ID_;                      // Shader Program ID
             std::vector<GLuint> shaders_;    // Container for shader objects
 
-            // Reads and compiles a shader from a file
-            void read_compile_shader(GLuint shader, const char* shaderFile);
-
             // Reads the contents of a file into a string
-            std::string get_file_contents(const char* filename) const;
+            std::string get_file_contents(const std::string& filename) const;
         };
     }
 }

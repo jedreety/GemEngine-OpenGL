@@ -4,18 +4,16 @@ namespace Engine
 {
     namespace Graphics
     {
-        Shader::Shader()
-        {
+        Shader::Shader() {
             ID_ = glCreateProgram();
         }
 
-        Shader::~Shader()
-        {
+        Shader::~Shader() {
             Delete();
         }
 
-        void Shader::add_shader(GLenum shaderType, const char* shaderFile)
-        {
+        void Shader::add_shader(GLenum shaderType, const char* shaderFile)  {
+
             GLuint shader = glCreateShader(shaderType);
 
             std::string shaderCode = get_file_contents(shaderFile);
@@ -28,8 +26,7 @@ namespace Engine
             // Check for compilation errors
             GLint success;
             glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-            if (!success)
-            {
+            if (!success) {
                 char infoLog[1024];
                 glGetShaderInfoLog(shader, sizeof(infoLog), nullptr, infoLog);
                 std::cerr << "ERROR::SHADER_COMPILATION_ERROR of type: " << shaderType << "\n"
@@ -43,16 +40,14 @@ namespace Engine
             shaders_.push_back(shader); // Store for deletion after linking
         }
 
-        void Shader::link_program()
-        {
+        void Shader::link_program() {
             // Link the shader program
             glLinkProgram(ID_);
 
             // Check for linking errors
             GLint success;
             glGetProgramiv(ID_, GL_LINK_STATUS, &success);
-            if (!success)
-            {
+            if (!success) {
                 char infoLog[1024];
                 glGetProgramInfoLog(ID_, sizeof(infoLog), nullptr, infoLog);
                 std::cerr << "ERROR::PROGRAM_LINKING_ERROR\n" << infoLog
@@ -63,8 +58,8 @@ namespace Engine
             // Validate the shader program
             glValidateProgram(ID_);
             glGetProgramiv(ID_, GL_VALIDATE_STATUS, &success);
-            if (!success)
-            {
+            if (!success) {
+
                 char infoLog[1024];
                 glGetProgramInfoLog(ID_, sizeof(infoLog), nullptr, infoLog);
                 std::cerr << "ERROR::PROGRAM_VALIDATION_ERROR\n" << infoLog
@@ -73,20 +68,17 @@ namespace Engine
             }
 
             // Delete the shader objects now that they've been linked
-            for (auto shader : shaders_)
-            {
+            for (auto shader : shaders_) {
                 glDeleteShader(shader);
             }
             shaders_.clear();
         }
 
-        void Shader::Activate() const
-        {
+        void Shader::Activate() const {
             glUseProgram(ID_);
         }
 
-        void Shader::Delete()
-        {
+        void Shader::Delete() {
             if (ID_ != 0)
             {
                 glDeleteProgram(ID_);
@@ -94,9 +86,13 @@ namespace Engine
             }
         }
 
-        std::string Shader::get_file_contents(const char* filename) const
-        {
-            std::ifstream in(filename, std::ios::in | std::ios::binary);
+        std::string Shader::get_file_contents(const std::string& filename) const {
+
+			std::string shader_path = "SourceCode\\Ressources\\shader\\";
+            std::string full_filename = shader_path + filename;
+
+            std::ifstream in(full_filename, std::ios::in | std::ios::binary);
+            
             if (in)
             {
                 std::ostringstream contents;
@@ -104,7 +100,7 @@ namespace Engine
                 in.close();
                 return contents.str();
             }
-            throw std::runtime_error(std::string("Could not open file ") + filename);
+            throw std::runtime_error(std::string("Could not open file ") + full_filename);
         }
     }
 }

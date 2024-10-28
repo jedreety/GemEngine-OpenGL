@@ -66,75 +66,107 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>Source Files\Game</Filter>
+    <ClCompile Include="SourceCode\src\main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="window.cpp">
-      <Filter>Source Files\Game\Engine\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="shaderProgram.cpp">
-      <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="VAO.cpp">
-      <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
-    </ClCompile>
-    <ClCompile Include="textureManager.cpp">
-      <Filter>Source Files\Game\Engine\Graphics\Texture\TextureManager</Filter>
-    </ClCompile>
-    <ClCompile Include="cameraProgram.cpp">
-      <Filter>Source Files\Game\Engine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="buffer.cpp">
+    <ClCompile Include="SourceCode\src\buffer.cpp">
       <Filter>Source Files\Game\Engine\GLStructure\BufferObject</Filter>
     </ClCompile>
-    <ClCompile Include="network_server.cpp">
+    <ClCompile Include="SourceCode\src\cameraProgram.cpp">
+      <Filter>Source Files\Game\Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\src\game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\src\network_client.cpp">
+      <Filter>Source Files\Game\Network\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\src\network_server.cpp">
       <Filter>Source Files\Game\Network\Serveur</Filter>
     </ClCompile>
-    <ClCompile Include="network_client.cpp">
-      <Filter>Source Files\Game\Network\Client</Filter>
+    <ClCompile Include="SourceCode\src\shaderProgram.cpp">
+      <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\src\textureManager.cpp">
+      <Filter>Source Files\Game\Engine\Graphics\Texture\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\src\VAO.cpp">
+      <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\src\window.cpp">
+      <Filter>Source Files\Game\Engine\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game.h">
-      <Filter>Source Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="window.h">
-      <Filter>Source Files\Game\Engine\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="shaderProgram.h">
-      <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="VAO.h">
-      <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
-    </ClInclude>
-    <ClInclude Include="textureManager.h">
-      <Filter>Source Files\Game\Engine\Graphics\Texture\TextureManager</Filter>
-    </ClInclude>
-    <ClInclude Include="cameraProgram.h">
-      <Filter>Source Files\Game\Engine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="buffer.h">
+    <ClInclude Include="SourceCode\src\buffer.h">
       <Filter>Source Files\Game\Engine\GLStructure\BufferObject</Filter>
     </ClInclude>
-    <ClInclude Include="network_server.h">
+    <ClInclude Include="SourceCode\src\cameraProgram.h">
+      <Filter>Source Files\Game\Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\game.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\network_client.h">
+      <Filter>Source Files\Game\Network\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\network_server.h">
       <Filter>Source Files\Game\Network\Serveur</Filter>
     </ClInclude>
-    <ClInclude Include="network_client.h">
-      <Filter>Source Files\Game\Network\Client</Filter>
+    <ClInclude Include="SourceCode\src\shaderProgram.h">
+      <Filter>Source Files\Game\Engine\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\textureManager.h">
+      <Filter>Source Files\Game\Engine\Graphics\Texture\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\VAO.h">
+      <Filter>Source Files\Game\Engine\GLStructure\Vao</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\window.h">
+      <Filter>Source Files\Game\Engine\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="default.vert">
+    <None Include="SourceCode\Ressources\shader\default.frag">
       <Filter>Resource Files\shader</Filter>
-    </Text>
-    <Text Include="default.frag">
+    </None>
+    <None Include="SourceCode\Ressources\shader\default.vert">
       <Filter>Resource Files\shader</Filter>
-    </Text>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="SourceCode\Ressources\texture\cobblestone.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\dirt.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\grass.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\grass_side.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\leaves.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\log_side.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\log_top.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\planks.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\sand.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
+    <Image Include="SourceCode\Ressources\texture\stone.png">
+      <Filter>Resource Files\texture</Filter>
+    </Image>
   </ItemGroup>
 </Project>

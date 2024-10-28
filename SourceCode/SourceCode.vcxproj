@@ -93,6 +93,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,6 +110,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,6 +127,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +144,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,33 +155,45 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="buffer.cpp" />
-    <ClCompile Include="cameraProgram.cpp" />
-    <ClCompile Include="game.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="network_client.cpp" />
-    <ClCompile Include="network_server.cpp" />
-    <ClCompile Include="shaderProgram.cpp" />
+    <ClCompile Include="SourceCode\src\buffer.cpp" />
+    <ClCompile Include="SourceCode\src\cameraProgram.cpp" />
+    <ClCompile Include="SourceCode\src\game.cpp" />
+    <ClCompile Include="SourceCode\src\main.cpp" />
+    <ClCompile Include="SourceCode\src\network_client.cpp" />
+    <ClCompile Include="SourceCode\src\network_server.cpp" />
+    <ClCompile Include="SourceCode\src\shaderProgram.cpp" />
+    <ClCompile Include="SourceCode\src\textureManager.cpp" />
+    <ClCompile Include="SourceCode\src\VAO.cpp" />
+    <ClCompile Include="SourceCode\src\window.cpp" />
     <ClCompile Include="stb.cpp" />
-    <ClCompile Include="textureManager.cpp" />
-    <ClCompile Include="VAO.cpp" />
-    <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cameraProgram.h" />
-    <ClInclude Include="game.h" />
-    <ClInclude Include="buffer.h" />
-    <ClInclude Include="network_client.h" />
-    <ClInclude Include="network_server.h" />
-    <ClInclude Include="shaderProgram.h" />
-    <ClInclude Include="textureManager.h" />
-    <ClInclude Include="VAO.h" />
-    <ClInclude Include="window.h" />
+    <ClInclude Include="SourceCode\src\buffer.h" />
+    <ClInclude Include="SourceCode\src\cameraProgram.h" />
+    <ClInclude Include="SourceCode\src\game.h" />
+    <ClInclude Include="SourceCode\src\network_client.h" />
+    <ClInclude Include="SourceCode\src\network_server.h" />
+    <ClInclude Include="SourceCode\src\shaderProgram.h" />
+    <ClInclude Include="SourceCode\src\textureManager.h" />
+    <ClInclude Include="SourceCode\src\VAO.h" />
+    <ClInclude Include="SourceCode\src\window.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="default.vert" />
-    <Text Include="default.frag" />
+    <None Include="SourceCode\Ressources\shader\default.frag" />
+    <None Include="SourceCode\Ressources\shader\default.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="SourceCode\Ressources\texture\cobblestone.png" />
+    <Image Include="SourceCode\Ressources\texture\dirt.png" />
+    <Image Include="SourceCode\Ressources\texture\grass.png" />
+    <Image Include="SourceCode\Ressources\texture\grass_side.png" />
+    <Image Include="SourceCode\Ressources\texture\leaves.png" />
+    <Image Include="SourceCode\Ressources\texture\log_side.png" />
+    <Image Include="SourceCode\Ressources\texture\log_top.png" />
+    <Image Include="SourceCode\Ressources\texture\planks.png" />
+    <Image Include="SourceCode\Ressources\texture\sand.png" />
+    <Image Include="SourceCode\Ressources\texture\stone.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

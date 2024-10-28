@@ -69,13 +69,15 @@ namespace Engine
 						textures_.push_back(texture_name);
 
 						int width, height, bpp;
-						const std::string texture_path = texture_name + ".png";
 
-						unsigned char* texture_image = stbi_load(texture_path.c_str(), &width, &height, &bpp, 4);
+						const std::string texture_path = "SourceCode\\Ressources\\texture\\";
+						const std::string full_filename = texture_path + texture_name + ".png";
+
+						unsigned char* texture_image = stbi_load(full_filename.c_str(), &width, &height, &bpp, 4);
 
 
 						if (width_ != width || height_ != height) {
-							std::cerr << "ERROR::TextureManager::AddTexture: Texture " << texture_name << " has different dimensions" << std::endl;
+							std::cerr << "ERROR::TextureManager::AddTexture: Texture " << full_filename << " has different dimensions" << std::endl;
 							textures_.pop_back();
 							if (texture_image) stbi_image_free(texture_image);
 							return;
@@ -91,7 +93,7 @@ namespace Engine
 
 						}
 						else {
-							std::cerr << "Failed to load " << texture_name << " image!" << std::endl;
+							std::cerr << "Failed to load " << full_filename << " image!" << std::endl;
 						}
 					}
 				}

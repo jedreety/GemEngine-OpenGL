@@ -16,13 +16,15 @@
 */
 
 #include "game.h"
-#include <iostream>
 #include "network_server.h"
 #include <limits>
+#include <filesystem>
 
 #pragma warning(disable:4996)
 
 int main() {
+    std::cout << "Current working directory: " << std::filesystem::current_path() << std::endl;
+
     int choice;
     std::cout << "Enter 0 to run as server, or 1 to run as client: ";
 
