@@ -28,7 +28,6 @@ Build/
 *.ipch
 
 # Static libraries
-*.lib
 *.a
 
 # Debug files
