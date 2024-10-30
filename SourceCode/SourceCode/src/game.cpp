@@ -141,6 +141,7 @@ void Game::run() {
 	GLint shaderlocation_textureArray = glGetUniformLocation(shader_->get_ID(), "texture_array");
 	GLint shaderlocation_modelMatrix = glGetUniformLocation(shader_->get_ID(), "modelMatrix");
 	networkClient_->SendPosition(playerPosition_);
+	float movementThreshold = 0.5f;
 
 	// Main game loop
 	while (!window_->is_closed()) {
@@ -159,7 +160,7 @@ void Game::run() {
 
 		// Check if position has changed
 		glm::vec3 newPosition = camera_->get_position();
-		if (newPosition != playerPosition_) {
+		if (glm::distance(newPosition, playerPosition_) > movementThreshold) {
 			playerPosition_ = newPosition;
 			positionChanged_ = true;
 		}
