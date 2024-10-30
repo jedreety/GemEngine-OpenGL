@@ -21,7 +21,6 @@ Build/
 *.o
 *.exe
 *.dll
-*.lib
 *.out
 
 # Precompiled headers
