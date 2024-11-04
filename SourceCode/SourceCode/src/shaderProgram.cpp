@@ -1,21 +1,31 @@
 #include "shaderProgram.h"
 
-namespace Engine
-{
-    namespace Graphics
-    {
+namespace Engine {
+    namespace Graphics {
+
+        // Constructor
         Shader::Shader() {
             ID_ = glCreateProgram();
+            if (ID_ == 0) {
+                std::cerr << "ERROR::SHADER::Failed to create shader program." << std::endl;
+            }
         }
 
+        // Destructor
         Shader::~Shader() {
-            Delete();
+            cleanup();
         }
 
-        void Shader::add_shader(GLenum shaderType, const char* shaderFile)  {
-
+        // Add a shader from a file
+        void Shader::add_shader(GLenum shaderType, const std::string& shaderFile) {
+            // Create the shader object
             GLuint shader = glCreateShader(shaderType);
+            if (shader == 0) {
+                std::cerr << "ERROR::SHADER::Failed to create shader of type " << shaderType << "." << std::endl;
+                throw std::runtime_error("Shader creation failed");
+            }
 
+            // Read the shader source code from the file
             std::string shaderCode = get_file_contents(shaderFile);
             const char* shaderSource = shaderCode.c_str();
 
@@ -40,6 +50,7 @@ namespace Engine
             shaders_.push_back(shader); // Store for deletion after linking
         }
 
+        // Link and validate the shader program
         void Shader::link_program() {
             // Link the shader program
             glLinkProgram(ID_);
@@ -59,7 +70,6 @@ namespace Engine
             glValidateProgram(ID_);
             glGetProgramiv(ID_, GL_VALIDATE_STATUS, &success);
             if (!success) {
-
                 char infoLog[1024];
                 glGetProgramInfoLog(ID_, sizeof(infoLog), nullptr, infoLog);
                 std::cerr << "ERROR::PROGRAM_VALIDATION_ERROR\n" << infoLog
@@ -74,33 +84,49 @@ namespace Engine
             shaders_.clear();
         }
 
-        void Shader::Activate() const {
+        // Activate the shader program
+        void Shader::activate() const {
             glUseProgram(ID_);
         }
 
-        void Shader::Delete() {
-            if (ID_ != 0)
-            {
+        // Delete the shader program
+        void Shader::cleanup() {
+            if (ID_ != 0) {
                 glDeleteProgram(ID_);
                 ID_ = 0;
             }
         }
 
-        std::string Shader::get_file_contents(const std::string& filename) const {
+        // Get the shader program ID
+        [[nodiscard]] GLuint Shader::get_ID() const noexcept {
+            return ID_;
+        }
 
-			std::string shader_path = "SourceCode\\Ressources\\shader\\";
+        // Equality operator
+        bool Shader::operator==(const Shader& other) const noexcept {
+            return ID_ == other.ID_;
+        }
+
+        // Inequality operator
+        bool Shader::operator!=(const Shader& other) const noexcept {
+            return !(*this == other);
+        }
+
+        // Read file contents
+        std::string Shader::get_file_contents(const std::string& filename) const {
+            // Define the shader path (adjust as needed)
+            std::string shader_path = "SourceCode/Ressources/shader/";
             std::string full_filename = shader_path + filename;
 
             std::ifstream in(full_filename, std::ios::in | std::ios::binary);
-            
-            if (in)
-            {
+            if (in) {
                 std::ostringstream contents;
                 contents << in.rdbuf();
                 in.close();
                 return contents.str();
             }
-            throw std::runtime_error(std::string("Could not open file ") + full_filename);
+            throw std::runtime_error("Could not open file " + full_filename);
         }
-    }
-}
+
+    } // namespace Graphics
+} // namespace Engine

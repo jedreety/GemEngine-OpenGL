@@ -61,6 +61,27 @@
     <Filter Include="Source Files\Game\Network\Client">
       <UniqueIdentifier>{1d9c856f-91ac-479f-bbef-6ba7e5dead97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Engine\ChunkMap">
+      <UniqueIdentifier>{815114f8-e502-467c-9238-fb92d89d5446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Chunk">
+      <UniqueIdentifier>{79b1b6d9-a6f3-4c65-a7dd-f0ef195b6d09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Voxel">
+      <UniqueIdentifier>{34df16fa-3749-4aa1-b562-e2f2c461ea6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Face">
+      <UniqueIdentifier>{fce40ec1-223d-4db7-8feb-e5c2739e0a1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Side">
+      <UniqueIdentifier>{f4bb697d-8f66-4ef4-87ef-fdad58fedd40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\Quad">
+      <UniqueIdentifier>{fcd97839-ff53-4a72-9abf-33e8602b481b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Engine\QuadGroups">
+      <UniqueIdentifier>{1673631f-0c22-43e4-840a-cf2976180c4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -99,6 +120,9 @@
     <ClCompile Include="SourceCode\src\window.cpp">
       <Filter>Source Files\Game\Engine\Window</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\src\face.cpp">
+      <Filter>Source Files\Game\Engine\Face</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\src\buffer.h">
@@ -127,6 +151,18 @@
     </ClInclude>
     <ClInclude Include="SourceCode\src\window.h">
       <Filter>Source Files\Game\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\side.h">
+      <Filter>Source Files\Game\Engine\Side</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\face.h">
+      <Filter>Source Files\Game\Engine\Face</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\quad.h">
+      <Filter>Source Files\Game\Engine\Quad</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\src\quadGroups.h">
+      <Filter>Source Files\Game\Engine\QuadGroups</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

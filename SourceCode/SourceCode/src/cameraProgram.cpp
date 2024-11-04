@@ -1,166 +1,177 @@
 #include "cameraProgram.h"
 
+#include <iostream>
 
 namespace Engine {
 
-	Camera::Camera() {
-		// Stores the main vectors of the camera
-		orientation_ = glm::vec3(0.0f, 0.0f, -1.0f);
-		up_ = glm::vec3(0.0f, 1.0f, 0.0f);
+    // Constructor
+    Camera::Camera() noexcept {
+        // Default values are already set in the member initializer list.
+    }
 
-		// Prevents the camera from jumping around when first clicking left click
-		firstClick_ = true;
+    // Initialize the camera
+    void Camera::init() {
+        if (!are_attributes_set()) {
+            std::cerr << "ERROR::Camera::init: Camera attributes not properly set before initialization." << std::endl;
+            throw std::runtime_error("Camera attributes not set.");
+        }
+    }
 
-		// Adjust the speed of the camera and it's sensitivity when looking around
-		speed_ = 0.1f;
-		sensitivity_ = 100.0f;
+    // Check if attributes are set
+    [[nodiscard]] bool Camera::are_attributes_set() const noexcept {
+        return width_ > 0 && height_ > 0;
+    }
 
-		fov_ = 45.0f;
+    // Set the uniform locations for matrices
+    void Camera::set_matrix_location(const Engine::Graphics::Shader* shader) {
+        projection_matrix_location_ = glGetUniformLocation(shader->get_ID(), "projectionMatrix");
+        view_matrix_location_ = glGetUniformLocation(shader->get_ID(), "viewMatrix");
 
-		nearPlane_ = 0.1f;
-		farPlane_ = 100.0f;
-	}
+        if (projection_matrix_location_ == -1 || view_matrix_location_ == -1) {
+            std::cerr << "ERROR::Camera::set_matrix_location: Failed to get uniform locations." << std::endl;
+            throw std::runtime_error("Failed to get uniform locations.");
+        }
+    }
 
-	void Camera::init() {
-		// Check if the windows attributes are set
-		if (!is_attr_set())
-		{
-			std::cerr << "ERROR::CAMERA::INIT : Initialise windows width heigth and position vector first." << std::endl;
-			exit(EXIT_FAILURE);
-			return;
-		}
+    // Update and send matrices to the shader
+    void Camera::update_matrices() const {
+        // Ensure uniform locations are valid
+        if (projection_matrix_location_ == -1 || view_matrix_location_ == -1) {
+            std::cerr << "ERROR::Camera::update_matrices: Uniform locations not set. Call set_matrix_location() first." << std::endl;
+            throw std::runtime_error("Uniform locations not set.");
+        }
 
-	}
+        // Calculate view matrix
+        glm::mat4 view = glm::lookAt(position_, position_ + orientation_, up_);
 
-	inline bool Camera::is_attr_set() const {
-		return width_ != 0 && height_ != 0 && position_ != glm::vec3();
-	}
+        // Calculate projection matrix
+        glm::mat4 projection = glm::perspective(glm::radians(fov_), static_cast<float>(width_) / height_, near_plane_, far_plane_);
 
-	void Camera::set_Matrix_location(const Engine::Graphics::Shader* shader) {
-		// Set the location to avoid repetition
-		projectionMatrixLocation_ = glGetUniformLocation(shader->get_ID(), "projectionMatrix");
-		viewMatrixLocation_ = glGetUniformLocation(shader->get_ID(), "viewMatrix");
-	}
+        // Send matrices to the shader
+        glUniformMatrix4fv(projection_matrix_location_, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(view_matrix_location_, 1, GL_FALSE, glm::value_ptr(view));
+    }
 
-	void Camera::Matrix() const {
-		// Check if the location of the matrices has been set
-		if (projectionMatrixLocation_ == -1 || viewMatrixLocation_ == -1)
-		{
-			std::cerr << "ERROR::CAMERA::MATRIX : The location of the matrices has not been set." << std::endl;
-			exit(EXIT_FAILURE);
-			return;
-		}
-		
-		// Initializes matrices since otherwise they will be the null matrix
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
+    // Process inputs
+    void Camera::process_inputs(GLFWwindow* window) {
+        process_keyboard_input(window);
+        process_mouse_input(window);
+    }
 
-		// Makes camera look in the right direction from the right position
-		view = glm::lookAt(position_, position_ + orientation_, up_);
-		// Adds perspective to the scene
-		projection = glm::perspective(glm::radians(fov_), (float)width_ / height_, nearPlane_, farPlane_);
+    // Process keyboard input
+    void Camera::process_keyboard_input(GLFWwindow* window) {
+        float adjusted_speed = speed_;
 
-		// Exports the camera matrix to the Vertex Shader
-		glUniformMatrix4fv(projectionMatrixLocation_, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(viewMatrixLocation_, 1, GL_FALSE, glm::value_ptr(view));
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+            adjusted_speed *= 2.0f; // Increase speed when shift is held
+        }
 
-	}
+        // Forward
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            position_ += adjusted_speed * orientation_;
+        }
+        // Backward
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            position_ -= adjusted_speed * orientation_;
+        }
+        // Left
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            position_ -= glm::normalize(glm::cross(orientation_, up_)) * adjusted_speed;
+        }
+        // Right
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            position_ += glm::normalize(glm::cross(orientation_, up_)) * adjusted_speed;
+        }
+        // Up
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+            position_ += adjusted_speed * up_;
+        }
+        // Down
+        if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+            position_ -= adjusted_speed * up_;
+        }
+    }
 
+    // Process mouse input
+    void Camera::process_mouse_input(GLFWwindow* window) {
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+            // Hide cursor
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+            // Prevent sudden jump on first click
+            if (first_click_) {
+                glfwSetCursorPos(window, width_ / 2.0, height_ / 2.0);
+                first_click_ = false;
+            }
 
-	void Camera::Inputs(GLFWwindow* window) {
-		
-		// Handles key inputs
-		KeyInputs(window);
+            // Get cursor position
+            double mouse_x, mouse_y;
+            glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
-		// Handles mouse inputs
-		MouseInputs(window);
+            // Calculate offsets
+            float offset_x = static_cast<float>(mouse_x - width_ / 2.0);
+            float offset_y = static_cast<float>(mouse_y - height_ / 2.0);
 
-	}
+            // Apply sensitivity
+            offset_x *= sensitivity_ / width_;
+            offset_y *= sensitivity_ / height_;
 
-	void Camera::KeyInputs(GLFWwindow* window) {
+            // Update orientation
+            glm::vec3 right = glm::normalize(glm::cross(orientation_, up_));
 
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		{
-			position_ += speed_ * orientation_;
-		}
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		{
-			position_ += speed_ * -glm::normalize(glm::cross(orientation_, up_));
-		}
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		{
-			position_ += speed_ * -orientation_;
-		}
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		{
-			position_ += speed_ * glm::normalize(glm::cross(orientation_, up_));
-		}
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		{
-			position_ += speed_ * up_;
-		}
-		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
-		{
-			position_ += speed_ * -up_;
-		}
-		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-		{
-			speed_ = 0.004f;
-		}
-		else
-		{
-			speed_ = 0.001f;
-		}
-	}
+            orientation_ = glm::rotate(orientation_, glm::radians(-offset_x), up_);
+            orientation_ = glm::rotate(orientation_, glm::radians(-offset_y), right);
+            orientation_ = glm::normalize(orientation_);
 
-	void Camera::MouseInputs(GLFWwindow* window) {
+            // Reset cursor position
+            glfwSetCursorPos(window, width_ / 2.0, height_ / 2.0);
+        }
+        else {
+            // Show cursor
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            first_click_ = true;
+        }
+    }
 
-		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-		{
-			// Hides mouse cursor
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    // Set window dimensions
+    void Camera::set_dimensions(int width, int height) noexcept {
+        width_ = width;
+        height_ = height;
+    }
 
-			// Prevents camera from jumping on the first click
-			if (firstClick_)
-			{
-				glfwSetCursorPos(window, (width_ / 2), (height_ / 2));
-				firstClick_ = false;
-			}
+    // Set camera position
+    void Camera::set_position(const glm::vec3& position) noexcept {
+        position_ = position;
+    }
 
-			// Stores the coordinates of the cursor
-			double mouseX;
-			double mouseY;
-			// Fetches the coordinates of the cursor
-			glfwGetCursorPos(window, &mouseX, &mouseY);
+    // Set movement speed
+    void Camera::set_speed(float speed) noexcept {
+        speed_ = speed;
+    }
 
-			// Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen
-			// and then "transforms" them into degrees 
-			float rotX = sensitivity_ * (float)(mouseY - (height_ / 2)) / height_;
-			float rotY = sensitivity_ * (float)(mouseX - (width_ / 2)) / width_;
+    // Set mouse sensitivity
+    void Camera::set_sensitivity(float sensitivity) noexcept {
+        sensitivity_ = sensitivity;
+    }
 
-			// Calculates upcoming vertical change in the Orientation
-			glm::vec3 newOrientation = glm::rotate(orientation_, glm::radians(-rotX), glm::normalize(glm::cross(orientation_, up_)));
+    // Set field of view
+    void Camera::set_fov(float fov) noexcept {
+        fov_ = fov;
+    }
 
-			// Decides whether or not the next vertical Orientation is legal or not
-			if (abs(glm::angle(newOrientation, up_) - glm::radians(90.0f)) <= glm::radians(85.0f))
-			{
-				orientation_ = newOrientation;
-			}
+    // Get camera position
+    [[nodiscard]] glm::vec3 Camera::get_position() const noexcept {
+        return position_;
+    }
 
-			// Rotates the Orientation left and right
-			orientation_ = glm::rotate(orientation_, glm::radians(-rotY), up_);
+    // Equality operator
+    bool Camera::operator==(const Camera& other) const noexcept {
+        return position_ == other.position_ && orientation_ == other.orientation_;
+    }
 
-			// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
-			glfwSetCursorPos(window, (width_ / 2), (height_ / 2));
-		}
-		else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-		{
-			// Unhides cursor since camera is not looking around anymore
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			// Makes sure the next time the camera looks around it doesn't jump
-			firstClick_ = true;
-		}
-	}
+    // Inequality operator
+    bool Camera::operator!=(const Camera& other) const noexcept {
+        return !(*this == other);
+    }
 
-}
+} // namespace Engine

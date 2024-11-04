@@ -1,53 +1,110 @@
 #pragma once
 
-#include<iostream>
-#include<glad/glad.h>
-#include "buffer.h"
+#include <iostream>
+#include <glad/glad.h>
+#include "Buffer.h"
 
-namespace Engine
-{
+namespace Engine {
+    namespace GL {
 
-	namespace GL
-	{
-		class VAO
-		{
-		public:
+        /**
+         * @brief OpenGL VAO (Vertex Array Object) class for managing vertex array objects.
+         *
+         * The VAO class encapsulates an OpenGL VAO, providing methods to generate, bind, unbind,
+         * link vertex attributes, and clean up the VAO. It simplifies VAO management within a graphics engine.
+         */
+        class VAO {
+        public:
+            /**
+             * @brief Constructs a VAO object.
+             */
+            VAO() noexcept;
 
-			VAO();
-			~VAO();
+            /**
+             * @brief Destructor that cleans up the VAO.
+             *
+             * Ensures that the VAO is properly deleted when the VAO instance goes out of scope.
+             */
+            ~VAO();
 
-			// generates a VAO ID
-			void generate();
+            /**
+             * @brief Generates the VAO.
+             *
+             * Calls glGenVertexArrays to create a new OpenGL VAO.
+             * Must be called before binding or linking attributes.
+             */
+            void generate();
 
-			// Links a VBO to the VAO using a certain layout
-			void link_attrib(Buffer& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset);
+            /**
+             * @brief Binds the VAO.
+             *
+             * Calls glBindVertexArray to bind the VAO.
+             * The VAO must be generated before calling this method.
+             */
+            void bind() const;
 
-			// Binds the VAO
-			void bind() const;
+            /**
+             * @brief Unbinds the VAO.
+             *
+             * Unbinds the VAO by binding to 0.
+             */
+            void unbind() const;
 
-			// Unbinds the VAO
-			void unbind();
+            /**
+             * @brief Links a VBO to the VAO using a specified layout.
+             *
+             * Sets up the vertex attribute pointers and enables the vertex attribute array.
+             * The VBO must be bound before calling this method.
+             *
+             * @param VBO The VBO to link.
+             * @param layout The layout location of the attribute.
+             * @param numComponents The number of components per vertex attribute.
+             * @param type The data type of each component (e.g., GL_FLOAT).
+             * @param stride The byte offset between consecutive vertex attributes.
+             * @param offset The offset of the first component of the first attribute.
+             * @param normalized Specifies whether fixed-point data values should be normalized.
+             */
+            void link_attrib(const Buffer& VBO, GLuint layout, GLint numComponents, GLenum type, GLsizei stride, const void* offset, GLboolean normalized = GL_FALSE);
 
-			void cleanup();
+            /**
+             * @brief Deletes the VAO.
+             *
+             * Calls glDeleteVertexArrays to delete the VAO.
+             * After calling this method, the VAO instance can no longer be used unless generate() is called again.
+             */
+            void cleanup();
 
-			// set the number of object of the VAO
-			inline void set_nb_object(const GLsizei nb_object) {
-				nb_object_ = nb_object;
-			};
+            /**
+             * @brief Gets the VAO ID.
+             *
+             * @return The OpenGL VAO ID.
+             */
+            [[nodiscard]] GLuint get_ID() const noexcept;
 
+            /**
+             * @brief Equality operator.
+             *
+             * Compares two VAO objects based on their IDs.
+             *
+             * @param other The other VAO object to compare with.
+             * @return True if both VAOs have the same ID, false otherwise.
+             */
+            bool operator==(const VAO& other) const noexcept;
 
-			inline GLuint get_ID() const {
-				return ID_;
-			};
+            /**
+             * @brief Inequality operator.
+             *
+             * Compares two VAO objects based on their IDs.
+             *
+             * @param other The other VAO object to compare with.
+             * @return True if the VAOs have different IDs, false otherwise.
+             */
+            bool operator!=(const VAO& other) const noexcept;
 
-			inline GLsizei get_nb_object() const {
-				return nb_object_;
-			};
+        private:
+            GLuint ID_ = 0;             ///< OpenGL VAO ID.
+            bool is_generated_ = false; ///< Flag indicating if the VAO has been generated.
+        };
 
-		private:
-			GLuint ID_ = 0;
-			GLsizei nb_object_ = 0;
-			bool is_generated_ = false;
-		};
-	}
-}
+    } // namespace GL
+} // namespace Engine

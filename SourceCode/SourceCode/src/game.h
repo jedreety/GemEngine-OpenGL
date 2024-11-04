@@ -48,7 +48,7 @@ private:
 	std::unique_ptr<Engine::Window> window_;
 
 	std::unique_ptr<Engine::Camera> camera_;
-	bool positionChanged_;
+	glm::vec3 oldPosition_;
 
 	std::unique_ptr<Engine::Graphics::Texture::TextureManager> textureManager_;
 	std::unique_ptr<Engine::Graphics::Shader> shader_;

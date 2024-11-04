@@ -75,9 +75,9 @@ Game::Game() {
 
 	// Use make_unique for smart pointer creation
 	window_ = std::make_unique<Engine::Window>();
-	window_->set_attr(800, 600, "OpenGL Game");
+	window_->set_attributes(800, 600, "OpenGL Game");
 	window_->set_vsync(false);
-	window_->Init();
+	window_->init();
 
 	load_GLAD();
 
@@ -93,30 +93,29 @@ Game::Game() {
 	}
 
 	textureManager_ = std::make_unique<Engine::Graphics::Texture::TextureManager>();
-	textureManager_->Init();
+	textureManager_->init();
 
-	textureManager_->AddTexture("dirt");
-	textureManager_->AddTexture("grass");
+	textureManager_->add_texture("dirt");
+	textureManager_->add_texture("grass");
 
-	textureManager_->GenerateMipMaps();
+	textureManager_->generate_mipmaps();
 
 	set_parameters();
 
 	// Generate VAO and buffers
 	VAO_.generate();
-	VAO_.bind();
 
-	VBO_.set_attr(GL_ARRAY_BUFFER, 1);
+	VBO_.set_type(GL_ARRAY_BUFFER);
 	VBO_.generate();
-	VBO_.bind();
+
 	VBO_.set_data(sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	VAO_.link_attrib(VBO_, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
 	VAO_.link_attrib(VBO_, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
-	IBO_.set_attr(GL_ELEMENT_ARRAY_BUFFER, 1);
+	IBO_.set_type(GL_ELEMENT_ARRAY_BUFFER);
 	IBO_.generate();
-	IBO_.bind();
+
 	IBO_.set_data(sizeof(indices), indices, GL_STATIC_DRAW);
 
 	VAO_.unbind();
@@ -124,8 +123,9 @@ Game::Game() {
 	playerPosition_ = glm::vec3(0.0f, 0.0f, 2.0f);
 
 	camera_ = std::make_unique<Engine::Camera>();
-	camera_->set_attr(window_->get_width(), window_->get_height(), playerPosition_);
-	camera_->set_Matrix_location(shader_.get());
+	camera_->set_dimensions(window_->get_width(), window_->get_height());
+	camera_->set_position(playerPosition_);
+	camera_->set_matrix_location(shader_.get());
 
 	// Dont forget to set the camera to the window
 	window_->set_camera(camera_.get());
@@ -140,41 +140,37 @@ void Game::run() {
 
 	GLint shaderlocation_textureArray = glGetUniformLocation(shader_->get_ID(), "texture_array");
 	GLint shaderlocation_modelMatrix = glGetUniformLocation(shader_->get_ID(), "modelMatrix");
+
+	playerPosition_ = oldPosition_ = camera_->get_position();
 	networkClient_->SendPosition(playerPosition_);
-	float movementThreshold = 0.5f;
+	float movementThreshold = 0.25f;
 
 	// Main game loop
-	while (!window_->is_closed()) {
-		window_->postFrame();
+	while (!window_->should_close()) {
+		window_->pre_frame();
 		updateDeltaTime();
 
 		// Activate shader program
-		shader_->Activate();
+		shader_->activate();
 
 		// Update camera
-		camera_->Inputs(window_->get_windowPtr());
-		camera_->Matrix();
+		camera_->process_inputs(window_->get_window_ptr());
+		camera_->update_matrices();
 
 		// Get other players' positions
 		otherPlayersPositions_ = networkClient_->GetOtherPlayersPositions();
 
 		// Check if position has changed
 		glm::vec3 newPosition = camera_->get_position();
-		if (glm::distance(newPosition, playerPosition_) > movementThreshold) {
-			playerPosition_ = newPosition;
-			positionChanged_ = true;
-		}
-		else {
-			positionChanged_ = false;
+		if (glm::distance(newPosition, oldPosition_) > movementThreshold) {
+			networkClient_->SendPosition(playerPosition_);
+			oldPosition_ = newPosition;
 		}
 
-		// Send player position to server only if position has changed
-		if (positionChanged_) {
-			networkClient_->SendPosition(playerPosition_);
-		}
+		playerPosition_ = newPosition;
 
 		// Bind texture
-		textureManager_->Bind();
+		textureManager_->bind();
 		glUniform1i(shaderlocation_textureArray, 0);
 
 		// Bind VAO
@@ -207,13 +203,13 @@ void Game::run() {
 		VAO_.unbind();
 
 		// Swap buffers and poll events
-		window_->afterFrame();
+		window_->post_frame();
 	}
 }
 
 Game::~Game() {
 
-	shader_->Delete();
+	shader_->cleanup();
 	// Stop and delete network client
 	networkClient_->Stop();
 	delete networkClient_;

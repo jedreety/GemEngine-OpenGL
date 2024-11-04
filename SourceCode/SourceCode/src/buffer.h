@@ -1,54 +1,124 @@
-// Buffer.h
 #pragma once
-#include <glad/glad.h>
 
-namespace Engine
-{
-    namespace GL
-    {
-        class Buffer
-        {
+#include <glad/glad.h>
+#include <iostream>
+
+namespace Engine {
+    namespace GL {
+
+        /**
+         * @brief OpenGL Buffer class for managing buffer objects.
+         *
+         * The Buffer class encapsulates an OpenGL buffer object, providing methods to generate, bind, unbind,
+         * upload data, and clean up the buffer. It is designed to be flexible and easy to use within a graphics engine.
+         */
+        class Buffer {
         public:
-            Buffer();
+            /**
+             * @brief Constructs a Buffer object with an optional buffer type.
+             *
+             * @param type The OpenGL buffer type (e.g., GL_ARRAY_BUFFER). Defaults to GL_ARRAY_BUFFER.
+             */
+            Buffer(GLenum type = GL_ARRAY_BUFFER) noexcept;
+
+            /**
+             * @brief Destructor that cleans up the buffer.
+             *
+             * Ensures that the buffer object is properly deleted when the Buffer instance goes out of scope.
+             */
             ~Buffer();
 
-            // Generate the buffer
+            /**
+             * @brief Generates the buffer object.
+             *
+             * Calls glGenBuffers to create a new OpenGL buffer object.
+             * Must be called before binding or setting data.
+             */
             void generate();
 
-            // Bind the buffer
+            /**
+             * @brief Binds the buffer.
+             *
+             * Calls glBindBuffer to bind the buffer object to its target.
+             * Buffer must be generated before calling this method.
+             */
             void bind() const;
 
-            // Unbind the buffer
+            /**
+             * @brief Unbinds the buffer.
+             *
+             * Unbinds the buffer from its target by binding to 0.
+             */
             void unbind() const;
 
-            // Upload data to the buffer
+            /**
+             * @brief Uploads data to the buffer.
+             *
+             * Calls glBufferData to create and initialize the buffer object's data store.
+             * The buffer must be generated before calling this method.
+             *
+             * @param size The size in bytes of the data to be uploaded.
+             * @param data A pointer to the data to be uploaded.
+             * @param usage The expected usage pattern of the data store (e.g., GL_STATIC_DRAW).
+             */
             void set_data(GLsizeiptr size, const void* data, GLenum usage);
 
-            // Delete the buffer
+            /**
+             * @brief Deletes the buffer object.
+             *
+             * Calls glDeleteBuffers to delete the buffer object. After calling this method,
+             * the Buffer instance can no longer be used unless generate() is called again.
+             */
             void cleanup();
 
-            inline GLuint get_ID() const { 
-                return ID_; 
-            }
+            /**
+             * @brief Gets the buffer ID.
+             *
+             * @return The OpenGL buffer ID.
+             */
+            [[nodiscard]] GLuint get_ID() const noexcept;
 
-			inline void set_type(GLenum type) {
-				type_ = type;
-			}
+            /**
+             * @brief Gets the buffer type.
+             *
+             * @return The OpenGL buffer type (e.g., GL_ARRAY_BUFFER).
+             */
+            [[nodiscard]] GLenum get_type() const noexcept;
 
-			inline void set_nb_object(GLsizei nb_object) {
-				nb_object_ = nb_object;
-			}
+            /**
+             * @brief Sets the buffer type before generation.
+             *
+             * Allows changing the buffer type if the buffer has not been generated yet.
+             *
+             * @param type The new buffer type to set.
+             */
+            void set_type(GLenum type);
 
-			inline void set_attr(GLenum type, GLsizei nb_object) {
-				type_ = type;
-				nb_object_ = nb_object;
-			}
+            /**
+             * @brief Equality operator.
+             *
+             * Compares two Buffer objects based on their IDs and types.
+             *
+             * @param other The other Buffer object to compare with.
+             * @return True if both buffers have the same ID and type, false otherwise.
+             */
+            bool operator==(const Buffer& other) const noexcept;
+
+            /**
+             * @brief Inequality operator.
+             *
+             * Compares two Buffer objects based on their IDs and types.
+             *
+             * @param other The other Buffer object to compare with.
+             * @return True if the buffers have different IDs or types, false otherwise.
+             */
+            bool operator!=(const Buffer& other) const noexcept;
 
         private:
-            GLuint ID_ = 0;
-            GLenum type_ = 0;
-            GLsizei nb_object_ = 0;
-            bool is_generated_ = false;
+            GLuint ID_ = 0;              ///< OpenGL buffer ID.
+            GLenum type_;                ///< OpenGL buffer type (e.g., GL_ARRAY_BUFFER).
+            bool is_generated_ = false;  ///< Flag indicating if the buffer has been generated.
         };
-    }
-}
+
+    } // namespace GL
+} // namespace Engine

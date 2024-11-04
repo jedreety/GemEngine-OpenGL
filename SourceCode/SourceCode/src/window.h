@@ -1,113 +1,212 @@
-/*
-For now I will use the OPENGL windowing system, but I will eventually make my own windowing system.
-*/
-
 #pragma once
 
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
-#include<iostream>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
 #include "cameraProgram.h"
 
+namespace Engine {
 
-namespace Engine
-{
+    /**
+     * @brief Callback function for key events.
+     *
+     * Closes the window when the Escape key is pressed.
+     *
+     * @param window Pointer to the GLFW window.
+     * @param key Keyboard key that was pressed or released.
+     * @param scancode System-specific scancode of the key.
+     * @param action GLFW_PRESS, GLFW_RELEASE, or GLFW_REPEAT.
+     * @param mods Bit field describing which modifier keys were held down.
+     */
+    void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-	// Callback function for key events
-	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	// Callback function for resizing the window
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+    /**
+     * @brief Callback function for window resize events.
+     *
+     * Updates the viewport and notifies the camera of the new window dimensions.
+     *
+     * @param window Pointer to the GLFW window.
+     * @param width New width of the window.
+     * @param height New height of the window.
+     */
+    void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-	class Window
-	{
-	public:
+    /**
+     * @brief Window class for managing the GLFW window and context.
+     *
+     * The Window class encapsulates the creation and management of a GLFW window,
+     * including context setup, input callbacks, and frame management.
+     */
+    class Window {
+    public:
+        /**
+         * @brief Constructs a Window object with default parameters.
+         */
+        Window();
 
-		Window();
-		// Initialize the window
-		void Init();
+        /**
+         * @brief Destructor that cleans up the GLFW window.
+         */
+        ~Window();
 
-		~Window();
+        /**
+         * @brief Initializes the window.
+         *
+         * Creates the GLFW window, sets up the context, callbacks, and VSync.
+         *
+         * @throws std::runtime_error if required attributes are not set or window creation fails.
+         */
+        void init();
 
-		// Return true if the window attributes are set
-		inline bool is_attr_set() const;
-		// Create the OpenGL window
-		void create_window();
-		// Make the window the one we will be working with
-		void set_context_current() const;
-		// Bind the Resize and Key call back functions
-		void set_callbacks() const;
+        /**
+         * @brief Checks if the window attributes are set.
+         *
+         * @return True if attributes are set, false otherwise.
+         */
+        [[nodiscard]] bool are_attributes_set() const noexcept;
 
-		void set_vsync() const;
+        /**
+         * @brief Clears the color and depth buffers.
+         */
+        void clear_frame() const;
 
-			
-		// Clear the color buffer
-		void clear_frame() const;
-		// First thing rendered into the window
-		void postFrame() const;
-		// Last thing rendered into the window
-		void afterFrame() const;
+        /**
+         * @brief Prepares the frame for rendering.
+         *
+         * Clears the buffers and sets the background color.
+         */
+        void pre_frame() const;
 
-		// Check if the window is closed
-		bool is_closed() { 
-			return glfwWindowShouldClose(window_); 
-		};
+        /**
+         * @brief Finalizes the frame after rendering.
+         *
+         * Swaps buffers and polls for events.
+         */
+        void post_frame() const;
 
-		inline int get_width() const { 
-			return width_; 
-		};
-		inline int get_height() const { 
-			return height_; 
-		};
+        /**
+         * @brief Checks if the window should close.
+         *
+         * @return True if the window should close, false otherwise.
+         */
+        [[nodiscard]] bool should_close() const noexcept;
 
-		inline void set_attr(const int width, const int height, const char* title) {
-			set_dimensions(width, height);
-			set_title(title);
-		};
+        /**
+         * @brief Sets the window dimensions and title.
+         *
+         * @param width Window width in pixels.
+         * @param height Window height in pixels.
+         * @param title Window title.
+         */
+        void set_attributes(int width, int height, const char* title);
 
-		inline void set_width(const int width) {
-			width_ = width; 
-		};
-		inline void set_height(const int height) {
-			height_ = height; 
-		};
-		inline void set_title(const char* title) {
-			title_ = title;
-		};
-		inline void set_vsync(const bool vsync) {
-			VSync_ = vsync;
-		};
+        /**
+         * @brief Sets the window width.
+         *
+         * @param width Window width in pixels.
+         */
+        void set_width(int width) noexcept;
 
-		void set_dimensions(const int width, const int height) {
-			set_width(width);
-			set_height(height);
-		}
+        /**
+         * @brief Sets the window height.
+         *
+         * @param height Window height in pixels.
+         */
+        void set_height(int height) noexcept;
 
-		inline void set_camera(Camera* camera) {
-			camera_ = camera;
+        /**
+         * @brief Sets the window title.
+         *
+         * @param title Window title.
+         */
+        void set_title(const char* title) noexcept;
 
-			// Set the user pointer of the GLFWwindow to this Window instance
-			glfwSetWindowUserPointer(window_, this);
-		}
+        /**
+         * @brief Enables or disables VSync.
+         *
+         * @param vsync True to enable VSync, false to disable.
+         */
+        void set_vsync(bool vsync) noexcept;
 
-		inline Camera* get_camera() const {
-			return camera_;
-		}
+        /**
+         * @brief Sets the camera associated with the window.
+         *
+         * @param camera Pointer to the Camera object.
+         */
+        void set_camera(Camera* camera) noexcept;
 
-		inline GLFWwindow* get_windowPtr() const { 
-			return window_; 
-		};
+        /**
+         * @brief Gets the window width.
+         *
+         * @return Window width in pixels.
+         */
+        [[nodiscard]] int get_width() const noexcept;
 
-	private:
+        /**
+         * @brief Gets the window height.
+         *
+         * @return Window height in pixels.
+         */
+        [[nodiscard]] int get_height() const noexcept;
 
-		GLFWwindow* window_ = nullptr;
-		const char* title_ = nullptr;
+        /**
+         * @brief Gets the pointer to the GLFW window.
+         *
+         * @return Pointer to the GLFW window.
+         */
+        [[nodiscard]] GLFWwindow* get_window_ptr() const noexcept;
 
-		unsigned int width_ = 0;
-		unsigned int height_ = 0;
-		bool VSync_ = false;
+        /**
+         * @brief Gets the pointer to the associated Camera object.
+         *
+         * @return Pointer to the Camera object.
+         */
+        [[nodiscard]] Camera* get_camera() const noexcept;
 
-		Camera* camera_ = nullptr;
+        /**
+         * @brief Equality operator.
+         *
+         * Compares two Window objects based on their GLFW window pointers.
+         *
+         * @param other The other Window object to compare with.
+         * @return True if both have the same GLFW window pointer, false otherwise.
+         */
+        bool operator==(const Window& other) const noexcept;
 
-	};
-	
-}
+        /**
+         * @brief Inequality operator.
+         *
+         * Compares two Window objects based on their GLFW window pointers.
+         *
+         * @param other The other Window object to compare with.
+         * @return True if they have different GLFW window pointers, false otherwise.
+         */
+        bool operator!=(const Window& other) const noexcept;
+
+    private:
+        /**
+         * @brief Creates the GLFW window.
+         *
+         * @throws std::runtime_error if window creation fails.
+         */
+        void create_window();
+
+        /**
+         * @brief Makes the window's context current.
+         */
+        void make_context_current() const;
+
+        /**
+         * @brief Sets the input callbacks for the window.
+         */
+        void set_callbacks();
+
+        GLFWwindow* window_ = nullptr;                  ///< Pointer to the GLFW window.
+        const char* title_ = "Default window name";     ///< Window title.
+        int width_ = 800;                               ///< Window width in pixels.
+        int height_ = 600;                              ///< Window height in pixels.
+        bool vsync_ = true;                             ///< VSync enabled flag.
+        Camera* camera_ = nullptr;                      ///< Pointer to the associated Camera object.
+    };
+
+} // namespace Engine
