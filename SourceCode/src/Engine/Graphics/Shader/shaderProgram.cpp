@@ -115,7 +115,7 @@ namespace Engine {
         // Read file contents
         std::string Shader::get_file_contents(const std::string& filename) const {
             // Define the shader path (adjust as needed)
-            std::string shader_path = "SourceCode/Ressources/shader/";
+            std::string shader_path = "SourceCode/ressources/shaders/";
             std::string full_filename = shader_path + filename;
 
             std::ifstream in(full_filename, std::ios::in | std::ios::binary);
@@ -125,6 +125,7 @@ namespace Engine {
                 in.close();
                 return contents.str();
             }
+            std::cout << full_filename << '\n';
             throw std::runtime_error("Could not open file " + full_filename);
         }
 

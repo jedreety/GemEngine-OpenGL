@@ -98,7 +98,7 @@ namespace Engine {
 
                 // Load the texture image
                 int width, height, channels;
-                std::string texture_path = "SourceCode/Ressources/texture/";
+                std::string texture_path = "SourceCode/ressources/textures/";
                 std::string full_filename = texture_path + texture_name + ".png";
 
                 stbi_set_flip_vertically_on_load(true); // Flip the image vertically if needed
