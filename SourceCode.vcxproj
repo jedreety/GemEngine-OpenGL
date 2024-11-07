@@ -18,6 +18,31 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SourceCode\src\Engine\Camera\engine_camera.cpp" />
+    <ClCompile Include="SourceCode\src\Engine\GLStructure\BufferObject\gl_buffer.cpp" />
+    <ClCompile Include="SourceCode\src\Engine\GLStructure\VertexArrayObject\gl_vao.cpp" />
+    <ClCompile Include="SourceCode\src\Engine\Graphics\Shader\engine_shaderProgram.cpp" />
+    <ClCompile Include="SourceCode\src\Engine\Graphics\Texture\TextureManager\engine_textureManager.cpp" />
+    <ClCompile Include="SourceCode\src\Engine\Window\engine_window.cpp" />
+    <ClCompile Include="SourceCode\src\game.cpp" />
+    <ClCompile Include="SourceCode\src\glad.c" />
+    <ClCompile Include="SourceCode\src\main.cpp" />
+    <ClCompile Include="SourceCode\src\Network\Client\network_client.cpp" />
+    <ClCompile Include="SourceCode\src\Network\Server\network_server.cpp" />
+    <ClCompile Include="SourceCode\src\stb.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SourceCode\src\Engine\Camera\engine_camera.h" />
+    <ClInclude Include="SourceCode\src\Engine\GLStructure\BufferObject\gl_buffer.h" />
+    <ClInclude Include="SourceCode\src\Engine\GLStructure\VertexArrayObject\gl_vao.h" />
+    <ClInclude Include="SourceCode\src\Engine\Graphics\Shader\engine_shaderProgram.h" />
+    <ClInclude Include="SourceCode\src\Engine\Graphics\Texture\TextureManager\engine_textureManager.h" />
+    <ClInclude Include="SourceCode\src\Engine\Window\engine_window.h" />
+    <ClInclude Include="SourceCode\src\game.h" />
+    <ClInclude Include="SourceCode\src\Network\Client\network_client.h" />
+    <ClInclude Include="SourceCode\src\Network\Server\network_server.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -71,20 +96,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)SourceCode\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)SourceCode\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)SourceCode\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)SourceCode\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)SourceCode\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)SourceCode\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)SourceCode\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)SourceCode\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

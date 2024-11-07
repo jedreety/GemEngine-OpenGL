@@ -1,4 +1,4 @@
-#include "Buffer.h"
+#include "gl_buffer.h"
 
 namespace Engine {
     namespace GL {

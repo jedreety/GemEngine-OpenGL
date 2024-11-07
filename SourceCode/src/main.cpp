@@ -16,7 +16,7 @@
 */
 
 #include "game.h"
-#include "network_server.h"
+#include "Network/Server/network_server.h"
 #include <limits>
 
 #pragma warning(disable:4996)

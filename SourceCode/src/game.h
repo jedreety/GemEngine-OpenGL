@@ -3,20 +3,20 @@
 #include<iostream>
 #include <memory>
 
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-#include "network_client.h"
+#include "Network/Client/network_client.h"
 
-#include "window.h"
+#include "Engine/Window/engine_window.h"
 
-#include "cameraProgram.h"
+#include "Engine/Camera/engine_camera.h"
 
-#include "shaderProgram.h"
-#include "textureManager.h"
+#include "Engine/Graphics/Shader/engine_shaderProgram.h"
+#include "Engine/Graphics/Texture/TextureManager/engine_textureManager.h"
 
-#include "VAO.h"
-#include "buffer.h"
+#include "Engine/GLStructure/VertexArrayObject/gl_vao.h"
+#include "Engine/GLStructure/BufferObject/gl_buffer.h"
 
 
 class Game

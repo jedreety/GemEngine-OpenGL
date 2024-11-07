@@ -7,7 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
-#include "shaderProgram.h"
+#include "../Graphics/Shader/engine_shaderProgram.h"
 
 namespace Engine {
 

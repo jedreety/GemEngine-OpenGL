@@ -1,4 +1,4 @@
-#include "VAO.h"
+#include "gl_vao.h"
 
 namespace Engine {
     namespace GL {

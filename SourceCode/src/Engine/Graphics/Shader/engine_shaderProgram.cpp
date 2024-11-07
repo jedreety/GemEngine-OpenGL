@@ -1,4 +1,4 @@
-#include "shaderProgram.h"
+#include "engine_shaderProgram.h"
 
 namespace Engine {
     namespace Graphics {
@@ -115,7 +115,7 @@ namespace Engine {
         // Read file contents
         std::string Shader::get_file_contents(const std::string& filename) const {
             // Define the shader path (adjust as needed)
-            std::string shader_path = "SourceCode/ressources/shaders/";
+            std::string shader_path = "SourceCode/resources/shaders/";
             std::string full_filename = shader_path + filename;
 
             std::ifstream in(full_filename, std::ios::in | std::ios::binary);

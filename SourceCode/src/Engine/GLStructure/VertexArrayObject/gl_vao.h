@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <glad/glad.h>
-#include "Buffer.h"
+#include "../BufferObject/gl_buffer.h"
 
 namespace Engine {
     namespace GL {

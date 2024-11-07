@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm> // for std::find
 #include <iostream>
+
 #include <stb/stb_image.h>
 
 namespace Engine {

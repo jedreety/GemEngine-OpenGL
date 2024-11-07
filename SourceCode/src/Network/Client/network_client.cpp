@@ -81,8 +81,6 @@ void NetworkClient::SendPosition(const glm::vec3& position) {
 	// Send the packet to the server
     enet_peer_send(serverPeer_, 0, packet);
 
-    // debug
-    std::cout << "Client " << client_->peers->connectID << " sent position: " << position.x << ", " << position.y << ", " << position.z << std::endl;
 }
 
 // Get positions of other players
@@ -132,9 +130,6 @@ void NetworkClient::Run() {
                     // Update other player's position
                     otherPlayersPositions_[senderID] = position;
 
-                    // debug
-                    std::cout << "Client received position from client " << senderID << ": "
-                        << position.x << ", " << position.y << ", " << position.z << std::endl;
                 }
                 
                 // Destroy the received packet

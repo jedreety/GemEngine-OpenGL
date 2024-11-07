@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "cameraProgram.h"
+#include "../Camera/engine_camera.h"
 
 namespace Engine {
 

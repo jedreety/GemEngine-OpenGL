@@ -70,10 +70,6 @@ void NetworkServer::Run() {
             switch (event.type) {
 
             case ENET_EVENT_TYPE_CONNECT:
-
-                // debug
-                std::cout << "A new client connected from "
-                    << event.peer->address.host << ":" << event.peer->address.port << "." << std::endl;
                 
                 // Initialize the client's position
                 clientPositions_[event.peer->connectID] = glm::vec3(0.0f);
@@ -88,10 +84,6 @@ void NetworkServer::Run() {
                     glm::vec3 position;
                     std::memcpy(&position, event.packet->data, sizeof(glm::vec3));
                     clientPositions_[event.peer->connectID] = position;
-
-                    // debug
-                    std::cout << "Server received position from client " << event.peer->connectID << ": "
-                        << position.x << ", " << position.y << ", " << position.z << std::endl;
 
                     // Broadcast the position to other clients
                     for (size_t i = 0; i < server_->peerCount; ++i) {
