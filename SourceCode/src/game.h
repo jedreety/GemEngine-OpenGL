@@ -1,10 +1,9 @@
 #pragma once
 
+#include <GlfwGlad.h>
+
 #include<iostream>
 #include <memory>
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 #include "Network/Client/network_client.h"
 
@@ -29,20 +28,6 @@ public:
 
 private:
 
-	// Initialize GLFW
-	void load_GLFW();
-
-	// Set the OpenGL version
-	void set_openGL_version(const int major, const int minor);
-
-	// Set the OpenGL profile
-	void set_openGL_profile(const int profile);
-
-	// Load the OpenGL functions
-	void load_GLAD();
-
-	void set_parameters();
-
 	void updateDeltaTime();
 
 	std::unique_ptr<Engine::Window> window_;
@@ -63,7 +48,7 @@ private:
 	float fpsAccumulator_;
 	int frameCount_;
 
-	NetworkClient* networkClient_;
+	Network::Client* networkClient_;
 	glm::vec3 playerPosition_;
 	std::unordered_map<enet_uint32, glm::vec3> otherPlayersPositions_;
 };

@@ -16,7 +16,7 @@ namespace Engine {
         // Generate the VAO
         void VAO::generate() {
             if (!is_generated_) {
-                glGenVertexArrays(1, &ID_);
+                GL::gen_vertex_arrays(1, &ID_);
                 if (ID_ == 0) {
                     std::cerr << "Failed to generate VAO." << std::endl;
                 }
@@ -32,7 +32,7 @@ namespace Engine {
         // Bind the VAO
         void VAO::bind() const {
             if (is_generated_) {
-                glBindVertexArray(ID_);
+                GL::bind_vertex_array(ID_);
             }
             else {
                 std::cerr << "VAO not generated; cannot bind." << std::endl;
@@ -41,7 +41,7 @@ namespace Engine {
 
         // Unbind the VAO
         void VAO::unbind() const {
-            glBindVertexArray(0);
+            GL::bind_vertex_array(0);
         }
 
         // Link a VBO to the VAO
@@ -53,10 +53,10 @@ namespace Engine {
             bind();
 
             // Set the vertex attribute pointer
-            glVertexAttribPointer(layout, numComponents, type, normalized, stride, offset);
+            GL::vertex_attrib_pointer(layout, numComponents, type, normalized, stride, offset);
 
             // Enable the vertex attribute array
-            glEnableVertexAttribArray(layout);
+            GL::enable_vertex_attrib_array(layout);
 
             // Unbind the VBO
             VBO.unbind();
@@ -68,7 +68,7 @@ namespace Engine {
         // Delete the VAO
         void VAO::cleanup() {
             if (is_generated_) {
-                glDeleteVertexArrays(1, &ID_);
+                GL::delete_vertex_arrays(1, &ID_);
                 ID_ = 0;
                 is_generated_ = false;
             }

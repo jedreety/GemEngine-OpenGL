@@ -17,7 +17,7 @@ namespace Engine {
         // Generate the buffer object
         void Buffer::generate() {
             if (!is_generated_) {
-                glGenBuffers(1, &ID_);
+                GL::gen_buffers(1, &ID_);
                 if (ID_ == 0) {
                     std::cerr << "Failed to generate buffer." << std::endl;
                 }
@@ -33,7 +33,7 @@ namespace Engine {
         // Bind the buffer
         void Buffer::bind() const {
             if (is_generated_) {
-                glBindBuffer(type_, ID_);
+                GL::bind_buffer(type_, ID_);
             }
             else {
                 std::cerr << "Buffer not generated; cannot bind." << std::endl;
@@ -42,14 +42,14 @@ namespace Engine {
 
         // Unbind the buffer
         void Buffer::unbind() const {
-            glBindBuffer(type_, 0);
+            GL::bind_buffer(type_, 0);
         }
 
         // Upload data to the buffer
         void Buffer::set_data(GLsizeiptr size, const void* data, GLenum usage) {
             if (is_generated_) {
-                glBindBuffer(type_, ID_);
-                glBufferData(type_, size, data, usage);
+                GL::bind_buffer(type_, ID_);
+                GL::buffer_data(type_, size, data, usage);
                 // Optionally unbind after setting data ( Make the program crash )
                 // glBindBuffer(type_, 0);
             }
@@ -61,7 +61,7 @@ namespace Engine {
         // Delete the buffer object
         void Buffer::cleanup() {
             if (is_generated_) {
-                glDeleteBuffers(1, &ID_);
+                GL::delete_buffers(1, &ID_);
                 ID_ = 0;
                 is_generated_ = false;
             }

@@ -8,6 +8,9 @@
 	L'objectif de ce projet est de développer un moteur de jeu qui soit le plus optimisé et extensible possible.
 
 	Le projet sera en anglais pour m'exercer.
+    
+	Ma règle est que si une classe parent exemple : Window a pour attribut une classe enfant exemple : Input, alors la classse parent peut modifier la classe enfant mais la classe enfant 
+	ne modifira aucun attribut de la classe parent. Il ne prendra la classe parent en const ou une copie. One way relationship.
 
 	* Prédiction *
 	Amusement : 10/10 Vraiment
@@ -15,9 +18,10 @@
 	Utilité : 10/10 énormément appris
 */
 
-#include "game.h"
-#include "Network/Server/network_server.h"
+#include <iostream>
 #include <limits>
+#include "Network/Server/network_server.h"
+#include "game.h"
 
 #pragma warning(disable:4996)
 
@@ -34,7 +38,7 @@ int main() {
 
     if (choice == 0) {
         // Run as server
-        NetworkServer server(1234); // Replace 1234 with your desired port
+        Network::Server server(1234); // Replace 1234 with your desired port
         server.Start();
 
         std::cout << "Server running. Press Enter to stop." << std::endl;

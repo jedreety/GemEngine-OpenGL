@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <glad/glad.h>
+#include <GlfwGlad.h>
 #include "../BufferObject/gl_buffer.h"
 
 namespace Engine {

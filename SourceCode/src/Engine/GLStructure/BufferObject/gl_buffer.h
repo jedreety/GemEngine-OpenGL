@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glad/glad.h>
+#include <GlfwGlad.h>
 #include <iostream>
 
 namespace Engine {

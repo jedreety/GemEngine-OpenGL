@@ -69,9 +69,9 @@ GLuint indices[] = {
 
 
 Game::Game() {
-	load_GLFW();
-	set_openGL_version(4, 6);
-	set_openGL_profile(GLFW_OPENGL_CORE_PROFILE);
+	Engine::GLFW::init();
+	Engine::GLFW::set_context_version(4, 6);
+	Engine::GLFW::set_openGL_profile(GLFW_OPENGL_CORE_PROFILE);
 
 	// Use make_unique for smart pointer creation
 	window_ = std::make_unique<Engine::Window>();
@@ -79,7 +79,7 @@ Game::Game() {
 	window_->set_vsync(false);
 	window_->init();
 
-	load_GLAD();
+	Engine::GLAD::init();
 
 	shader_ = std::make_unique<Engine::Graphics::Shader>();
 	try {
@@ -100,7 +100,7 @@ Game::Game() {
 
 	textureManager_->generate_mipmaps();
 
-	set_parameters();
+	Engine::GLFW::enable_parameters();
 
 	// Generate VAO and buffers
 	VAO_.generate();
@@ -131,19 +131,19 @@ Game::Game() {
 	window_->set_camera(camera_.get());
 
 	// Initialize network client
-	networkClient_ = new NetworkClient("127.0.0.1", 1234); // Use your server IP and port
+	networkClient_ = new Network::Client("127.0.0.1", 1234); // Use your server IP and port
 	networkClient_->Start();
 
 }
 
 void Game::run() {
 
-	GLint shaderlocation_textureArray = glGetUniformLocation(shader_->get_ID(), "texture_array");
-	GLint shaderlocation_modelMatrix = glGetUniformLocation(shader_->get_ID(), "modelMatrix");
+	GLint shaderlocation_textureArray = Engine::GL::get_uniform_location(shader_->get_ID(), "texture_array");
+	GLint shaderlocation_modelMatrix = Engine::GL::get_uniform_location(shader_->get_ID(), "modelMatrix");
 
 	playerPosition_ = oldPosition_ = camera_->get_position();
 	networkClient_->SendPosition(playerPosition_);
-	float movementThreshold = 0.25f;
+	float movementThreshold = 0.125f;
 
 	// Main game loop
 	while (!window_->should_close()) {
@@ -154,7 +154,7 @@ void Game::run() {
 		shader_->activate();
 
 		// Update camera
-		camera_->process_inputs(window_->get_window_ptr());
+		camera_->process_inputs(window_->get_window_ptr(), window_->get_inputs());
 		camera_->update_matrices();
 
 		// Get other players' positions
@@ -171,21 +171,20 @@ void Game::run() {
 
 		// Bind texture
 		textureManager_->bind();
-		glUniform1i(shaderlocation_textureArray, 0);
+		Engine::GL::set_uniform1i(shaderlocation_textureArray, 0);
 
 		// Bind VAO
 		VAO_.bind();
 
 		// Set model matrix for player's cube
 		glm::mat4 model = glm::mat4(1.0f);
+
 		// Translate the cube to the player's position
 		model = glm::translate(model, playerPosition_);
 		// Set the model matrix in the shader
-		glUniformMatrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
-
-
+		Engine::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
 		// Draw elements
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+		Engine::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
 		// Render other players
 		for (const auto& player : otherPlayersPositions_) {
@@ -193,10 +192,10 @@ void Game::run() {
 			model = glm::mat4(1.0f);
 			// Translate the cube to the other player's position
 			model = glm::translate(model, player.second);
-			glUniformMatrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
+			Engine::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
 
 			// Draw other player's cube
-			glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
+			Engine::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 		}
 
 		// Unbind VAO (optional)
@@ -217,56 +216,15 @@ Game::~Game() {
 	VBO_.cleanup();
 	IBO_.cleanup();
 
-	glfwTerminate();  // GLFW cleanup is still required
-}
-
-void Game::load_GLFW() {
-
-	if (!glfwInit()) {
-		// Handle GLFW initialization failure
-		std::cerr << "Failed to initialize GLFW" << std::endl;
-
-		exit(EXIT_FAILURE);
-	}
-}
-
-void Game::set_openGL_version(const int major, const int minor) {
-	// Set the OpenGL version to major.minor
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
-}
-
-void Game::set_openGL_profile(const int profile) {
-	// Set the OpenGL profile
-	glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
-}
-
-void Game::load_GLAD() {
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		// Handle GLAD initialization failure
-		glGetError();
-		std::cerr << "Failed to initialize GLAD" << std::endl;
-		exit(EXIT_FAILURE);
-	}
-}
-void Game::set_parameters() {
-	// Enables the Depth Buffer
-	glEnable(GL_DEPTH_TEST);
-	// Enables Cull Facing
-	glEnable(GL_CULL_FACE);
-	// Keeps front faces
-	glCullFace(GL_BACK);
-	// Uses clock-wise standard
-	glFrontFace(GL_CW);
+	Engine::GLFW::terminate();  // GLFW cleanup is still required
 }
 
 void Game::updateDeltaTime() {
 
-	const float seconds = 3.5f;
+	const float seconds = 2.f;
 
 	// DELTA TIME
-	double current_frameTime = glfwGetTime();
+	double current_frameTime = Engine::GLFW::get_time();
 	deltaTime_ = static_cast<float>(current_frameTime - last_frameTime_);
 	last_frameTime_ = current_frameTime;
 	

@@ -19,26 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SourceCode\Libraries\include\GlfwGlad.cpp" />
     <ClCompile Include="SourceCode\src\Engine\Camera\engine_camera.cpp" />
     <ClCompile Include="SourceCode\src\Engine\GLStructure\BufferObject\gl_buffer.cpp" />
     <ClCompile Include="SourceCode\src\Engine\GLStructure\VertexArrayObject\gl_vao.cpp" />
     <ClCompile Include="SourceCode\src\Engine\Graphics\Shader\engine_shaderProgram.cpp" />
     <ClCompile Include="SourceCode\src\Engine\Graphics\Texture\TextureManager\engine_textureManager.cpp" />
+    <ClCompile Include="SourceCode\src\Engine\Input\engine_inputs.cpp" />
+    <ClCompile Include="SourceCode\src\Engine\Input\Key\engine_key.cpp" />
     <ClCompile Include="SourceCode\src\Engine\Window\engine_window.cpp" />
     <ClCompile Include="SourceCode\src\game.cpp" />
-    <ClCompile Include="SourceCode\src\glad.c" />
+    <ClCompile Include="SourceCode\Libraries\include\glad.c" />
     <ClCompile Include="SourceCode\src\main.cpp" />
     <ClCompile Include="SourceCode\src\Network\Client\network_client.cpp" />
     <ClCompile Include="SourceCode\src\Network\Server\network_server.cpp" />
     <ClCompile Include="SourceCode\src\stb.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SourceCode\Libraries\include\GlfwGlad.h" />
     <ClInclude Include="SourceCode\src\Engine\Camera\engine_camera.h" />
     <ClInclude Include="SourceCode\src\Engine\GLStructure\BufferObject\gl_buffer.h" />
     <ClInclude Include="SourceCode\src\Engine\GLStructure\VertexArrayObject\gl_vao.h" />
     <ClInclude Include="SourceCode\src\Engine\Graphics\Shader\engine_shaderProgram.h" />
     <ClInclude Include="SourceCode\src\Engine\Graphics\Texture\TextureManager\engine_textureManager.h" />
     <ClInclude Include="SourceCode\src\Engine\Window\engine_window.h" />
+    <ClInclude Include="SourceCode\src\Engine\Input\engine_inputs.h" />
+    <ClInclude Include="SourceCode\src\Engine\Input\Key\engine_key.h" />
     <ClInclude Include="SourceCode\src\game.h" />
     <ClInclude Include="SourceCode\src\Network\Client\network_client.h" />
     <ClInclude Include="SourceCode\src\Network\Server\network_server.h" />
@@ -119,6 +125,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,6 +143,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,6 +161,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -170,6 +179,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

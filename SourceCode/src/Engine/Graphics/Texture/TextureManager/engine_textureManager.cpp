@@ -12,7 +12,7 @@ namespace Engine {
             // Destructor
             TextureManager::~TextureManager() {
                 if (texture_array_ID_ != 0) {
-                    glDeleteTextures(1, &texture_array_ID_);
+                    GL::delete_textures(1, &texture_array_ID_);
                     texture_array_ID_ = 0;
                 }
             }
@@ -30,13 +30,13 @@ namespace Engine {
                 bind();
 
                 // Set texture parameters
-                glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
                 // Allocate storage for the texture array
-                glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, width_, height_, max_texture_units_);
+                GL::tex_storage_3d(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, width_, height_, max_texture_units_);
 
                 unbind();
 
@@ -45,7 +45,7 @@ namespace Engine {
 
             // Generate the texture array
             void TextureManager::generate() {
-                glGenTextures(1, &texture_array_ID_);
+                GL::gen_textures(1, &texture_array_ID_);
                 if (texture_array_ID_ == 0) {
                     std::cerr << "ERROR::TextureManager::generate: Failed to generate texture array." << std::endl;
                     throw std::runtime_error("Failed to generate texture array.");
@@ -59,13 +59,13 @@ namespace Engine {
 
             // Bind the texture array
             void TextureManager::bind() const {
-                glActiveTexture(GL_TEXTURE0 + texture_unit_);
-                glBindTexture(GL_TEXTURE_2D_ARRAY, texture_array_ID_);
+                GL::active_texture(GL_TEXTURE0 + texture_unit_);
+                GL::bind_texture(GL_TEXTURE_2D_ARRAY, texture_array_ID_);
             }
 
             // Unbind the texture array
             void TextureManager::unbind() const {
-                glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+                GL::bind_texture(GL_TEXTURE_2D_ARRAY, 0);
             }
 
             // Generate mipmaps
@@ -75,7 +75,7 @@ namespace Engine {
                     throw std::runtime_error("Texture array not initialized.");
                 }
                 bind();
-                glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+                GL::generate_mipmap(GL_TEXTURE_2D_ARRAY);
                 unbind();
             }
 
@@ -117,7 +117,7 @@ namespace Engine {
 
                 // Add the texture data to the texture array
                 bind();
-                glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, static_cast<GLint>(textures_.size()), width_, height_, 1, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
+                GL::tex_sub_image_3d(GL_TEXTURE_2D_ARRAY, 0, 0, 0, static_cast<GLint>(textures_.size()), width_, height_, 1, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
                 unbind();
 
                 // Free the loaded texture data

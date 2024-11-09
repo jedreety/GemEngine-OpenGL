@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glad/glad.h>
+#include <GlfwGlad.h>
 #include <cstdint>   // for fixed-width integer types
 #include <vector>
 #include <string>

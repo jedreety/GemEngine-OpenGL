@@ -7,29 +7,32 @@
 #include <atomic>
 #include <glm/glm.hpp>
 
-class NetworkClient {
-public:
-    NetworkClient(const std::string& serverAddress, uint16_t port);
-    ~NetworkClient();
+namespace Network {
 
-    void Start();
-    void Stop();
+    class Client {
+    public:
+        Client(const std::string& serverAddress, uint16_t port);
+        ~Client();
 
-    // Send player's position to the server
-    void SendPosition(const glm::vec3& position);
+        void Start();
+        void Stop();
 
-    // Get positions of other players
-    std::unordered_map<enet_uint32, glm::vec3> GetOtherPlayersPositions();
+        // Send player's position to the server
+        void SendPosition(const glm::vec3& position);
 
-private:
-    void Run();
+        // Get positions of other players
+        std::unordered_map<enet_uint32, glm::vec3> GetOtherPlayersPositions();
 
-    ENetHost* client_;
-    ENetPeer* serverPeer_;
-    std::thread clientThread_;
-    std::atomic<bool> running_;
+    private:
+        void Run();
 
-    std::mutex mutex_;
-    // Map of other players' positions
-    std::unordered_map<enet_uint32, glm::vec3> otherPlayersPositions_;
-};
+        ENetHost* client_;
+        ENetPeer* serverPeer_;
+        std::thread clientThread_;
+        std::atomic<bool> running_;
+
+        std::mutex mutex_;
+        // Map of other players' positions
+        std::unordered_map<enet_uint32, glm::vec3> otherPlayersPositions_;
+    };
+}

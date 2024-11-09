@@ -1,24 +1,11 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <GlfwGlad.h>
 #include <iostream>
 #include "../Camera/engine_camera.h"
+#include "../Input/engine_inputs.h"
 
 namespace Engine {
-
-    /**
-     * @brief Callback function for key events.
-     *
-     * Closes the window when the Escape key is pressed.
-     *
-     * @param window Pointer to the GLFW window.
-     * @param key Keyboard key that was pressed or released.
-     * @param scancode System-specific scancode of the key.
-     * @param action GLFW_PRESS, GLFW_RELEASE, or GLFW_REPEAT.
-     * @param mods Bit field describing which modifier keys were held down.
-     */
-    void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
     /**
      * @brief Callback function for window resize events.
@@ -30,6 +17,32 @@ namespace Engine {
      * @param height New height of the window.
      */
     void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+    /**
+     * @brief Callback function for key events.
+     *
+     * Update the Inputs and closes the window when the Escape key is pressed.
+     *
+     * @param window Pointer to the GLFW window.
+     * @param key Keyboard key that was pressed or released.
+     * @param scancode System-specific scancode of the key.
+     * @param action GLFW_PRESS, GLFW_RELEASE, or GLFW_REPEAT.
+     * @param mods Bit field describing which modifier keys were held down.
+     */
+     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+     /**
+      * @brief Callback function for Mouse events.
+      *
+      * Update the mouse button Inputs.
+      *
+      * @param window Pointer to the GLFW window.
+      * @param button Mouse button that was pressed or released.
+      * @param scancode System-specific scancode of the key.
+      * @param action GLFW_PRESS, GLFW_RELEASE, or GLFW_REPEAT.
+      * @param mods Bit field describing which modifier keys were held down.
+      */
+     void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
     /**
      * @brief Window class for managing the GLFW window and context.
@@ -164,6 +177,13 @@ namespace Engine {
         [[nodiscard]] Camera* get_camera() const noexcept;
 
         /**
+		 * @brief Gets the pointer to the Inputs object.
+         * 
+         * @return Pointer to the Inputs object.
+         */
+		[[nodiscard]] Inputs* get_inputs() const noexcept;
+
+        /**
          * @brief Equality operator.
          *
          * Compares two Window objects based on their GLFW window pointers.
@@ -207,6 +227,7 @@ namespace Engine {
         int height_ = 600;                              ///< Window height in pixels.
         bool vsync_ = true;                             ///< VSync enabled flag.
         Camera* camera_ = nullptr;                      ///< Pointer to the associated Camera object.
+		Inputs* inputs_;    				            ///< Pointer to the Inputs object.      
     };
 
 } // namespace Engine

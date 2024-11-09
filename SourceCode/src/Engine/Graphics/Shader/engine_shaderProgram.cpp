@@ -5,7 +5,7 @@ namespace Engine {
 
         // Constructor
         Shader::Shader() {
-            ID_ = glCreateProgram();
+            ID_ = GL::create_program();
             if (ID_ == 0) {
                 std::cerr << "ERROR::SHADER::Failed to create shader program." << std::endl;
             }
@@ -19,7 +19,7 @@ namespace Engine {
         // Add a shader from a file
         void Shader::add_shader(GLenum shaderType, const std::string& shaderFile) {
             // Create the shader object
-            GLuint shader = glCreateShader(shaderType);
+            GLuint shader = GL::create_shader(shaderType);
             if (shader == 0) {
                 std::cerr << "ERROR::SHADER::Failed to create shader of type " << shaderType << "." << std::endl;
                 throw std::runtime_error("Shader creation failed");
@@ -30,48 +30,48 @@ namespace Engine {
             const char* shaderSource = shaderCode.c_str();
 
             // Compile the shader
-            glShaderSource(shader, 1, &shaderSource, nullptr);
-            glCompileShader(shader);
+            GL::shader_source(shader, 1, &shaderSource, nullptr);
+            GL::compile_shader(shader);
 
             // Check for compilation errors
             GLint success;
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+            GL::get_shader_iv(shader, GL_COMPILE_STATUS, &success);
             if (!success) {
                 char infoLog[1024];
-                glGetShaderInfoLog(shader, sizeof(infoLog), nullptr, infoLog);
+                GL::get_shader_info_log(shader, sizeof(infoLog), nullptr, infoLog);
                 std::cerr << "ERROR::SHADER_COMPILATION_ERROR of type: " << shaderType << "\n"
                     << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-                glDeleteShader(shader); // Avoid shader resource leak
+                GL::delete_shader(shader); // Avoid shader resource leak
                 throw std::runtime_error("Shader compilation failed");
             }
 
             // Attach the shader to the program
-            glAttachShader(ID_, shader);
+            GL::attach_shader(ID_, shader);
             shaders_.push_back(shader); // Store for deletion after linking
         }
 
         // Link and validate the shader program
         void Shader::link_program() {
             // Link the shader program
-            glLinkProgram(ID_);
+            GL::link_program(ID_);
 
             // Check for linking errors
             GLint success;
-            glGetProgramiv(ID_, GL_LINK_STATUS, &success);
+            GL::get_program_iv(ID_, GL_LINK_STATUS, &success);
             if (!success) {
                 char infoLog[1024];
-                glGetProgramInfoLog(ID_, sizeof(infoLog), nullptr, infoLog);
+                GL::get_program_info_log(ID_, sizeof(infoLog), nullptr, infoLog);
                 std::cerr << "ERROR::PROGRAM_LINKING_ERROR\n" << infoLog
                     << "\n -- --------------------------------------------------- -- " << std::endl;
                 throw std::runtime_error("Program linking failed");
             }
 
             // Validate the shader program
-            glValidateProgram(ID_);
-            glGetProgramiv(ID_, GL_VALIDATE_STATUS, &success);
+            GL::validate_program(ID_);
+            GL::get_program_iv(ID_, GL_VALIDATE_STATUS, &success);
             if (!success) {
                 char infoLog[1024];
-                glGetProgramInfoLog(ID_, sizeof(infoLog), nullptr, infoLog);
+                GL::get_program_info_log(ID_, sizeof(infoLog), nullptr, infoLog);
                 std::cerr << "ERROR::PROGRAM_VALIDATION_ERROR\n" << infoLog
                     << "\n -- --------------------------------------------------- -- " << std::endl;
                 throw std::runtime_error("Program validation failed");
@@ -79,20 +79,20 @@ namespace Engine {
 
             // Delete the shader objects now that they've been linked
             for (auto shader : shaders_) {
-                glDeleteShader(shader);
+                GL::delete_shader(shader);
             }
             shaders_.clear();
         }
 
         // Activate the shader program
         void Shader::activate() const {
-            glUseProgram(ID_);
+            GL::use_program(ID_);
         }
 
         // Delete the shader program
         void Shader::cleanup() {
             if (ID_ != 0) {
-                glDeleteProgram(ID_);
+                GL::delete_program(ID_);
                 ID_ = 0;
             }
         }

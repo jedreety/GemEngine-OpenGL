@@ -1,13 +1,13 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <GlfwGlad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "../Graphics/Shader/engine_shaderProgram.h"
+#include "../Input/engine_inputs.h"
 
 namespace Engine {
 
@@ -54,9 +54,9 @@ namespace Engine {
          *
          * Processes both keyboard and mouse inputs to update the camera's position and orientation.
          *
-         * @param window Pointer to the GLFW window.
+         * @param inputs Pointer to the Inputs object.
          */
-        void process_inputs(GLFWwindow* window);
+        void process_inputs(GLFWwindow* window, const Engine::Inputs* inputs);
 
         /**
          * @brief Sets the window dimensions.
@@ -132,16 +132,16 @@ namespace Engine {
         /**
          * @brief Processes keyboard inputs to move the camera.
          *
-         * @param window Pointer to the GLFW window.
+         * @param inputs Pointer to the Inputs object
          */
-        void process_keyboard_input(GLFWwindow* window);
+        void process_keyboard_input(const Engine::Inputs* inputs);
 
         /**
          * @brief Processes mouse inputs to rotate the camera.
          *
-         * @param window Pointer to the GLFW window.
+         * @param inputs Pointer to the Inputs object
          */
-        void process_mouse_input(GLFWwindow* window);
+        void process_mouse_input(GLFWwindow* window, const Engine::Inputs* inputs);
 
         glm::vec3 position_{ 0.0f, 0.0f, 0.0f };       ///< Camera position.
         glm::vec3 orientation_{ 0.0f, 0.0f, -1.0f };   ///< Camera forward direction.

@@ -24,8 +24,8 @@ namespace Engine {
 
     // Set the uniform locations for matrices
     void Camera::set_matrix_location(const Engine::Graphics::Shader* shader) {
-        projection_matrix_location_ = glGetUniformLocation(shader->get_ID(), "projectionMatrix");
-        view_matrix_location_ = glGetUniformLocation(shader->get_ID(), "viewMatrix");
+        projection_matrix_location_ = GL::get_uniform_location(shader->get_ID(), "projectionMatrix");
+        view_matrix_location_ = GL::get_uniform_location(shader->get_ID(), "viewMatrix");
 
         if (projection_matrix_location_ == -1 || view_matrix_location_ == -1) {
             std::cerr << "ERROR::Camera::set_matrix_location: Failed to get uniform locations." << std::endl;
@@ -48,65 +48,65 @@ namespace Engine {
         glm::mat4 projection = glm::perspective(glm::radians(fov_), static_cast<float>(width_) / height_, near_plane_, far_plane_);
 
         // Send matrices to the shader
-        glUniformMatrix4fv(projection_matrix_location_, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(view_matrix_location_, 1, GL_FALSE, glm::value_ptr(view));
+        GL::set_uniform_matrix4fv(projection_matrix_location_, 1, GL_FALSE, glm::value_ptr(projection));
+        GL::set_uniform_matrix4fv(view_matrix_location_, 1, GL_FALSE, glm::value_ptr(view));
     }
 
     // Process inputs
-    void Camera::process_inputs(GLFWwindow* window) {
-        process_keyboard_input(window);
-        process_mouse_input(window);
+    void Camera::process_inputs(GLFWwindow* window, const Inputs* inputs) {
+        process_keyboard_input(inputs);
+        process_mouse_input(window, inputs);
     }
 
     // Process keyboard input
-    void Camera::process_keyboard_input(GLFWwindow* window) {
+    void Camera::process_keyboard_input(const Inputs* inputs) {
         float adjusted_speed = speed_;
 
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        if (inputs->is_key_pressed(GLFW_KEY_LEFT_SHIFT)) {
             adjusted_speed *= 2.0f; // Increase speed when shift is held
         }
-
+            
         // Forward
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        if (inputs->is_key_pressed(GLFW_KEY_W)) {
             position_ += adjusted_speed * orientation_;
         }
         // Backward
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        if (inputs->is_key_pressed(GLFW_KEY_S)) {
             position_ -= adjusted_speed * orientation_;
         }
         // Left
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        if (inputs->is_key_pressed(GLFW_KEY_A)) {
             position_ -= glm::normalize(glm::cross(orientation_, up_)) * adjusted_speed;
         }
         // Right
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        if (inputs->is_key_pressed(GLFW_KEY_D)) {
             position_ += glm::normalize(glm::cross(orientation_, up_)) * adjusted_speed;
         }
         // Up
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        if (inputs->is_key_pressed(GLFW_KEY_SPACE)) {
             position_ += adjusted_speed * up_;
         }
         // Down
-        if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+        if (inputs->is_key_pressed(GLFW_KEY_C)) {
             position_ -= adjusted_speed * up_;
         }
     }
 
     // Process mouse input
-    void Camera::process_mouse_input(GLFWwindow* window) {
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    void Camera::process_mouse_input(GLFWwindow* window, const Inputs* inputs) {
+        if ( inputs->is_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT)) {
             // Hide cursor
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            GLFW::set_input_mode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
             // Prevent sudden jump on first click
             if (first_click_) {
-                glfwSetCursorPos(window, width_ / 2.0, height_ / 2.0);
+                GLFW::set_cursor_pos(window, width_ / 2.0, height_ / 2.0);
                 first_click_ = false;
             }
 
             // Get cursor position
             double mouse_x, mouse_y;
-            glfwGetCursorPos(window, &mouse_x, &mouse_y);
+            GLFW::get_cursor_pos(window, &mouse_x, &mouse_y);
 
             // Calculate offsets
             float offset_x = static_cast<float>(mouse_x - width_ / 2.0);
@@ -124,11 +124,11 @@ namespace Engine {
             orientation_ = glm::normalize(orientation_);
 
             // Reset cursor position
-            glfwSetCursorPos(window, width_ / 2.0, height_ / 2.0);
+            GLFW::set_cursor_pos(window, width_ / 2.0, height_ / 2.0);
         }
         else {
             // Show cursor
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            GLFW::set_input_mode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             first_click_ = true;
         }
     }

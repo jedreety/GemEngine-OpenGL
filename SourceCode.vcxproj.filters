@@ -12,7 +12,10 @@
     <ClCompile Include="SourceCode\src\Network\Client\network_client.cpp" />
     <ClCompile Include="SourceCode\src\Network\Server\network_server.cpp" />
     <ClCompile Include="SourceCode\src\stb.cpp" />
-    <ClCompile Include="SourceCode\src\glad.c" />
+    <ClCompile Include="SourceCode\Libraries\include\glad.c" />
+    <ClCompile Include="SourceCode\src\Engine\Input\engine_inputs.cpp" />
+    <ClCompile Include="SourceCode\src\Engine\Input\Key\engine_key.cpp" />
+    <ClCompile Include="SourceCode\Libraries\include\GlfwGlad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\src\Engine\Camera\engine_camera.h" />
@@ -24,5 +27,8 @@
     <ClInclude Include="SourceCode\src\game.h" />
     <ClInclude Include="SourceCode\src\Network\Client\network_client.h" />
     <ClInclude Include="SourceCode\src\Network\Server\network_server.h" />
+    <ClInclude Include="SourceCode\src\Engine\Input\engine_inputs.h" />
+    <ClInclude Include="SourceCode\src\Engine\Input\Key\engine_key.h" />
+    <ClInclude Include="SourceCode\Libraries\include\GlfwGlad.h" />
   </ItemGroup>
 </Project>

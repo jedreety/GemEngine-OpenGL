@@ -5,9 +5,19 @@ namespace Engine {
 
     // Callback function for key events
     void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-        // Close the window if the ESC key is pressed
+
+        Window* self_window = static_cast<Window*>(GLFW::get_window_user_pointer(window));
+       
+        if (self_window && self_window->get_inputs()) {
+            self_window->get_inputs()->key_callback(key, action);
+        }
+        else {
+			std::cerr << "ERROR::Window::key_callback: Failed to get Window or Input instance." << std::endl;
+        }
+
+		// Close window when ESC key is pressed
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
+            GLFW::set_window_should_close(window, GLFW_TRUE);
         }
     }
 
@@ -23,7 +33,8 @@ namespace Engine {
         glViewport(0, 0, width, height);
 
         // Retrieve the Window instance from the user pointer
-        Window* self_window = static_cast<Window*>(glfwGetWindowUserPointer(window));
+        Window* self_window = static_cast<Window*>(GLFW::get_window_user_pointer(window));
+
         if (self_window) {
             // Update the window dimensions
             self_window->set_width(width);
@@ -37,6 +48,19 @@ namespace Engine {
         }
     }
 
+	// Callback function for the mouse button events
+    void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+
+        Engine::Window* self_window = static_cast<Engine::Window*>(GLFW::get_window_user_pointer(window));
+        
+        if (self_window && self_window->get_inputs()) {
+            self_window->get_inputs()->mouse_button_callback(button, action);
+        }
+        else {
+            std::cerr << "ERROR::Window::mouse_button_callback: Failed to get Window or Input instance." << std::endl;
+        }
+    }
+
     // Constructor
     Window::Window() {
         // Default values are already set in the member initializer list
@@ -45,33 +69,34 @@ namespace Engine {
     // Destructor
     Window::~Window() {
         if (window_ != nullptr) {
-            glfwDestroyWindow(window_);
+            GLFW::destroy_window(window_);
             window_ = nullptr;
         }
     }
 
     // Initialize the window
     void Window::init() {
+
         if (!are_attributes_set()) {
             std::cerr << "ERROR::Window::init: Window attributes not properly set before initialization." << std::endl;
             throw std::runtime_error("Window attributes not set.");
         }
 
+        inputs_ = new Inputs();
+
         create_window();
+        
+        // Set the user pointer to this Window instance
+        GLFW::set_window_user_pointer(window_, this);
+
         make_context_current();
         set_callbacks();
 
-        // Set the user pointer to this Window instance
-        glfwSetWindowUserPointer(window_, this);
 
         // Enable or disable VSync
-        glfwSwapInterval(vsync_ ? 1 : 0);
+        GLFW::set_swap_interval(vsync_ ? 1 : 0);
 
-        // Load OpenGL functions using GLAD
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-            std::cerr << "ERROR::Window::init: Failed to initialize GLAD." << std::endl;
-            throw std::runtime_error("Failed to initialize GLAD.");
-        }
+        GLAD::init();
     }
 
     // Check if attributes are set
@@ -81,48 +106,48 @@ namespace Engine {
 
     // Create the GLFW window
     void Window::create_window() {
-        window_ = glfwCreateWindow(width_, height_, title_, nullptr, nullptr);
-        if (!window_) {
-            std::cerr << "ERROR::Window::create_window: Failed to create GLFW window." << std::endl;
-            glfwTerminate();
-            throw std::runtime_error("Failed to create GLFW window.");
-        }
+        window_ = GLFW::create_window(width_, height_, title_);
     }
 
     // Make the window's context current
     void Window::make_context_current() const {
-        glfwMakeContextCurrent(window_);
+        GLFW::make_context_current(window_);
     }
 
     // Set input callbacks
     void Window::set_callbacks() {
-        glfwSetKeyCallback(window_, key_callback);
-        glfwSetFramebufferSizeCallback(window_, framebuffer_size_callback);
+        GLFW::set_key_callback(window_, key_callback);
+        GLFW::set_framebuffer_size_callback(window_, framebuffer_size_callback);
+        GLFW::set_mouse_button_callback(window_, mouse_button_callback);
     }
 
     // Clears the color and depth buffers
     void Window::clear_frame() const {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        GL::clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     // Prepares the frame for rendering
     void Window::pre_frame() const {
         // Set the background color
-        glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+        GL::clear_color(0.15f, 0.15f, 0.15f, 1.0f);
         clear_frame();
+
+		// Update inputs
+		if (get_inputs())
+            get_inputs()->update();
     }
 
     // Finalizes the frame after rendering
     void Window::post_frame() const {
         // Swap front and back buffers
-        glfwSwapBuffers(window_);
+        GLFW::swap_buffers(window_);
         // Poll for and process events
-        glfwPollEvents();
+        GLFW::poll_events();
     }
 
     // Checks if the window should close
     [[nodiscard]] bool Window::should_close() const noexcept {
-        return glfwWindowShouldClose(window_);
+        return GLFW::window_should_close(window_);
     }
 
     // Sets window dimensions and title
@@ -176,6 +201,11 @@ namespace Engine {
     [[nodiscard]] Camera* Window::get_camera() const noexcept {
         return camera_;
     }
+
+	// Gets the pointer to the associated Inputs object
+	[[nodiscard]] Inputs* Window::get_inputs() const noexcept {
+		return inputs_;
+	}
 
     // Equality operator
     bool Window::operator==(const Window& other) const noexcept {
