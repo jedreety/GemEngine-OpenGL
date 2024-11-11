@@ -1,21 +1,37 @@
 /*
     Projet Minecraft Clone
     Auteur : Mehdi Mazouz
-    Date : 2024
+    Date : 1/10/2024
 
     Ce projet a pour but de créer un moteur de jeu en C++ ainsi qu'un jeu.
-
-    L'objectif de ce projet est de développer un moteur de jeu qui soit le plus optimisé et extensible possible.
-
-    Le projet sera en anglais pour m'exercer.
-
-    Ma règle est que si une classe parent exemple : Window a pour attribut une classe enfant exemple : Input, alors la classse parent peut modifier la classe enfant mais la classe enfant
-    ne modifira aucun attribut de la classe parent. Il ne prendra la classe parent en const ou une copie. One way relationship.
 
     * Prédiction *
     Amusement : 10/10 Vraiment
     Difficulté : 10/10 C'est long et difficile
     Utilité : 10/10 énormément appris
+*/
+
+/*
+
+    TODO: ( 1 \n = 1 commit )
+
+	- [ ] Ajout selection du chemin pour les assets ( shader/ textures )
+	- [ ] Ajout des parametres de texture dans la classe Texture
+
+    - [ ] Ajout de plus de forme de texture
+
+	- [ ] Refonte du Network (Client/Server)
+        |
+		|= [ ] Ajout de serialisation et deserialisation
+		|= [ ] L'envoie de toute classe ou packet
+		|= [ ] La modularité du code
+
+    - [ ] Ajout de la classe Entité
+
+    - [ ] Creation de la classe Timer
+
+	- [ ] Ajout de la classe Buffer
+
 */
 
 #include <iostream>
