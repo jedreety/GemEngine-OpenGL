@@ -29,12 +29,6 @@ namespace Gem {
 
                 bind();
 
-                // Set texture parameters
-                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
                 // Allocate storage for the texture array
                 GL::tex_storage_3d(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, width_, height_, max_texture_units_);
 
@@ -98,19 +92,18 @@ namespace Gem {
 
                 // Load the texture image
                 int width, height, channels;
-                std::string texture_path = "resources/textures/";
-                std::string full_filename = texture_path + texture_name + ".png";
+                std::string full_filename = path_ + texture_name;
 
                 stbi_set_flip_vertically_on_load(true); // Flip the image vertically if needed
                 unsigned char* texture_data = stbi_load(full_filename.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 
                 if (!texture_data) {
-                    std::cerr << "ERROR::TextureManager::add_texture: Failed to load texture '" << full_filename << "'." << std::endl;
+                    std::cerr << "ERROR::TextureManager::add_texture: Failed to load texture '" << full_filename << "',\ntry to change the path with set_path() to your local texture folder." << std::endl;
                     return;
                 }
 
                 if (static_cast<GLuint>(width) != width_ || static_cast<GLuint>(height) != height_) {
-                    std::cerr << "ERROR::TextureManager::add_texture: Texture '" << full_filename << "' has different dimensions." << std::endl;
+                    std::cerr << "ERROR::TextureManager::add_texture: Texture '" << full_filename << "' has different dimensions than "<< width_ << 'x' << height_ << '.' << std::endl;
                     stbi_image_free(texture_data);
                     return;
                 }
@@ -141,6 +134,56 @@ namespace Gem {
             // Set texture unit
             void TextureManager::set_texture_unit(GLuint texture_unit) {
                 texture_unit_ = texture_unit;
+            }
+
+            // Set the min filter parametre
+            void TextureManager::set_min_filter(GLint param) {
+
+                bind();
+
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, param);
+                unbind();
+            }
+
+            // Set the mag filter parametre
+            void TextureManager::set_mag_filter(GLint param) {
+
+                bind();
+
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, param);
+            }
+
+            // Set the wrap parametre
+            void TextureManager::set_wrap(GLint param) {
+
+                bind();
+
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, param);
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, param);
+                unbind();
+            }
+
+            // Set the wrap s filter parametre
+            void TextureManager::set_wrap_s(GLint param) {
+
+                bind();
+
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, param);
+                unbind();
+            }
+
+            // Set the wrap t filter parametre
+            void TextureManager::set_wrap_t(GLint param) {
+
+                bind();
+
+                GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, param);
+                unbind();
+            }
+            
+            // Set the path to the texture folder
+            void TextureManager::set_path(const std::string& path) {
+                path_ = path;
             }
 
             // Getters

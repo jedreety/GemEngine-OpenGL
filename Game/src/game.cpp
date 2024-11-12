@@ -94,10 +94,14 @@ Game::Game() {
 	textureManager_ = std::make_unique<Gem::Graphics::TextureManager>();
 	textureManager_->init();
 
-	textureManager_->add_texture("dirt");
-	textureManager_->add_texture("grass");
+	textureManager_->add_texture("dirt.png");
+	textureManager_->add_texture("grass.png");
 
 	textureManager_->generate_mipmaps();
+
+	textureManager_->set_wrap(GL_REPEAT);
+	textureManager_->set_min_filter(GL_NEAREST_MIPMAP_LINEAR);
+	textureManager_->set_mag_filter(GL_NEAREST);
 
 	Gem::GLFW::enable_parameters();
 

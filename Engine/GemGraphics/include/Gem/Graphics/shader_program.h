@@ -67,6 +67,13 @@ namespace Gem {
             void cleanup();
 
             /**
+             * @brief Set the path to the shader folder
+             *
+             * @param path Specifies the path to the folder
+             */
+            void set_path(const std::string& path);
+
+            /**
              * @brief Gets the shader program ID.
              *
              * @return The OpenGL shader program ID.
@@ -105,8 +112,10 @@ namespace Gem {
 
         private:
 
-            GLuint ID_ = 0;                     ///< OpenGL shader program ID.
-            std::vector<GLuint> shaders_;       ///< Container for shader object IDs.
+            GLuint ID_ = 0;                             ///< OpenGL shader program ID.
+            std::vector<GLuint> shaders_;               ///< Container for shader object IDs.
+            std::string path_ = "resources/shaders/";   ///< Path to the shader folder
+
         
         };
 

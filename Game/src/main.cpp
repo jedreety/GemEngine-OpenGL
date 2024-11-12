@@ -15,9 +15,6 @@
 
     TODO: ( 1 \n = 1 commit )
 
-	- [ ] Ajout selection du chemin pour les assets ( shader/ textures )
-	- [ ] Ajout des parametres de texture dans la classe Texture
-
     - [ ] Ajout de plus de forme de texture
 
 	- [ ] Refonte du Network (Client/Server)

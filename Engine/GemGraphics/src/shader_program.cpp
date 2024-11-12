@@ -98,6 +98,11 @@ namespace Gem {
             }
         }
 
+        // Set the path to the shader folder
+        void Shader::set_path(const std::string& path) {
+            path_ = path;
+        }
+
         // Get the shader program ID
         [[nodiscard]] GLuint Shader::get_ID() const noexcept {
             return ID_;
@@ -115,9 +120,8 @@ namespace Gem {
 
         // Read file contents
         std::string Shader::get_file_contents(const std::string& filename) const {
-            // Define the shader path (adjust as needed)
-            std::string shader_path = "resources/shaders/";
-            std::string full_filename = shader_path + filename;
+            
+            std::string full_filename = path_ + filename;
 
             std::ifstream in(full_filename, std::ios::in | std::ios::binary);
             if (in) {
@@ -126,7 +130,7 @@ namespace Gem {
                 in.close();
                 return contents.str();
             }
-            std::cout << full_filename << '\n';
+            std::cout << "Could not open file : " << full_filename << "\ntry to change the path with set_path() to your local shader folder.\n";
             throw std::runtime_error("Could not open file " + full_filename);
         }
 

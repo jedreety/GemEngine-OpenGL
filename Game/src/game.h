@@ -32,7 +32,7 @@ private:
 	std::unique_ptr<Gem::Window::Window> window_;
 
 	std::unique_ptr<Gem::Graphics::Camera> camera_;
-	glm::vec3 oldPosition_;
+	glm::vec3 oldPosition_ = glm::vec3();
 
 	std::unique_ptr<Gem::Graphics::TextureManager> textureManager_;
 	std::unique_ptr<Gem::Graphics::Shader> shader_;
@@ -44,8 +44,8 @@ private:
 	float deltaTime_ = 0.0f;
 	double last_frameTime_ = 0.0;
 
-	float fpsAccumulator_;
-	int frameCount_;
+	float fpsAccumulator_ = 0.0f;
+	int frameCount_ = 0;
 
 	Network::Client* networkClient_;
 	glm::vec3 playerPosition_;

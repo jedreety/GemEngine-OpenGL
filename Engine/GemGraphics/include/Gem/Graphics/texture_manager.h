@@ -92,6 +92,48 @@ namespace Gem {
                 void set_texture_unit(GLuint texture_unit);
 
                 /**
+                 * @brief Sets texture Min Filter
+                 * 
+                 * @param param Specifies the value of pname.
+                 */
+                void set_min_filter(GLint param);
+
+                /**
+                 * @brief Sets texture Mag Filter
+                 *
+                 * @param param Specifies the value of pname.
+                 */
+                void set_mag_filter(GLint param);
+
+                /**
+                 * @brief Sets Wrap Parametre for both S and T
+                 *
+                 * @param param Specifies the value of pname.
+                 */
+                void set_wrap(GLint param);
+
+                /**
+                 * @brief Sets S Wrap Parametre
+                 *
+                 * @param param Specifies the value of pname.
+                 */
+                void set_wrap_s(GLint param);
+
+                /**
+                 * @brief Sets T Wrap Parametre
+                 *
+                 * @param param Specifies the value of pname.
+                 */
+                void set_wrap_t(GLint param);
+
+                /**
+                 * @brief Set the path to the texture folder
+                 * 
+                 * @param path Specifies the path to the folder
+                 */
+                void set_path(const std::string& path);
+
+                /**
                  * @brief Gets the width of the textures.
                  *
                  * @return The texture width.
@@ -155,14 +197,15 @@ namespace Gem {
 
             private:
 
-                GLuint texture_array_ID_ = 0;         ///< OpenGL texture array ID.
-                GLuint max_texture_units_ = 16;       ///< Maximum number of textures in the array.
-                GLuint width_ = 16;                   ///< Width of each texture.
-                GLuint height_ = 16;                  ///< Height of each texture.
-                GLuint texture_unit_ = 0;             ///< Texture unit index.
-                bool is_initialized_ = false;         ///< Flag indicating if the texture array has been initialized.
+                GLuint texture_array_ID_ = 0;                ///< OpenGL texture array ID.
+                GLuint max_texture_units_ = 16;              ///< Maximum number of textures in the array.
+                GLuint width_ = 16;                          ///< Width of each texture.
+                GLuint height_ = 16;                         ///< Height of each texture.
+                GLuint texture_unit_ = 0;                    ///< Texture unit index.
+                bool is_initialized_ = false;                ///< Flag indicating if the texture array has been initialized.
+                std::string path_ = "resources/textures/";   ///< Path to the texture folder
 
-                std::vector<std::string> textures_;   ///< List of texture names added to the array.
+                std::vector<std::string> textures_;          ///< List of texture names added to the array.
 
             };
 
