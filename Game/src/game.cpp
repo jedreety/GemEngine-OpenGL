@@ -21,22 +21,22 @@ GLfloat vertices[] = {
 	 -0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  // Vertex 11
 
 	 // Right face
-	  0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // Vertex 12
-	  0.5f, -0.5f,  0.5f,   0.0f, 0.0f,  // Vertex 13
-	  0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Vertex 14
-	  0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Vertex 15
+	 0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // Vertex 12
+	 0.5f, -0.5f,  0.5f,   0.0f, 0.0f,  // Vertex 13
+	 0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Vertex 14
+	 0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Vertex 15
 
-	  // Top face
-	  -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // Vertex 16
-	  -0.5f,  0.5f,  0.5f,   0.0f, 0.0f,  // Vertex 17
-	   0.5f,  0.5f,  0.5f,   1.0f, 0.0f,  // Vertex 18
-	   0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Vertex 19
+	 // Top face
+	 -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  // Vertex 16
+	 -0.5f,  0.5f,  0.5f,   0.0f, 0.0f,  // Vertex 17
+	 0.5f,  0.5f,  0.5f,   1.0f, 0.0f,  // Vertex 18
+	 0.5f,  0.5f, -0.5f,   1.0f, 1.0f,  // Vertex 19
 
-	   // Bottom face
-	   -0.5f, -0.5f,  0.5f,   0.0f, 1.0f,  // Vertex 20
-	   -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Vertex 21
-		0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Vertex 22
-		0.5f, -0.5f,  0.5f,   1.0f, 1.0f   // Vertex 23
+	 // Bottom face
+   	 -0.5f, -0.5f,  0.5f,   0.0f, 1.0f,  // Vertex 20
+	 -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  // Vertex 21
+	 0.5f, -0.5f, -0.5f,   1.0f, 0.0f,  // Vertex 22
+	 0.5f, -0.5f,  0.5f,   1.0f, 1.0f   // Vertex 23
 };
 
 GLuint indices[] = {
@@ -65,9 +65,8 @@ GLuint indices[] = {
 	22, 21, 20
 };
 
-
-
 Game::Game() {
+
 	Gem::GLFW::init();
 	Gem::GLFW::set_context_version(4, 6);
 	Gem::GLFW::set_openGL_profile(GLFW_OPENGL_CORE_PROFILE);
@@ -137,6 +136,8 @@ Game::Game() {
 	networkClient_ = new Network::Client("127.0.0.1", 1234); // Use your server IP and port
 	networkClient_->Start();
 
+	gameTimer_.set_debugFps(2);
+
 }
 
 void Game::run() {
@@ -145,13 +146,15 @@ void Game::run() {
 	GLint shaderlocation_modelMatrix = Gem::GL::get_uniform_location(shader_->get_ID(), "modelMatrix");
 
 	playerPosition_ = oldPosition_ = camera_->get_position();
+
 	networkClient_->SendPosition(playerPosition_);
 	float movementThreshold = 0.125f;
 
 	// Main game loop
 	while (!window_->should_close()) {
 		window_->pre_frame();
-		updateDeltaTime();
+
+		gameTimer_.update();
 
 		// Activate shader program
 		shader_->activate();
@@ -166,6 +169,7 @@ void Game::run() {
 		// Check if position has changed
 		glm::vec3 newPosition = camera_->get_position();
 		if (glm::distance(newPosition, oldPosition_) > movementThreshold) {
+
 			networkClient_->SendPosition(playerPosition_);
 			oldPosition_ = newPosition;
 		}
@@ -212,34 +216,13 @@ void Game::run() {
 Game::~Game() {
 
 	shader_->cleanup();
-	// Stop and delete network client
+	
 	networkClient_->Stop();
 	delete networkClient_;
+	
 	VAO_.cleanup();
 	VBO_.cleanup();
 	IBO_.cleanup();
 
 	Gem::GLFW::terminate();  // GLFW cleanup is still required
-}
-
-void Game::updateDeltaTime() {
-
-	const float seconds = 2.f;
-
-	// DELTA TIME
-	double current_frameTime = Gem::GLFW::get_time();
-	deltaTime_ = static_cast<float>(current_frameTime - last_frameTime_);
-	last_frameTime_ = current_frameTime;
-	
-	// FPS COUNT
-	fpsAccumulator_ += deltaTime_;
-	frameCount_++;
-
-	if (fpsAccumulator_ >= seconds) {
-		float fps = frameCount_ / fpsAccumulator_;
-		std::cout << "FPS: " << fps << std::endl;
-
-		fpsAccumulator_ = 0.0f;
-		frameCount_ = 0;
-	}
 }

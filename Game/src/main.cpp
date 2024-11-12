@@ -16,6 +16,7 @@
     TODO: ( 1 \n = 1 commit )
 
     - [ ] Ajout de plus de forme de texture
+    - [ ] ajout d'une macro pour les texture bind
 
 	- [ ] Refonte du Network (Client/Server)
         |
@@ -25,7 +26,7 @@
 
     - [ ] Ajout de la classe Entité
 
-    - [ ] Creation de la classe Timer
+	- [ ] regler un petit beug de la classe Timer
 
 	- [ ] Ajout de la classe Buffer
 

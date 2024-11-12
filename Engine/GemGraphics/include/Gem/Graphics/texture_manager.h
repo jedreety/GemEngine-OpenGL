@@ -94,42 +94,43 @@ namespace Gem {
                 /**
                  * @brief Sets texture Min Filter
                  * 
-                 * @param param Specifies the value of pname.
+				 * @param param The minification filter mode (e.g., GL_NEAREST, GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR).
                  */
                 void set_min_filter(GLint param);
 
                 /**
                  * @brief Sets texture Mag Filter
                  *
-                 * @param param Specifies the value of pname.
+			     * @param param The magnification filter mode (e.g., GL_NEAREST, GL_LINEAR).
                  */
                 void set_mag_filter(GLint param);
 
                 /**
-                 * @brief Sets Wrap Parametre for both S and T
+                 * @brief Sets Wrap Parameter for both S and T
                  *
-                 * @param param Specifies the value of pname.
+			     * @param param The wrapping mode (e.g., GL_REPEAT, GL_CLAMP_TO_EDGE).
                  */
                 void set_wrap(GLint param);
 
                 /**
-                 * @brief Sets S Wrap Parametre
+                 * @brief Sets S Wrap Parameter
                  *
-                 * @param param Specifies the value of pname.
+    			 * @param param The wrapping mode (e.g., GL_REPEAT, GL_CLAMP_TO_EDGE).
                  */
                 void set_wrap_s(GLint param);
 
                 /**
-                 * @brief Sets T Wrap Parametre
+                 * @brief Sets T Wrap Parameter
                  *
-                 * @param param Specifies the value of pname.
+			     * @param param The wrapping mode (e.g., GL_REPEAT, GL_CLAMP_TO_EDGE).
+
                  */
                 void set_wrap_t(GLint param);
 
                 /**
                  * @brief Set the path to the texture folder
                  * 
-                 * @param path Specifies the path to the folder
+                 * @param path The path to the texture folder
                  */
                 void set_path(const std::string& path);
 

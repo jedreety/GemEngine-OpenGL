@@ -17,6 +17,8 @@
 #include <Gem/Graphics/vao.h>
 #include <Gem/Graphics/buffer.h>
 
+ #include <Gem/Core/timer.h>
+
 class Game
 {
 public:
@@ -26,8 +28,6 @@ public:
 	~Game();
 
 private:
-
-	void updateDeltaTime();
 
 	std::unique_ptr<Gem::Window::Window> window_;
 
@@ -41,11 +41,7 @@ private:
 	Gem::Graphics::Buffer VBO_;
 	Gem::Graphics::Buffer IBO_;
 
-	float deltaTime_ = 0.0f;
-	double last_frameTime_ = 0.0;
-
-	float fpsAccumulator_ = 0.0f;
-	int frameCount_ = 0;
+	Gem::Core::Timer gameTimer_;
 
 	Network::Client* networkClient_;
 	glm::vec3 playerPosition_;

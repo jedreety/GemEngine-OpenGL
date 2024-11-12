@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GemCore\src\scoped_timer.cpp" />
+    <ClCompile Include="GemCore\src\texture_binder.cpp" />
+    <ClCompile Include="GemCore\src\timer.cpp" />
     <ClCompile Include="GemGraphics\src\camera.cpp" />
     <ClCompile Include="GemGraphics\src\buffer.cpp" />
     <ClCompile Include="GemGraphics\src\vao.cpp" />
@@ -36,6 +39,9 @@
     <ClCompile Include="ThirdParty\stb\stb.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GemCore\include\Gem\Core\scoped_timer.h" />
+    <ClInclude Include="GemCore\include\Gem\Core\texture_binder.h" />
+    <ClInclude Include="GemCore\include\Gem\Core\timer.h" />
     <ClInclude Include="GemGraphics\include\Gem\Graphics\camera.h" />
     <ClInclude Include="GemGraphics\include\Gem\Graphics\buffer.h" />
     <ClInclude Include="GemGraphics\include\Gem\Graphics\vao.h" />

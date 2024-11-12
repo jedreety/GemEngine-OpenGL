@@ -137,7 +137,7 @@ namespace Gem {
                 texture_unit_ = texture_unit;
             }
 
-            // Set the min filter parametre
+            // Set the min filter parameter
             void Texture2DArray::set_min_filter(GLint param) {
 
                 bind();
@@ -146,7 +146,7 @@ namespace Gem {
                 unbind();
             }
 
-            // Set the mag filter parametre
+            // Set the mag filter parameter
             void Texture2DArray::set_mag_filter(GLint param) {
 
                 bind();
@@ -154,7 +154,7 @@ namespace Gem {
                 GL::tex_parameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, param);
             }
 
-            // Set the wrap parametre
+            // Set the wrap parameter
             void Texture2DArray::set_wrap(GLint param) {
 
                 bind();
@@ -164,7 +164,7 @@ namespace Gem {
                 unbind();
             }
 
-            // Set the wrap s filter parametre
+            // Set the wrap s filter parameter
             void Texture2DArray::set_wrap_s(GLint param) {
 
                 bind();
@@ -173,7 +173,7 @@ namespace Gem {
                 unbind();
             }
 
-            // Set the wrap t filter parametre
+            // Set the wrap t filter parameter
             void Texture2DArray::set_wrap_t(GLint param) {
 
                 bind();

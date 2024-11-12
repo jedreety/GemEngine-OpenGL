@@ -100,7 +100,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\GemCore\include\;$(SolutionDir)Engine\GemGraphics\include\;$(SolutionDir)Engine\GemNetworking\include\;$(SolutionDir)Engine\GemInput\include\;$(SolutionDir)Engine\GemWindow\include\;$(SolutionDir)Engine\ThirdParty\stb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\GemCore\include\;$(SolutionDir)Engine\GemGraphics\include\;$(SolutionDir)Engine\GemNetworking\include\;$(SolutionDir)Engine\GemInput\include\;$(SolutionDir)Engine\GemWindow\include\;$(SolutionDir)Engine\ThirdParty\stb\;$(ProjectDir)GemWindow\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\GemCore\include\;$(SolutionDir)Engine\GemGraphics\include\;$(SolutionDir)Engine\GemNetworking\include\;$(SolutionDir)Engine\GemInput\include\;$(SolutionDir)Engine\GemWindow\include\;$(SolutionDir)Engine\ThirdParty\stb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\GemCore\include\;$(SolutionDir)Engine\GemGraphics\include\;$(SolutionDir)Engine\GemNetworking\include\;$(SolutionDir)Engine\GemInput\include\;$(SolutionDir)Engine\GemWindow\include\;$(SolutionDir)Engine\ThirdParty\stb\;$(ProjectDir)GemWindow\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\GemCore\include\;$(SolutionDir)Engine\GemGraphics\include\;$(SolutionDir)Engine\GemNetworking\include\;$(SolutionDir)Engine\GemInput\include\;$(SolutionDir)Engine\GemWindow\include\;$(SolutionDir)Engine\ThirdParty\stb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\GemCore\include\;$(SolutionDir)Engine\GemGraphics\include\;$(SolutionDir)Engine\GemNetworking\include\;$(SolutionDir)Engine\GemInput\include\;$(SolutionDir)Engine\GemWindow\include\;$(SolutionDir)Engine\ThirdParty\stb\;$(ProjectDir)GemWindow\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,7 +151,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\GemCore\include\;$(SolutionDir)Engine\GemGraphics\include\;$(SolutionDir)Engine\GemNetworking\include\;$(SolutionDir)Engine\GemInput\include\;$(SolutionDir)Engine\GemWindow\include\;$(SolutionDir)Engine\ThirdParty\stb\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\GemCore\include\;$(SolutionDir)Engine\GemGraphics\include\;$(SolutionDir)Engine\GemNetworking\include\;$(SolutionDir)Engine\GemInput\include\;$(SolutionDir)Engine\GemWindow\include\;$(SolutionDir)Engine\ThirdParty\stb\;$(ProjectDir)GemWindow\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
