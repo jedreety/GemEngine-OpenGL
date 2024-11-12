@@ -14,27 +14,27 @@ namespace Gem {
     namespace Graphics {
     
             /**
-             * @brief TextureManager class for managing a texture array in OpenGL.
+             * @brief Texture2DArray class for managing a texture array in OpenGL.
              *
-             * The TextureManager class encapsulates the creation, binding, and management of a texture array.
+             * The Texture2DArray class encapsulates the creation, binding, and management of a texture array.
              * It allows loading multiple textures into a single texture array for efficient rendering.
              */
-            class TextureManager {
+            class Texture2DArray {
 
             public:
                 /**
-                 * @brief Constructs a TextureManager object with default attributes.
+                 * @brief Constructs a Texture2DArray object with default attributes.
                  *
                  * Initializes default values for texture width, height, and maximum texture units.
                  */
-                TextureManager();
+                Texture2DArray();
 
                 /**
                  * @brief Destructor that cleans up the texture array.
                  *
-                 * Ensures that the texture array is properly deleted when the TextureManager instance goes out of scope.
+                 * Ensures that the texture array is properly deleted when the Texture2DArray instance goes out of scope.
                  */
-                ~TextureManager();
+                ~Texture2DArray();
 
                 /**
                  * @brief Initializes the texture array.
@@ -164,22 +164,22 @@ namespace Gem {
                 /**
                  * @brief Equality operator.
                  *
-                 * Compares two TextureManager objects based on their texture array IDs.
+                 * Compares two Texture2DArray objects based on their texture array IDs.
                  *
-                 * @param other The other TextureManager object to compare with.
+                 * @param other The other Texture2DArray object to compare with.
                  * @return True if both have the same texture array ID, false otherwise.
                  */
-                bool operator==(const TextureManager& other) const noexcept;
+                bool operator==(const Texture2DArray& other) const noexcept;
 
                 /**
                  * @brief Inequality operator.
                  *
-                 * Compares two TextureManager objects based on their texture array IDs.
+                 * Compares two Texture2DArray objects based on their texture array IDs.
                  *
-                 * @param other The other TextureManager object to compare with.
+                 * @param other The other Texture2DArray object to compare with.
                  * @return True if they have different texture array IDs, false otherwise.
                  */
-                bool operator!=(const TextureManager& other) const noexcept;
+                bool operator!=(const Texture2DArray& other) const noexcept;
 
             private:
 

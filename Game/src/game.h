@@ -34,7 +34,7 @@ private:
 	std::unique_ptr<Gem::Graphics::Camera> camera_;
 	glm::vec3 oldPosition_ = glm::vec3();
 
-	std::unique_ptr<Gem::Graphics::TextureManager> textureManager_;
+	std::unique_ptr<Gem::Graphics::Texture2DArray> textureManager_;
 	std::unique_ptr<Gem::Graphics::Shader> shader_;
 
 	Gem::Graphics::VAO VAO_;

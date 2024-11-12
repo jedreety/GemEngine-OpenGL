@@ -5,12 +5,12 @@ namespace Gem {
     namespace Graphics {
 
             // Constructor
-            TextureManager::TextureManager() {
+            Texture2DArray::Texture2DArray() {
                 // Default attributes are already set in the member initializer list.
             }
 
             // Destructor
-            TextureManager::~TextureManager() {
+            Texture2DArray::~Texture2DArray() {
                 if (texture_array_ID_ != 0) {
                     GL::delete_textures(1, &texture_array_ID_);
                     texture_array_ID_ = 0;
@@ -18,11 +18,11 @@ namespace Gem {
             }
 
             // Initialize the texture array
-            void TextureManager::init() {
+            void Texture2DArray::init() {
                 // Check if the texture attributes are set
                 if (!is_attr_set()) {
-                    std::cerr << "ERROR::TextureManager::init: Initialize texture manager dimensions and max texture units first." << std::endl;
-                    throw std::runtime_error("TextureManager attributes not set.");
+                    std::cerr << "ERROR::Texture2DArray::init: Initialize texture manager dimensions and max texture units first." << std::endl;
+                    throw std::runtime_error("Texture2DArray attributes not set.");
                 }
 
                 generate();
@@ -30,6 +30,7 @@ namespace Gem {
                 bind();
 
                 // Allocate storage for the texture array
+
                 GL::tex_storage_3d(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, width_, height_, max_texture_units_);
 
                 unbind();
@@ -38,34 +39,34 @@ namespace Gem {
             }
 
             // Generate the texture array
-            void TextureManager::generate() {
+            void Texture2DArray::generate() {
                 GL::gen_textures(1, &texture_array_ID_);
                 if (texture_array_ID_ == 0) {
-                    std::cerr << "ERROR::TextureManager::generate: Failed to generate texture array." << std::endl;
+                    std::cerr << "ERROR::Texture2DArray::generate: Failed to generate texture array." << std::endl;
                     throw std::runtime_error("Failed to generate texture array.");
                 }
             }
 
             // Check if attributes are set
-            [[nodiscard]] bool TextureManager::is_attr_set() const noexcept {
+            [[nodiscard]] bool Texture2DArray::is_attr_set() const noexcept {
                 return width_ > 0 && height_ > 0 && max_texture_units_ > 0;
             }
 
             // Bind the texture array
-            void TextureManager::bind() const {
+            void Texture2DArray::bind() const {
                 GL::active_texture(GL_TEXTURE0 + texture_unit_);
                 GL::bind_texture(GL_TEXTURE_2D_ARRAY, texture_array_ID_);
             }
 
             // Unbind the texture array
-            void TextureManager::unbind() const {
+            void Texture2DArray::unbind() const {
                 GL::bind_texture(GL_TEXTURE_2D_ARRAY, 0);
             }
 
             // Generate mipmaps
-            void TextureManager::generate_mipmaps() const {
+            void Texture2DArray::generate_mipmaps() const {
                 if (!is_initialized_) {
-                    std::cerr << "ERROR::TextureManager::generate_mipmaps: Texture array not initialized." << std::endl;
+                    std::cerr << "ERROR::Texture2DArray::generate_mipmaps: Texture array not initialized." << std::endl;
                     throw std::runtime_error("Texture array not initialized.");
                 }
                 bind();
@@ -74,19 +75,19 @@ namespace Gem {
             }
 
             // Add a texture to the array
-            void TextureManager::add_texture(const std::string& texture_name) {
+            void Texture2DArray::add_texture(const std::string& texture_name) {
                 if (!is_initialized_) {
-                    std::cerr << "ERROR::TextureManager::add_texture: Texture array not initialized. Call init() first." << std::endl;
+                    std::cerr << "ERROR::Texture2DArray::add_texture: Texture array not initialized. Call init() first." << std::endl;
                     throw std::runtime_error("Texture array not initialized.");
                 }
 
                 if (textures_.size() >= max_texture_units_) {
-                    std::cerr << "ERROR::TextureManager::add_texture: Maximum number of textures reached." << std::endl;
+                    std::cerr << "ERROR::Texture2DArray::add_texture: Maximum number of textures reached." << std::endl;
                     return;
                 }
 
                 if (std::find(textures_.begin(), textures_.end(), texture_name) != textures_.end()) {
-                    std::cerr << "ERROR::TextureManager::add_texture: Texture '" << texture_name << "' already exists." << std::endl;
+                    std::cerr << "ERROR::Texture2DArray::add_texture: Texture '" << texture_name << "' already exists." << std::endl;
                     return;
                 }
 
@@ -98,12 +99,12 @@ namespace Gem {
                 unsigned char* texture_data = stbi_load(full_filename.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 
                 if (!texture_data) {
-                    std::cerr << "ERROR::TextureManager::add_texture: Failed to load texture '" << full_filename << "',\ntry to change the path with set_path() to your local texture folder." << std::endl;
+                    std::cerr << "ERROR::Texture2DArray::add_texture: Failed to load texture '" << full_filename << "',\ntry to change the path with set_path() to your local texture folder." << std::endl;
                     return;
                 }
 
                 if (static_cast<GLuint>(width) != width_ || static_cast<GLuint>(height) != height_) {
-                    std::cerr << "ERROR::TextureManager::add_texture: Texture '" << full_filename << "' has different dimensions than "<< width_ << 'x' << height_ << '.' << std::endl;
+                    std::cerr << "ERROR::Texture2DArray::add_texture: Texture '" << full_filename << "' has different dimensions than "<< width_ << 'x' << height_ << '.' << std::endl;
                     stbi_image_free(texture_data);
                     return;
                 }
@@ -121,23 +122,23 @@ namespace Gem {
             }
 
             // Set texture dimensions
-            void TextureManager::set_dimensions(GLuint width, GLuint height) {
+            void Texture2DArray::set_dimensions(GLuint width, GLuint height) {
                 width_ = width;
                 height_ = height;
             }
 
             // Set maximum number of textures
-            void TextureManager::set_max_textures(GLuint max_textures) {
+            void Texture2DArray::set_max_textures(GLuint max_textures) {
                 max_texture_units_ = max_textures;
             }
 
             // Set texture unit
-            void TextureManager::set_texture_unit(GLuint texture_unit) {
+            void Texture2DArray::set_texture_unit(GLuint texture_unit) {
                 texture_unit_ = texture_unit;
             }
 
             // Set the min filter parametre
-            void TextureManager::set_min_filter(GLint param) {
+            void Texture2DArray::set_min_filter(GLint param) {
 
                 bind();
 
@@ -146,7 +147,7 @@ namespace Gem {
             }
 
             // Set the mag filter parametre
-            void TextureManager::set_mag_filter(GLint param) {
+            void Texture2DArray::set_mag_filter(GLint param) {
 
                 bind();
 
@@ -154,7 +155,7 @@ namespace Gem {
             }
 
             // Set the wrap parametre
-            void TextureManager::set_wrap(GLint param) {
+            void Texture2DArray::set_wrap(GLint param) {
 
                 bind();
 
@@ -164,7 +165,7 @@ namespace Gem {
             }
 
             // Set the wrap s filter parametre
-            void TextureManager::set_wrap_s(GLint param) {
+            void Texture2DArray::set_wrap_s(GLint param) {
 
                 bind();
 
@@ -173,7 +174,7 @@ namespace Gem {
             }
 
             // Set the wrap t filter parametre
-            void TextureManager::set_wrap_t(GLint param) {
+            void Texture2DArray::set_wrap_t(GLint param) {
 
                 bind();
 
@@ -182,34 +183,34 @@ namespace Gem {
             }
             
             // Set the path to the texture folder
-            void TextureManager::set_path(const std::string& path) {
+            void Texture2DArray::set_path(const std::string& path) {
                 path_ = path;
             }
 
             // Getters
-            [[nodiscard]] GLuint TextureManager::get_width() const noexcept {
+            [[nodiscard]] GLuint Texture2DArray::get_width() const noexcept {
                 return width_;
             }
 
-            [[nodiscard]] GLuint TextureManager::get_height() const noexcept {
+            [[nodiscard]] GLuint Texture2DArray::get_height() const noexcept {
                 return height_;
             }
 
-            [[nodiscard]] GLuint TextureManager::get_max_textures() const noexcept {
+            [[nodiscard]] GLuint Texture2DArray::get_max_textures() const noexcept {
                 return max_texture_units_;
             }
 
-            [[nodiscard]] GLuint TextureManager::get_texture_array_ID() const noexcept {
+            [[nodiscard]] GLuint Texture2DArray::get_texture_array_ID() const noexcept {
                 return texture_array_ID_;
             }
 
             // Equality operator
-            bool TextureManager::operator==(const TextureManager& other) const noexcept {
+            bool Texture2DArray::operator==(const Texture2DArray& other) const noexcept {
                 return texture_array_ID_ == other.texture_array_ID_;
             }
 
             // Inequality operator
-            bool TextureManager::operator!=(const TextureManager& other) const noexcept {
+            bool Texture2DArray::operator!=(const Texture2DArray& other) const noexcept {
                 return !(*this == other);
             }
 

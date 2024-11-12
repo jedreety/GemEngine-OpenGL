@@ -91,7 +91,7 @@ Game::Game() {
 		exit(EXIT_FAILURE);
 	}
 
-	textureManager_ = std::make_unique<Gem::Graphics::TextureManager>();
+	textureManager_ = std::make_unique<Gem::Graphics::Texture2DArray>();
 	textureManager_->init();
 
 	textureManager_->add_texture("dirt.png");
