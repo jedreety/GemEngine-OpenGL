@@ -17,7 +17,7 @@
 #include <Gem/Graphics/vao.h>
 #include <Gem/Graphics/buffer.h>
 
- #include <Gem/Core/timer.h>
+#include <Gem/Core/timer.h>
 
 class Game
 {

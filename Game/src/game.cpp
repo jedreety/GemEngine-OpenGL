@@ -193,6 +193,8 @@ void Game::run() {
 		// Draw elements
 		Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
+
+
 		// Render other players
 		for (const auto& player : otherPlayersPositions_) {
 			// Set model matrix for other player's cube

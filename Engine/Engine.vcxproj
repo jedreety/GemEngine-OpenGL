@@ -29,6 +29,7 @@
     <ClCompile Include="GemGraphics\src\texture_manager.cpp" />
     <ClCompile Include="GemInput\src\inputs.cpp" />
     <ClCompile Include="GemInput\src\key.cpp" />
+    <ClCompile Include="GemVoxel\src\chunk.cpp" />
     <ClCompile Include="GemWindow\src\window.cpp" />
     <ClCompile Include="GemNetworking\src\network_client.cpp" />
     <ClCompile Include="GemNetworking\src\network_server.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="GemGraphics\include\Gem\Graphics\texture_manager.h" />
     <ClInclude Include="GemInput\include\Gem\Input\inputs.h" />
     <ClInclude Include="GemInput\include\Gem\Input\key.h" />
+    <ClInclude Include="GemVoxel\include\Gem\Voxel\chunk.h" />
     <ClInclude Include="GemWindow\include\Gem\Window\window.h" />
     <ClInclude Include="GemNetworking\include\Gem\Networking\network_client.h" />
     <ClInclude Include="GemNetworking\include\Gem\Networking\network_server.h" />
@@ -611,7 +613,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)GemCore\include\;$(ProjectDir)GemGraphics\include\;$(ProjectDir)GemNetworking\include\;$(ProjectDir)GemInput\include\;$(ProjectDir)GemWindow\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)GemCore\include\;$(ProjectDir)GemGraphics\include\;$(ProjectDir)GemNetworking\include\;$(ProjectDir)GemInput\include\;$(ProjectDir)GemWindow\include\;$(ProjectDir)GemVoxel\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <Optimization>Custom</Optimization>

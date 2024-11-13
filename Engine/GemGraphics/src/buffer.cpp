@@ -50,8 +50,7 @@ namespace Gem {
             if (is_generated_) {
                 GL::bind_buffer(type_, ID_);
                 GL::buffer_data(type_, size, data, usage);
-                // Optionally unbind after setting data ( Make the program crash )
-                // glBindBuffer(type_, 0);
+                // Do not unbind here
             }
             else {
                 std::cerr << "Buffer not generated; cannot set data." << std::endl;
