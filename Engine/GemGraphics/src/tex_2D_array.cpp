@@ -1,4 +1,4 @@
-#include <Gem/Graphics/texture_manager.h>
+#include <Gem/Graphics/tex_2D_array.h>
 
 namespace Gem {
 

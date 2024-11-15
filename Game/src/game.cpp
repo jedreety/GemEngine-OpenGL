@@ -67,6 +67,8 @@ GLuint indices[] = {
 
 Game::Game() {
 
+	Gem::Core::ScopedTimer F("Game Init");
+
 	Gem::GLFW::init();
 	Gem::GLFW::set_context_version(4, 6);
 	Gem::GLFW::set_openGL_profile(GLFW_OPENGL_CORE_PROFILE);
@@ -150,6 +152,8 @@ void Game::run() {
 	networkClient_->SendPosition(playerPosition_);
 	float movementThreshold = 0.125f;
 
+	Gem::Voxel::Chunk chunk;
+
 	// Main game loop
 	while (!window_->should_close()) {
 		window_->pre_frame();
@@ -193,7 +197,22 @@ void Game::run() {
 		// Draw elements
 		Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
+		for (size_t i = 0; i < chunk.getVolume(); i++) {
+			// Set model matrix for player's cube
+			model = glm::mat4(1.0f);
 
+			// Call the static function correctly
+			std::tuple<uint32_t, uint32_t, uint32_t> pos = Gem::Voxel::Chunk::delinearize(i);
+
+			// Translate the cube to the voxel's position
+			model = glm::translate(model, glm::vec3(std::get<0>(pos), std::get<1>(pos), std::get<2>(pos)));
+
+			// Set the model matrix in the shader
+			Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
+
+			// Draw elements
+			Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+		}
 
 		// Render other players
 		for (const auto& player : otherPlayersPositions_) {

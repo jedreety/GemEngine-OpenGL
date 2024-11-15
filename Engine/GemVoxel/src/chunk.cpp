@@ -1,54 +1,49 @@
 #include <Gem/Voxel/chunk.h>
 #include <algorithm>
-#include <cstdint>
 
 namespace Gem {
+    namespace Voxel {
 
-	namespace Voxel {
+        Chunk::Chunk() {
+            // Initialize all voxels with default constructor
+            voxels_.fill(Voxel());
+        }
 
-		Chunk::Chunk() {
+        Voxel& Chunk::getVoxel(uint32_t x, uint32_t y, uint32_t z) {
+            size_t index = linearize(x, y, z);
+            return voxels_.at(index);
+        }
 
-			// Fill the array with Voxel::Default()
-			std::fill(std::begin(voxels_), std::end(voxels_), Voxel());
-		}
+        void Chunk::setVoxel(uint32_t x, uint32_t y, uint32_t z, const Voxel& voxel) {
+            size_t index = linearize(x, y, z);
+            voxels_.at(index) = voxel;
+        }
 
-		Voxel Chunk::get_voxel(GLuint x, GLuint y, GLuint z) {
+        constexpr size_t Chunk::linearize(uint32_t x, uint32_t y, uint32_t z) {
+            if (x >= length_ || y >= length_ || z >= length_) {
+                throw std::out_of_range("Coordinates out of bounds in linearize.");
+            }
+            return x + y * length_ + z * area_;
+        }
 
-			return voxels_[Chunk::linearize(x, y, z)];
-		}
+        std::tuple<uint32_t, uint32_t, uint32_t> Chunk::delinearize(size_t index) {
+            if (index >= volume_) {
+                throw std::out_of_range("Index out of bounds in delinearize.");
+            }
 
-		GLuint Chunk::linearize(GLuint x, GLuint y, GLuint z) {
-			return x + (y * length_) + (z * area_);
-		}
+            uint32_t z = index / area_;
+            index %= area_;
 
-		std::tuple<GLuint, GLuint, GLuint> Chunk::delinearize(GLuint index) {
-			GLuint z = index / (area_);
-			index -= z * (area_);
+            uint32_t y = index / length_;
 
-			GLuint y = index / length_;
-			index -= y * length_;
+            uint32_t x = index % length_;
 
-			// GLuint x = index;
+            return std::make_tuple(x, y, z);
+        }
 
-			return std::make_tuple(index, y, z);
+        Voxel& Chunk::operator()(uint32_t x, uint32_t y, uint32_t z) {
+            return getVoxel(x, y, z);
+        }
 
-		}
-
-		auto Chunk::get_length() {
-			
-			return length_;
-		}
-
-		auto Chunk::get_area() {
-				
-			return area_;
-		}
-		auto Chunk::get_volume() {
-				
-			return volume_;
-		}
-
-
-	} // namespace Voxel
-
-} // namesapce Gem
+    } // namespace Voxel
+} // namespace Gem

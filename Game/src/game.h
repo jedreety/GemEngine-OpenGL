@@ -12,12 +12,15 @@
 #include <Gem/Graphics/camera.h>
 
 #include <Gem/Graphics/shader_program.h>
-#include <Gem/Graphics/texture_manager.h>
+#include <Gem/Graphics/tex_2D_array.h>
 
 #include <Gem/Graphics/vao.h>
 #include <Gem/Graphics/buffer.h>
 
 #include <Gem/Core/timer.h>
+#include <Gem/Core/scoped_timer.h>
+
+#include <Gem/Voxel/chunk.h>
 
 class Game
 {
