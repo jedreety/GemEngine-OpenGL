@@ -58,7 +58,7 @@ namespace Gem {
              *
              * @param inputs Pointer to the Inputs object.
              */
-            void process_inputs(GLFWwindow* window, const Input::Inputs* inputs);
+            void process_inputs(GLFWwindow* window, const Input::Inputs* inputs, float deltaTime);
 
             /**
              * @brief Sets the window dimensions.
@@ -136,7 +136,7 @@ namespace Gem {
              *
              * @param inputs Pointer to the Inputs object
              */
-            void process_keyboard_input(const Input::Inputs* inputs);
+            void process_keyboard_input(const Input::Inputs* inputs, float deltaTime);
 
             /**
              * @brief Processes mouse inputs to rotate the camera.

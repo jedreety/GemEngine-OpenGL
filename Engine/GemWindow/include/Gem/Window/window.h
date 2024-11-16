@@ -2,6 +2,7 @@
 
 #include <GlfwGlad.h>
 #include <iostream>
+#include <functional>
 #include <Gem/Graphics/camera.h>
 #include <Gem/Input/inputs.h>
 
@@ -53,25 +54,22 @@ namespace Gem {
          * including context setup, input callbacks, and frame management.
          */
         class Window {
+
         public:
             /**
              * @brief Constructs a Window object with default parameters.
+             * 
+			 * @param width Window width in pixels.
+			 * @param height Window height in pixels.
+			 * @param title Window title.
+             * @param vsync True to enable VSync, false to disable.
              */
-            Window();
+            Window(int width = 800, int height = 600, const char* title = "Default window name", bool vsync = true);
 
             /**
              * @brief Destructor that cleans up the GLFW window.
              */
             ~Window();
-
-            /**
-             * @brief Initializes the window.
-             *
-             * Creates the GLFW window, sets up the context, callbacks, and VSync.
-             *
-             * @throws std::runtime_error if required attributes are not set or window creation fails.
-             */
-            void init();
 
             /**
              * @brief Checks if the window attributes are set.
@@ -107,15 +105,6 @@ namespace Gem {
             [[nodiscard]] bool should_close() const noexcept;
 
             /**
-             * @brief Sets the window dimensions and title.
-             *
-             * @param width Window width in pixels.
-             * @param height Window height in pixels.
-             * @param title Window title.
-             */
-            void set_attributes(int width, int height, const char* title);
-
-            /**
              * @brief Sets the window width.
              *
              * @param width Window width in pixels.
@@ -130,25 +119,12 @@ namespace Gem {
             void set_height(int height) noexcept;
 
             /**
-             * @brief Sets the window title.
-             *
-             * @param title Window title.
-             */
-            void set_title(const char* title) noexcept;
-
-            /**
-             * @brief Enables or disables VSync.
-             *
-             * @param vsync True to enable VSync, false to disable.
-             */
-            void set_vsync(bool vsync) noexcept;
-
-            /**
              * @brief Sets the camera associated with the window.
              *
              * @param camera Pointer to the Camera object.
+			 * @param update_dimentions Tell if the camera's dimensions should be updated to match the window's viewport.
              */
-            void set_camera(Graphics::Camera* camera) noexcept;
+            void set_camera(Graphics::Camera* camera, bool update_dimentions = true) noexcept;
 
             /**
              * @brief Gets the window width.
@@ -186,6 +162,39 @@ namespace Gem {
             [[nodiscard]] Input::Inputs* get_inputs() const noexcept;
 
             /**
+             * @brief Sets a user-provided framebuffer size callback function.
+             *
+             * Allows the user to specify a custom callback function that will be called
+             * whenever the window is resized. The user's callback will be invoked in addition
+             * to the default framebuffer size callback.
+             *
+             * @param callback The user-provided callback function.
+             */
+            void set_framebuffer_size_callback(std::function<void(GLFWwindow*, int, int)> callback);
+
+            /**
+             * @brief Sets a user-provided key callback function.
+             *
+             * Allows the user to specify a custom callback function that will be called
+             * whenever a key event occurs. The user's callback will be invoked in addition
+             * to the default key callback.
+             *
+             * @param callback The user-provided callback function.
+             */
+            void set_key_callback(std::function<void(GLFWwindow*, int, int, int, int)> callback);
+
+            /**
+             * @brief Sets a user-provided mouse button callback function.
+             *
+             * Allows the user to specify a custom callback function that will be called
+             * whenever a mouse button event occurs. The user's callback will be invoked in addition
+             * to the default mouse button callback.
+             *
+             * @param callback The user-provided callback function.
+             */
+            void set_mouse_button_callback(std::function<void(GLFWwindow*, int, int, int)> callback);
+
+            /**
              * @brief Equality operator.
              *
              * Compares two Window objects based on their GLFW window pointers.
@@ -205,7 +214,22 @@ namespace Gem {
              */
             bool operator!=(const Window& other) const noexcept;
 
+        public:
+
+			std::function<void(GLFWwindow*, int, int)> user_framebuffer_size_callback_;   ///< User-provided framebuffer size callback.
+			std::function<void(GLFWwindow*, int, int, int, int)> user_key_callback_;      ///< User-provided key callback.
+			std::function<void(GLFWwindow*, int, int, int)> user_mouse_button_callback_;  ///< User-provided mouse button callback.
+
         private:
+
+            /**
+             * @brief Initializes the window.
+             *
+             * Creates the GLFW window, sets up the context, callbacks, and VSync.
+             *
+             * @throws std::runtime_error if required attributes are not set or window creation fails.
+             */
+            void init();
 
             /**
              * @brief Creates the GLFW window.
@@ -226,13 +250,14 @@ namespace Gem {
 
         private:
 
-            GLFWwindow* window_ = nullptr;                  ///< Pointer to the GLFW window.
-            const char* title_ = "Default window name";     ///< Window title.
-            int width_ = 800;                               ///< Window width in pixels.
-            int height_ = 600;                              ///< Window height in pixels.
-            bool vsync_ = true;                             ///< VSync enabled flag.
-            Graphics::Camera* camera_ = nullptr;                      ///< Pointer to the associated Camera object.
-            Input::Inputs* inputs_;    				            ///< Pointer to the Inputs object.      
+            GLFWwindow* window_ = nullptr;         ///< Pointer to the GLFW window.
+            const char* title_;                    ///< Window title.
+            int width_;                            ///< Window width in pixels.
+            int height_;                           ///< Window height in pixels.
+            bool vsync_;                           ///< VSync enabled flag.
+            Graphics::Camera* camera_ = nullptr;   ///< Pointer to the associated Camera object.
+            Input::Inputs* inputs_;    		       ///< Pointer to the Inputs object.      
+
         };
 
 	} // namespace Window

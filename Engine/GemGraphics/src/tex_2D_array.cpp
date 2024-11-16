@@ -5,8 +5,10 @@ namespace Gem {
     namespace Graphics {
 
             // Constructor
-            Texture2DArray::Texture2DArray() {
-                // Default attributes are already set in the member initializer list.
+            Texture2DArray::Texture2DArray(GLuint width, GLuint height, GLuint max_textures, GLuint texture_unit):
+				width_(width), height_(height), max_texture_units_(max_textures), texture_unit_(texture_unit) {
+
+                init();
             }
 
             // Destructor
@@ -21,7 +23,7 @@ namespace Gem {
             void Texture2DArray::init() {
                 // Check if the texture attributes are set
                 if (!is_attr_set()) {
-                    std::cerr << "ERROR::Texture2DArray::init: Initialize texture manager dimensions and max texture units first." << std::endl;
+                    std::cerr << "ERROR::Texture2DArray::init: Initialize texture 2D array dimensions and max texture units first." << std::endl;
                     throw std::runtime_error("Texture2DArray attributes not set.");
                 }
 
@@ -119,17 +121,6 @@ namespace Gem {
 
                 // Add the texture name to the list
                 textures_.push_back(texture_name);
-            }
-
-            // Set texture dimensions
-            void Texture2DArray::set_dimensions(GLuint width, GLuint height) {
-                width_ = width;
-                height_ = height;
-            }
-
-            // Set maximum number of textures
-            void Texture2DArray::set_max_textures(GLuint max_textures) {
-                max_texture_units_ = max_textures;
             }
 
             // Set texture unit

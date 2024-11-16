@@ -54,44 +54,47 @@ namespace Gem {
         }
 
         // Process inputs
-        void Camera::process_inputs(GLFWwindow* window, const Input::Inputs* inputs) {
-            process_keyboard_input(inputs);
+        void Camera::process_inputs(GLFWwindow* window, const Input::Inputs* inputs, float deltaTime) {
+            process_keyboard_input(inputs, deltaTime);
             process_mouse_input(window, inputs);
         }
 
-        // Process keyboard input
-        void Camera::process_keyboard_input(const Input::Inputs* inputs) {
-            float adjusted_speed = speed_;
+		// Process keyboard input
+		void Camera::process_keyboard_input(const Input::Inputs* inputs, float deltaTime) {
+			glm::vec3 direction(0.0f);
 
-            if (inputs->is_key_pressed(GLFW_KEY_LEFT_SHIFT)) {
-                adjusted_speed *= 2.0f; // Increase speed when shift is held
-            }
+			float adjusted_speed = speed_;
 
-            // Forward
-            if (inputs->is_key_pressed(GLFW_KEY_W)) {
-                position_ += adjusted_speed * orientation_;
-            }
-            // Backward
-            if (inputs->is_key_pressed(GLFW_KEY_S)) {
-                position_ -= adjusted_speed * orientation_;
-            }
-            // Left
-            if (inputs->is_key_pressed(GLFW_KEY_A)) {
-                position_ -= glm::normalize(glm::cross(orientation_, up_)) * adjusted_speed;
-            }
-            // Right
-            if (inputs->is_key_pressed(GLFW_KEY_D)) {
-                position_ += glm::normalize(glm::cross(orientation_, up_)) * adjusted_speed;
-            }
-            // Up
-            if (inputs->is_key_pressed(GLFW_KEY_SPACE)) {
-                position_ += adjusted_speed * up_;
-            }
-            // Down
-            if (inputs->is_key_pressed(GLFW_KEY_C)) {
-                position_ -= adjusted_speed * up_;
-            }
-        }
+			if (inputs->is_key_pressed(GLFW_KEY_LEFT_SHIFT)) {
+				adjusted_speed *= 2.0f; // Increase speed when shift is held
+			}
+
+			// Collect direction inputs
+			if (inputs->is_key_pressed(GLFW_KEY_W)) {
+				direction += orientation_;
+			}
+			if (inputs->is_key_pressed(GLFW_KEY_S)) {
+				direction -= orientation_;
+			}
+			if (inputs->is_key_pressed(GLFW_KEY_A)) {
+				direction -= glm::normalize(glm::cross(orientation_, up_));
+			}
+			if (inputs->is_key_pressed(GLFW_KEY_D)) {
+				direction += glm::normalize(glm::cross(orientation_, up_));
+			}
+			if (inputs->is_key_pressed(GLFW_KEY_SPACE)) {
+				direction += up_;
+			}
+			if (inputs->is_key_pressed(GLFW_KEY_C)) {
+				direction -= up_;
+			}
+
+			// Normalize the direction and move the camera
+			if (glm::length(direction) > 0.0f) {
+				direction = glm::normalize(direction);
+				position_ += direction * adjusted_speed * deltaTime;
+			}
+		}
 
         // Process mouse input
         void Camera::process_mouse_input(GLFWwindow* window, const Input::Inputs* inputs) {

@@ -8,8 +8,8 @@ namespace Gem {
 
             constexpr float M_PI = 3.14159265358979;
             
-            Sphere::Sphere(unsigned int latitudeSegments, unsigned int longitudeSegments)
-				: latitudeSegments_(latitudeSegments), longitudeSegments_(longitudeSegments),
+            Sphere::Sphere(float radius, unsigned int latitudeSegments, unsigned int longitudeSegments)
+				: radius_(radius), latitudeSegments_(latitudeSegments), longitudeSegments_(longitudeSegments),
 				VAO_(),
 				VBO_(GL_ARRAY_BUFFER),
 				EBO_(GL_ELEMENT_ARRAY_BUFFER) {
@@ -61,23 +61,30 @@ namespace Gem {
 					for (unsigned int x = 0; x <= longitudeSegments_; ++x) {
 						float sinX_val = sinX[x];
 						float cosX_val = cosX[x];
-						float posX = cosX_val * sinY_val;
-						float posY = cosY_val;
-						float posZ = sinX_val * sinY_val;
+
+						// Calculate position using radius_
+						float posX = radius_ * cosX_val * sinY_val;
+						float posY = radius_ * cosY_val;
+						float posZ = radius_ * sinX_val * sinY_val;
+
+						// Normal vector (normalize position vector for the normal)
+						float nx = cosX_val * sinY_val;
+						float ny = cosY_val;
+						float nz = sinX_val * sinY_val;
 
 						// Position
 						vertices_[vertexIndex++] = posX;
 						vertices_[vertexIndex++] = posY;
 						vertices_[vertexIndex++] = posZ;
 
-						// Normal (same as position for a unit sphere centered at the origin)
-						vertices_[vertexIndex++] = posX;
-						vertices_[vertexIndex++] = posY;
-						vertices_[vertexIndex++] = posZ;
+						// Normal
+						vertices_[vertexIndex++] = nx;
+						vertices_[vertexIndex++] = ny;
+						vertices_[vertexIndex++] = nz;
 					}
 				}
 
-				// Generate indices
+				// Generate indices (same as before)
 				unsigned int index = 0;
 				for (unsigned int y = 0; y < latitudeSegments_; ++y) {
 					unsigned int base = y * (longitudeSegments_ + 1);

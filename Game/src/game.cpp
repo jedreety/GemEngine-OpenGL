@@ -1,5 +1,10 @@
 #include "game.h"
 
+void my_framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+	// User-specific code...
+	std::cout << "Framebuffer size changed to: " << width << "x" << height << std::endl;
+}
+
 GLfloat vertices[] = {
 	// Positions          // Texture Coords
 	// Front face
@@ -74,10 +79,8 @@ Game::Game() {
 	Gem::GLFW::set_openGL_profile(GLFW_OPENGL_CORE_PROFILE);
 
 	// Use make_unique for smart pointer creation
-	window_ = std::make_unique<Gem::Window::Window>();
-	window_->set_attributes(800, 600, "OpenGL Game");
-	window_->set_vsync(false);
-	window_->init();
+	window_ = std::make_unique<Gem::Window::Window>(800, 600, "OpenGL Window", false);
+	window_->set_framebuffer_size_callback(my_framebuffer_size_callback);
 
 	Gem::GLAD::init();
 
@@ -93,10 +96,10 @@ Game::Game() {
 	}
 
 	textureManager_ = std::make_unique<Gem::Graphics::Texture2DArray>();
-	textureManager_->init();
 
 	textureManager_->add_texture("dirt.png");
 	textureManager_->add_texture("grass.png");
+
 
 	textureManager_->generate_mipmaps();
 
@@ -127,7 +130,6 @@ Game::Game() {
 	playerPosition_ = glm::vec3(0.0f, 0.0f, 2.0f);
 
 	camera_ = std::make_unique<Gem::Graphics::Camera>();
-	camera_->set_dimensions(window_->get_width(), window_->get_height());
 	camera_->set_position(glm::vec3(20, 20, 20));
 	camera_->set_matrix_location(shader_.get());
 
@@ -155,10 +157,11 @@ void Game::run() {
 	Gem::Voxel::Chunk chunk;
 	{
 		Gem::Core::ScopedTimer F("Chunk Generation");
-		Gem::Graphics::Shapes::Sphere sphere = Gem::Graphics::Shapes::Sphere(3000, 3000);
+		Gem::Graphics::Shapes::Sphere sphere = Gem::Graphics::Shapes::Sphere(3000, 3000, 3000);
 
 	}
-	Gem::Graphics::Shapes::Sphere sphere = Gem::Graphics::Shapes::Sphere(1000, 1000);
+	Gem::Graphics::Shapes::Sphere sphere1=Gem::Graphics::Shapes::Sphere(2);
+	Gem::Graphics::Shapes::Sphere sphere2=Gem::Graphics::Shapes::Sphere(20);
 
 	// Main game loop
 	while (!window_->should_close()) {
@@ -170,8 +173,10 @@ void Game::run() {
 		shader_->activate();
 
 		// Update camera
-		camera_->process_inputs(window_->get_window_ptr(), window_->get_inputs());
+		camera_->process_inputs(window_->get_window_ptr(), window_->get_inputs(), gameTimer_.getDeltaMillis());
 		camera_->update_matrices();
+
+		std::cout << "FPS: " << camera_->get_position().x << std::endl;
 
 		// Get other players' positions
 		otherPlayersPositions_ = networkClient_->GetOtherPlayersPositions();
@@ -224,7 +229,12 @@ void Game::run() {
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(20.0f, 20.0f, 0.0f));
 
-		sphere.render();
+		sphere1.render();
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(21.0f, 21.0f, 3.0f));
+
+		sphere2.render();
 
 		// Set the model matrix in the shader
 		Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));

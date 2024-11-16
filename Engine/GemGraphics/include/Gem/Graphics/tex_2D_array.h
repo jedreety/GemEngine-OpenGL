@@ -26,8 +26,13 @@ namespace Gem {
                  * @brief Constructs a Texture2DArray object with default attributes.
                  *
                  * Initializes default values for texture width, height, and maximum texture units.
+                 * 
+                 * @param width The width of the textures.
+                 * @param height The height of the textures.
+                 * @param max_textures The maximum number of textures.
+                 * @param texture_unit The texture unit index (e.g., 0 for GL_TEXTURE0).
                  */
-                Texture2DArray();
+                Texture2DArray(GLuint width = 16, GLuint height = 16, GLuint max_textures = 16, GLuint texture_unit = 0);
 
                 /**
                  * @brief Destructor that cleans up the texture array.
@@ -68,21 +73,6 @@ namespace Gem {
                  * @param texture_name The name of the texture file (without extension).
                  */
                 void add_texture(const std::string& texture_name);
-
-                /**
-                 * @brief Sets the dimensions of the textures in the array.
-                 *
-                 * @param width The width of the textures.
-                 * @param height The height of the textures.
-                 */
-                void set_dimensions(GLuint width, GLuint height);
-
-                /**
-                 * @brief Sets the maximum number of textures in the array.
-                 *
-                 * @param max_textures The maximum number of textures.
-                 */
-                void set_max_textures(GLuint max_textures);
 
                 /**
                  * @brief Sets the texture unit to bind the texture array to.
@@ -199,10 +189,10 @@ namespace Gem {
             private:
 
                 GLuint texture_array_ID_ = 0;                ///< OpenGL texture array ID.
-                GLuint max_texture_units_ = 16;              ///< Maximum number of textures in the array.
-                GLuint width_ = 16;                          ///< Width of each texture.
-                GLuint height_ = 16;                         ///< Height of each texture.
-                GLuint texture_unit_ = 0;                    ///< Texture unit index.
+                GLuint max_texture_units_;                   ///< Maximum number of textures in the array.
+                GLuint width_;                               ///< Width of each texture.
+                GLuint height_;                              ///< Height of each texture.
+                GLuint texture_unit_;                    ///< Texture unit index.
                 bool is_initialized_ = false;                ///< Flag indicating if the texture array has been initialized.
                 std::string path_ = "resources/textures/";   ///< Path to the texture folder
 

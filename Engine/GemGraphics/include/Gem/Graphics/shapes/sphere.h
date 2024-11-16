@@ -17,7 +17,7 @@ namespace Gem {
 
             public:
 
-                Sphere(unsigned int latitudeSegments = 32, unsigned int longitudeSegments = 32);
+                Sphere( float radius = 1., unsigned int latitudeSegments = 32, unsigned int longitudeSegments = 32);
                 ~Sphere();
 
                 /**
@@ -53,6 +53,7 @@ namespace Gem {
 
                 unsigned int latitudeSegments_;
                 unsigned int longitudeSegments_;
+				unsigned int radius_;
 
                 std::vector<GLfloat> vertices_;
                 std::vector<GLuint> indices_;
