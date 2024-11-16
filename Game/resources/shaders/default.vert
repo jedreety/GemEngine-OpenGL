@@ -3,14 +3,17 @@
 
 layout(location = 0) in vec3 vertex_position; // vertex position attribute
 layout(location = 1) in vec2 aTexCoord;
+layout(location = 2) in vec3 aNormal;
 
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 modelMatrix;
 
 out vec2 TexCoord; // Pass texture coordinates to fragment shader
+out vec3 Normals;
 
 void main(void) {
 	TexCoord = aTexCoord;
+	Normals = aNormal;
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertex_position, 1.0); // set vertex position
 }

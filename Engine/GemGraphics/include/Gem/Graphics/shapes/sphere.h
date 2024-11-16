@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GlfwGlad.h>
 #include <Gem/Graphics/buffer.h>
 #include <Gem/Graphics/vao.h>
 #include <vector>
@@ -23,13 +24,13 @@ namespace Gem {
                  * @brief Retrieves the vertex data for the sphere.
                  * @return A vector of floats representing vertex positions.
                  */
-                const std::vector<float>& getVertices() const;
+                const std::vector<GLfloat>& getVertices() const;
 
                 /**
                  * @brief Retrieves the index data for the sphere.
                  * @return A vector of unsigned integers representing indices.
                  */
-                const std::vector<unsigned int>& getIndices() const;
+                const std::vector<GLuint>& getIndices() const;
 
                 /**
                  * @brief Initializes OpenGL buffers for the sphere.
@@ -53,8 +54,8 @@ namespace Gem {
                 unsigned int latitudeSegments_;
                 unsigned int longitudeSegments_;
 
-                std::vector<float> vertices_;
-                std::vector<unsigned int> indices_;
+                std::vector<GLfloat> vertices_;
+                std::vector<GLuint> indices_;
 
                 Gem::Graphics::VAO VAO_;
                 Gem::Graphics::Buffer VBO_, EBO_;

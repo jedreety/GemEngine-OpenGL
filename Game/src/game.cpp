@@ -128,7 +128,7 @@ Game::Game() {
 
 	camera_ = std::make_unique<Gem::Graphics::Camera>();
 	camera_->set_dimensions(window_->get_width(), window_->get_height());
-	camera_->set_position(playerPosition_);
+	camera_->set_position(glm::vec3(20, 20, 20));
 	camera_->set_matrix_location(shader_.get());
 
 	// Dont forget to set the camera to the window
@@ -153,6 +153,12 @@ void Game::run() {
 	float movementThreshold = 0.125f;
 
 	Gem::Voxel::Chunk chunk;
+	{
+		Gem::Core::ScopedTimer F("Chunk Generation");
+		Gem::Graphics::Shapes::Sphere sphere = Gem::Graphics::Shapes::Sphere(3000, 3000);
+
+	}
+	Gem::Graphics::Shapes::Sphere sphere = Gem::Graphics::Shapes::Sphere(1000, 1000);
 
 	// Main game loop
 	while (!window_->should_close()) {
@@ -202,7 +208,7 @@ void Game::run() {
 			model = glm::mat4(1.0f);
 
 			// Call the static function correctly
-			std::tuple<uint32_t, uint32_t, uint32_t> pos = Gem::Voxel::Chunk::delinearize(i);
+			auto pos = Gem::Voxel::Chunk::delinearize(i);
 
 			// Translate the cube to the voxel's position
 			model = glm::translate(model, glm::vec3(std::get<0>(pos), std::get<1>(pos), std::get<2>(pos)));
@@ -213,6 +219,18 @@ void Game::run() {
 			// Draw elements
 			Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 		}
+
+		// Translate the cube to the sphere position
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(20.0f, 20.0f, 0.0f));
+
+		sphere.render();
+
+		// Set the model matrix in the shader
+		Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
+
+		// Draw elements
+		Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
 		// Render other players
 		for (const auto& player : otherPlayersPositions_) {

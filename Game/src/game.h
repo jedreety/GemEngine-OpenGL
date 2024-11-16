@@ -21,6 +21,7 @@
 #include <Gem/Core/scoped_timer.h>
 
 #include <Gem/Voxel/chunk.h>
+#include <Gem/Graphics/shapes/sphere.h>
 
 class Game
 {

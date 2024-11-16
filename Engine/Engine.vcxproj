@@ -24,7 +24,7 @@
     <ClCompile Include="GemCore\src\timer.cpp" />
     <ClCompile Include="GemGraphics\src\camera.cpp" />
     <ClCompile Include="GemGraphics\src\buffer.cpp" />
-    <ClCompile Include="GemGraphics\src\shape.cpp" />
+    <ClCompile Include="GemGraphics\src\shapes\sphere.cpp" />
     <ClCompile Include="GemGraphics\src\vao.cpp" />
     <ClCompile Include="GemGraphics\src\shader_program.cpp" />
     <ClCompile Include="GemGraphics\src\tex_2D_array.cpp" />
