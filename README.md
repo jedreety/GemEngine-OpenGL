@@ -1,6 +1,6 @@
 # GemEngine - OpenGL Game Engine and Minecraft Clone
 
-**GemEngine** is a project started early Octobre. I will try to update it frequently.
+**GemEngine** was a project started early Octobre. I will try to update it frequently.
 
 ## Project Description
 
