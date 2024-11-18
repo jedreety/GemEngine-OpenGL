@@ -25,9 +25,12 @@
     <ClCompile Include="GemGraphics\src\camera.cpp" />
     <ClCompile Include="GemGraphics\src\buffer.cpp" />
     <ClCompile Include="GemGraphics\src\shapes\sphere.cpp" />
+    <ClCompile Include="GemGraphics\src\textures\texture.cpp" />
+    <ClCompile Include="GemGraphics\src\textures\tex_2D.cpp" />
+    <ClCompile Include="GemGraphics\src\textures\tex_3D.cpp" />
     <ClCompile Include="GemGraphics\src\vao.cpp" />
-    <ClCompile Include="GemGraphics\src\shader_program.cpp" />
-    <ClCompile Include="GemGraphics\src\tex_2D_array.cpp" />
+    <ClCompile Include="GemGraphics\src\shader.cpp" />
+    <ClCompile Include="GemGraphics\src\textures\tex_2D_array.cpp" />
     <ClCompile Include="GemInput\src\inputs.cpp" />
     <ClCompile Include="GemInput\src\key.cpp" />
     <ClCompile Include="GemVoxel\src\chunk.cpp" />
@@ -47,9 +50,14 @@
     <ClInclude Include="GemGraphics\include\Gem\Graphics\camera.h" />
     <ClInclude Include="GemGraphics\include\Gem\Graphics\buffer.h" />
     <ClInclude Include="GemGraphics\include\Gem\Graphics\shapes\sphere.h" />
+    <ClInclude Include="GemGraphics\include\Gem\Graphics\textures\texture.h" />
+    <ClInclude Include="GemGraphics\include\Gem\Graphics\textures\tex_2D.h" />
+    <ClInclude Include="GemGraphics\include\Gem\Graphics\textures\tex_3D.h" />
     <ClInclude Include="GemGraphics\include\Gem\Graphics\vao.h" />
-    <ClInclude Include="GemGraphics\include\Gem\Graphics\shader_program.h" />
-    <ClInclude Include="GemGraphics\include\Gem\Graphics\tex_2D_array.h" />
+    <ClInclude Include="GemGraphics\include\Gem\Graphics\shader.h" />
+    <ClInclude Include="GemGraphics\include\Gem\Graphics\textures\tex_2D_array.h" />
+    <ClInclude Include="GemGraphics\include\Gem\Graphics\textures\tex_1D.h" />
+    <ClInclude Include="GemGraphics\src\textures\tex_1D.cpp" />
     <ClInclude Include="GemInput\include\Gem\Input\inputs.h" />
     <ClInclude Include="GemInput\include\Gem\Input\key.h" />
     <ClInclude Include="GemVoxel\include\Gem\Voxel\chunk.h" />
@@ -352,6 +360,8 @@
     <ClInclude Include="ThirdParty\include\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ThirdParty\assets\shaders\GemDefaultCamera.frag" />
+    <None Include="ThirdParty\assets\shaders\GemDefaultCamera.vert" />
     <None Include="ThirdParty\include\glm\detail\func_common.inl" />
     <None Include="ThirdParty\include\glm\detail\func_common_simd.inl" />
     <None Include="ThirdParty\include\glm\detail\func_exponential.inl" />

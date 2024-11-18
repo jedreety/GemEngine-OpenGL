@@ -95,17 +95,19 @@ Game::Game() {
 		exit(EXIT_FAILURE);
 	}
 
-	textureManager_ = std::make_unique<Gem::Graphics::Texture2DArray>();
-
-	textureManager_->add_texture("dirt.png");
-	textureManager_->add_texture("grass.png");
-
-
-	textureManager_->generate_mipmaps();
+	textureManager_ = std::make_unique<Gem::Graphics::Texture2DArray>(16, 16, 10);
 
 	textureManager_->set_wrap(GL_REPEAT);
 	textureManager_->set_min_filter(GL_NEAREST_MIPMAP_LINEAR);
 	textureManager_->set_mag_filter(GL_NEAREST);
+
+	textureManager_->add_texture("dirt.png");
+	textureManager_->add_texture("grass.png");
+
+	textureManager_->generate_mipmaps();
+
+	textureBinder_ = std::make_unique<Gem::Core::TextureBinder>();
+	textureBinder_->bind_texture(textureManager_.get(), 0);
 
 	Gem::GLFW::enable_parameters();
 
@@ -146,8 +148,8 @@ Game::Game() {
 
 void Game::run() {
 
-	GLint shaderlocation_textureArray = Gem::GL::get_uniform_location(shader_->get_ID(), "texture_array");
-	GLint shaderlocation_modelMatrix = Gem::GL::get_uniform_location(shader_->get_ID(), "modelMatrix");
+	shader_->add_uniform_location("texture_array");
+	shader_->add_uniform_location("modelMatrix");
 
 	playerPosition_ = oldPosition_ = camera_->get_position();
 
@@ -155,13 +157,7 @@ void Game::run() {
 	float movementThreshold = 0.125f;
 
 	Gem::Voxel::Chunk chunk;
-	{
-		Gem::Core::ScopedTimer F("Chunk Generation");
-		Gem::Graphics::Shapes::Sphere sphere = Gem::Graphics::Shapes::Sphere(3000, 3000, 3000);
-
-	}
-	Gem::Graphics::Shapes::Sphere sphere1=Gem::Graphics::Shapes::Sphere(2);
-	Gem::Graphics::Shapes::Sphere sphere2=Gem::Graphics::Shapes::Sphere(20);
+	glm::mat4 model = glm::mat4(1.0f);
 
 	// Main game loop
 	while (!window_->should_close()) {
@@ -176,38 +172,25 @@ void Game::run() {
 		camera_->process_inputs(window_->get_window_ptr(), window_->get_inputs(), gameTimer_.getDeltaMillis());
 		camera_->update_matrices();
 
-		std::cout << "FPS: " << camera_->get_position().x << std::endl;
-
 		// Get other players' positions
 		otherPlayersPositions_ = networkClient_->GetOtherPlayersPositions();
 
 		// Check if position has changed
-		glm::vec3 newPosition = camera_->get_position();
-		if (glm::distance(newPosition, oldPosition_) > movementThreshold) {
+		if (glm::distance(playerPosition_, oldPosition_) > movementThreshold) {
 
 			networkClient_->SendPosition(playerPosition_);
-			oldPosition_ = newPosition;
+			oldPosition_ = playerPosition_;
 		}
 
-		playerPosition_ = newPosition;
-
 		// Bind texture
-		textureManager_->bind();
-		Gem::GL::set_uniform1i(shaderlocation_textureArray, 0);
+		shader_->set_uniform("texture_array", 0);
 
 		// Bind VAO
 		VAO_.bind();
 
 		// Set model matrix for player's cube
-		glm::mat4 model = glm::mat4(1.0f);
 
-		// Translate the cube to the player's position
-		model = glm::translate(model, playerPosition_);
-		// Set the model matrix in the shader
-		Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
-		// Draw elements
-		Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
-
+		// Render chunk
 		for (size_t i = 0; i < chunk.getVolume(); i++) {
 			// Set model matrix for player's cube
 			model = glm::mat4(1.0f);
@@ -219,28 +202,11 @@ void Game::run() {
 			model = glm::translate(model, glm::vec3(std::get<0>(pos), std::get<1>(pos), std::get<2>(pos)));
 
 			// Set the model matrix in the shader
-			Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
+			shader_->set_uniform_matrix("modelMatrix", glm::value_ptr(model), 1, GL_FALSE, GL_FLOAT_MAT4);
 
 			// Draw elements
 			Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 		}
-
-		// Translate the cube to the sphere position
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(20.0f, 20.0f, 0.0f));
-
-		sphere1.render();
-
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(21.0f, 21.0f, 3.0f));
-
-		sphere2.render();
-
-		// Set the model matrix in the shader
-		Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
-
-		// Draw elements
-		Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
 		// Render other players
 		for (const auto& player : otherPlayersPositions_) {
@@ -248,7 +214,7 @@ void Game::run() {
 			model = glm::mat4(1.0f);
 			// Translate the cube to the other player's position
 			model = glm::translate(model, player.second);
-			Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
+			shader_->set_uniform_matrix("modelMatrix", glm::value_ptr(model), 1, GL_FALSE, GL_FLOAT_MAT4);
 
 			// Draw other player's cube
 			Gem::GL::draw_elements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);

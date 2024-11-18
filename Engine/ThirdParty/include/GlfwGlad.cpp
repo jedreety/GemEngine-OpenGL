@@ -368,12 +368,41 @@ namespace Gem {
 		void generate_mipmap(GLenum target) {
 			glGenerateMipmap(target);
 		}
+		
+		void tex_image_3d(GLenum target, GLint level, GLint internalformat,
+			GLsizei width, GLsizei height, GLsizei depth, GLint border,
+			GLenum format, GLenum type, const void* pixels) {
+			glTexImage3D(target, level, internalformat, width, height, depth, border, format, type, pixels);
+		}
 
 		void tex_sub_image_3d(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset,
 			GLsizei width, GLsizei height, GLsizei depth,
 			GLenum format, GLenum type, const void* pixels) {
 			glTexSubImage3D(target, level, xoffset, yoffset, zoffset,
 				width, height, depth, format, type, pixels);
+		}
+
+		void tex_image_2d(GLenum target, GLint level, GLint internalformat,
+			GLsizei width, GLsizei height, GLint border,
+			GLenum format, GLenum type, const void* pixels) {
+			glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+		}
+
+		void tex_sub_image_2d(GLenum target, GLint level, GLint xoffset, GLint yoffset,
+			GLsizei width, GLsizei height,
+			GLenum format, GLenum type, const void* pixels) {
+			glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+		}
+
+		void tex_storage_2d(GLenum target, GLsizei levels, GLenum internalformat,
+			GLsizei width, GLsizei height) {
+			glTexStorage2D(target, levels, internalformat, width, height);
+		}
+
+		void tex_image_1d(GLenum target, GLint level, GLint internalformat,
+			GLsizei width, GLint border,
+			GLenum format, GLenum type, const void* pixels) {
+			glTexImage1D(target, level, internalformat, width, border, format, type, pixels);
 		}
 
 		//|========================================================= Buffers ===============================================================================================

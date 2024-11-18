@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj",
 		{59E269A4-E134-4429-8E5E-94812EEDA81E} = {59E269A4-E134-4429-8E5E-94812EEDA81E}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InfiniteCircleDemo", "InfiniteCircleDemo\InfiniteCircleDemo.vcxproj", "{7681E53D-8CA4-4366-9988-056881D37D54}"
+	ProjectSection(ProjectDependencies) = postProject
+		{59E269A4-E134-4429-8E5E-94812EEDA81E} = {59E269A4-E134-4429-8E5E-94812EEDA81E}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +39,14 @@ Global
 		{22812363-A993-41A1-882D-CB1ED189CD2D}.Release|x64.Build.0 = Release|x64
 		{22812363-A993-41A1-882D-CB1ED189CD2D}.Release|x86.ActiveCfg = Release|Win32
 		{22812363-A993-41A1-882D-CB1ED189CD2D}.Release|x86.Build.0 = Release|Win32
+		{7681E53D-8CA4-4366-9988-056881D37D54}.Debug|x64.ActiveCfg = Debug|x64
+		{7681E53D-8CA4-4366-9988-056881D37D54}.Debug|x64.Build.0 = Debug|x64
+		{7681E53D-8CA4-4366-9988-056881D37D54}.Debug|x86.ActiveCfg = Debug|Win32
+		{7681E53D-8CA4-4366-9988-056881D37D54}.Debug|x86.Build.0 = Debug|Win32
+		{7681E53D-8CA4-4366-9988-056881D37D54}.Release|x64.ActiveCfg = Release|x64
+		{7681E53D-8CA4-4366-9988-056881D37D54}.Release|x64.Build.0 = Release|x64
+		{7681E53D-8CA4-4366-9988-056881D37D54}.Release|x86.ActiveCfg = Release|Win32
+		{7681E53D-8CA4-4366-9988-056881D37D54}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,8 +11,8 @@
 
 #include <Gem/Graphics/camera.h>
 
-#include <Gem/Graphics/shader_program.h>
-#include <Gem/Graphics/tex_2D_array.h>
+#include <Gem/Graphics/shader.h>
+#include <Gem/Graphics/textures/tex_2D_array.h>
 
 #include <Gem/Graphics/vao.h>
 #include <Gem/Graphics/buffer.h>
@@ -22,6 +22,8 @@
 
 #include <Gem/Voxel/chunk.h>
 #include <Gem/Graphics/shapes/sphere.h>
+
+#include <Gem/Core/texture_binder.h>
 
 class Game
 {
@@ -39,6 +41,7 @@ private:
 	glm::vec3 oldPosition_ = glm::vec3();
 
 	std::unique_ptr<Gem::Graphics::Texture2DArray> textureManager_;
+	std::unique_ptr<Gem::Core::TextureBinder> textureBinder_;
 	std::unique_ptr<Gem::Graphics::Shader> shader_;
 
 	Gem::Graphics::VAO VAO_;

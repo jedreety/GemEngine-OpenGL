@@ -756,6 +756,24 @@ namespace Gem {
          * @param target Specifies the target to which the texture is bound (e.g., GL_TEXTURE_2D, GL_TEXTURE_3D).
          */
         void generate_mipmap(GLenum target);
+        
+        /**
+         * @brief Specifies a three-dimensional texture image.
+         *
+         * @param target Specifies the target texture (e.g., GL_TEXTURE_3D).
+         * @param level Specifies the level-of-detail number.
+         * @param internalformat Specifies the number of color components in the texture.
+         * @param width Specifies the width of the texture image.
+         * @param height Specifies the height of the texture image.
+         * @param depth Specifies the depth of the texture image.
+         * @param border Specifies the width of the border. Must be 0.
+         * @param format Specifies the format of the pixel data (e.g., GL_RGBA).
+         * @param type Specifies the data type of the pixel data (e.g., GL_UNSIGNED_BYTE).
+         * @param pixels Specifies a pointer to the image data in memory.
+         */
+        void tex_image_3d(GLenum target, GLint level, GLint internalformat,
+            GLsizei width, GLsizei height, GLsizei depth, GLint border,
+            GLenum format, GLenum type, const void* pixels);
 
         /**
          * @brief Specifies a three-dimensional texture subimage.
@@ -776,6 +794,73 @@ namespace Gem {
          */
         void tex_sub_image_3d(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset,
             GLsizei width, GLsizei height, GLsizei depth,
+            GLenum format, GLenum type, const void* pixels);
+
+        /**
+         * @brief Specifies a two-dimensional texture image.
+         *
+         * Specifies a two-dimensional texture image.
+         *
+         * @param target Specifies the target texture (e.g., GL_TEXTURE_2D).
+         * @param level Specifies the level-of-detail number.
+         * @param internalformat Specifies the number of color components in the texture.
+         * @param width Specifies the width of the texture image.
+         * @param height Specifies the height of the texture image.
+         * @param border Specifies the width of the border. Must be 0.
+         * @param format Specifies the format of the pixel data (e.g., GL_RGBA).
+         * @param type Specifies the data type of the pixel data (e.g., GL_UNSIGNED_BYTE).
+         * @param pixels Specifies a pointer to the image data in memory.
+         */
+        void tex_image_2d(GLenum target, GLint level, GLint internalformat,
+            GLsizei width, GLsizei height, GLint border,
+            GLenum format, GLenum type, const void* pixels);
+
+        /**
+         * @brief Specifies a two-dimensional texture subimage.
+         *
+         * Specifies a two-dimensional texture subimage, replacing a portion of an existing two-dimensional texture image.
+         *
+         * @param target Specifies the target texture (e.g., GL_TEXTURE_2D).
+         * @param level Specifies the level-of-detail number.
+         * @param xoffset Specifies the x offset of the texture subregion.
+         * @param yoffset Specifies the y offset of the texture subregion.
+         * @param width Specifies the width of the texture subregion.
+         * @param height Specifies the height of the texture subregion.
+         * @param format Specifies the format of the pixel data (e.g., GL_RGBA).
+         * @param type Specifies the data type of the pixel data (e.g., GL_UNSIGNED_BYTE).
+         * @param pixels Specifies a pointer to the image data in memory.
+         */
+        void tex_sub_image_2d(GLenum target, GLint level, GLint xoffset, GLint yoffset,
+            GLsizei width, GLsizei height,
+            GLenum format, GLenum type, const void* pixels);
+
+        /**
+         * @brief Specifies storage for a two-dimensional texture.
+         *
+         * Specifies storage for all levels of a two-dimensional texture.
+         *
+         * @param target Specifies the target of the operation (e.g., GL_TEXTURE_2D).
+         * @param levels Specifies the number of texture levels.
+         * @param internalformat Specifies the sized internal format to be used to store texture image data.
+         * @param width Specifies the width of the texture, in pixels.
+         * @param height Specifies the height of the texture, in pixels.
+         */
+        void tex_storage_2d(GLenum target, GLsizei levels, GLenum internalformat,
+            GLsizei width, GLsizei height);
+        /**
+         * @brief Specifies a one-dimensional texture image.
+         *
+         * @param target Specifies the target texture (e.g., GL_TEXTURE_1D).
+         * @param level Specifies the level-of-detail number.
+         * @param internalformat Specifies the number of color components in the texture.
+         * @param width Specifies the width of the texture image.
+         * @param border Specifies the width of the border. Must be 0.
+         * @param format Specifies the format of the pixel data (e.g., GL_RGBA).
+         * @param type Specifies the data type of the pixel data (e.g., GL_UNSIGNED_BYTE).
+         * @param pixels Specifies a pointer to the image data in memory.
+         */
+        void tex_image_1d(GLenum target, GLint level, GLint internalformat,
+            GLsizei width, GLint border,
             GLenum format, GLenum type, const void* pixels);
 
         /**

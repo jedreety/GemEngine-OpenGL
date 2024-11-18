@@ -1,19 +1,38 @@
-/*#include <GlfwGlad.h>
+#include <Gem/Core/texture_binder.h>
 
 namespace Gem {
 
-	class TextureBinder {
-	public:
-		TextureBinder(GLenum target, GLuint texture) : target_(target) {
-			GL::active_texture(GL_TEXTURE0 + texture_unit_);
-			GL::bind_texture(GL_TEXTURE_2D_ARRAY, texture_array_ID_);
+	namespace Core {
+
+		// Constructor
+		TextureBinder::TextureBinder() {
+			// No initialization required
 		}
-		~TextureBinder() {
-			GL::bind_texture(GL_TEXTURE_2D_ARRAY, 0);
+
+		// Destructor
+		TextureBinder::~TextureBinder() {
+			unbind_all();
 		}
-	private:
-		GLenum target_;
-	};
+
+		void TextureBinder::bind_texture(const Gem::Graphics::Texture* texture, GLuint texture_unit) {
+			if (texture) {
+				texture->bind(texture_unit);
+				bound_textures_.push_back(texture);
+			}
+			else {
+				std::cerr << "ERROR::TextureBinder::bind_texture: Texture pointer is null." << std::endl;
+			}
+		}
+
+		void TextureBinder::unbind_all() {
+			for (const Gem::Graphics::Texture* texture : bound_textures_) {
+				if (texture) {
+					texture->unbind();
+				}
+			}
+			bound_textures_.clear();
+		}
+
+	} // namespace Graphics
 
 } // namespace Gem
-*/

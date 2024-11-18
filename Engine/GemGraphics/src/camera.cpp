@@ -96,46 +96,59 @@ namespace Gem {
 			}
 		}
 
-        // Process mouse input
-        void Camera::process_mouse_input(GLFWwindow* window, const Input::Inputs* inputs) {
-            if (inputs->is_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT)) {
-                // Hide cursor
-                GLFW::set_input_mode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		// Process mouse input
+		void Camera::process_mouse_input(GLFWwindow* window, const Input::Inputs* inputs) {
+			if (inputs->is_mouse_button_pressed(GLFW_MOUSE_BUTTON_LEFT)) {
+				// Hide cursor
+				GLFW::set_input_mode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-                // Prevent sudden jump on first click
-                if (first_click_) {
-                    GLFW::set_cursor_pos(window, width_ / 2.0, height_ / 2.0);
-                    first_click_ = false;
-                }
+/*				// Get current mouse position
+				double mouse_x = inputs->get_mouse_x();
+				double mouse_y = inputs->get_mouse_y();*/
+				double mouse_x, mouse_y;
+				GLFW::get_cursor_pos(window, &mouse_x, &mouse_y);
 
-                // Get cursor position
-                double mouse_x, mouse_y;
-                GLFW::get_cursor_pos(window, &mouse_x, &mouse_y);
+				if (first_click_) {
+					last_mouse_x_ = mouse_x;
+					last_mouse_y_ = mouse_y;
+					first_click_ = false;
+				}
 
-                // Calculate offsets
-                float offset_x = static_cast<float>(mouse_x - width_ / 2.0);
-                float offset_y = static_cast<float>(mouse_y - height_ / 2.0);
+				// Calculate mouse offsets
+				float offset_x = static_cast<float>(mouse_x - last_mouse_x_);
+				float offset_y = static_cast<float>(last_mouse_y_ - mouse_y); // Inverted since y-coordinates go from bottom to top
 
-                // Apply sensitivity
-                offset_x *= sensitivity_ / width_;
-                offset_y *= sensitivity_ / height_;
+				// Update last mouse positions
+				last_mouse_x_ = mouse_x;
+				last_mouse_y_ = mouse_y;
 
-                // Update orientation
-                glm::vec3 right = glm::normalize(glm::cross(orientation_, up_));
+				// Apply sensitivity
+				offset_x *= sensitivity_;
+				offset_y *= sensitivity_;
 
-                orientation_ = glm::rotate(orientation_, glm::radians(-offset_x), up_);
-                orientation_ = glm::rotate(orientation_, glm::radians(-offset_y), right);
-                orientation_ = glm::normalize(orientation_);
+				// Update yaw and pitch
+				yaw_ += offset_x;
+				pitch_ += offset_y;
 
-                // Reset cursor position
-                GLFW::set_cursor_pos(window, width_ / 2.0, height_ / 2.0);
-            }
-            else {
-                // Show cursor
+				// Clamp the pitch angle to prevent screen flipping
+				if (pitch_ > 89.0f)
+					pitch_ = 89.0f;
+				if (pitch_ < -89.0f)
+					pitch_ = -89.0f;
+
+				// Calculate the new orientation
+				glm::vec3 front;
+				front.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+				front.y = sin(glm::radians(pitch_));
+				front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+				orientation_ = glm::normalize(front);
+			}
+			else {
+				// Show cursor
                 GLFW::set_input_mode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-                first_click_ = true;
-            }
-        }
+				first_click_ = true;
+			}
+		}
 
         // Set window dimensions
         void Camera::set_dimensions(int width, int height) noexcept {
