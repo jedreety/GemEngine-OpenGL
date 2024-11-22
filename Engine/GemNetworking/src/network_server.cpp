@@ -75,6 +75,7 @@ namespace Network {
 
                     // Initialize the client's position
                     clientPositions_[event.peer->connectID] = glm::vec3(0.0f);
+					std::cout << "Client connected: " << event.peer->connectID << std::endl;
                     break;
 
                 case ENET_EVENT_TYPE_RECEIVE:

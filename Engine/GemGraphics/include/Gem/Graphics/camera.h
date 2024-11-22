@@ -42,7 +42,7 @@ namespace Gem {
              *
              * @param shader Pointer to the Shader object.
              */
-            void set_matrix_location(const Gem::Graphics::Shader* shader);
+            void set_matrix_location(Gem::Graphics::Shader* shader);
 
             /**
              * @brief Updates and sends the view and projection matrices to the shader.
@@ -124,6 +124,7 @@ namespace Gem {
             bool operator!=(const Camera& other) const noexcept;
 
         private:
+
             /**
              * @brief Checks if the required attributes are set before initialization.
              *
@@ -145,30 +146,32 @@ namespace Gem {
              */
             void process_mouse_input(GLFWwindow* window, const Input::Inputs* inputs);
 
-            glm::vec3 position_{ 0.0f, 0.0f, 0.0f };       ///< Camera position.
-            glm::vec3 orientation_{ 0.0f, 0.0f, -1.0f };   ///< Camera forward direction.
-            glm::vec3 up_{ 0.0f, 1.0f, 0.0f };             ///< Camera up direction.
+        private:
 
-            bool first_click_{ true };                     ///< Flag to prevent sudden jumps on first click.
+            glm::vec3 position_{ 0.0f, 0.0f, 0.0f };        ///< Camera position.
+            glm::vec3 orientation_{ 0.0f, 0.0f, -1.0f };    ///< Camera forward direction.
+            glm::vec3 up_{ 0.0f, 1.0f, 0.0f };              ///< Camera up direction.
 
-			double last_mouse_x_{ 0.0};                    ///< Last mouse X position
-            double last_mouse_y_{ 0.0 };                   ///< Last mouse Y position
+            bool first_click_{ true };                      ///< Flag to prevent sudden jumps on first click.
 
-            int width_{ 800 };                             ///< Window width.
-            int height_{ 600 };                            ///< Window height.
+			double last_mouse_x_{ 0.0};                     ///< Last mouse X position
+            double last_mouse_y_{ 0.0 };                    ///< Last mouse Y position
+
+            int width_{ 800 };                              ///< Window width.
+            int height_{ 600 };                             ///< Window height.
 
             float speed_{ 0.01f };                          ///< Movement speed.
-            float sensitivity_{ .2f };                    ///< Mouse sensitivity.
+            float sensitivity_{ .2f };                      ///< Mouse sensitivity.
 
 			float yaw_ = -90.0f;                            ///< Horizontal rotation angle
 			float pitch_ = 0.0f;                            ///< Vertical rotation angle
 
             float fov_{ 45.0f };                            ///< Field of view.
             float near_plane_{ 0.1f };                      ///< Near clipping plane.
-            float far_plane_{ 1000.0f };                     ///< Far clipping plane.
+            float far_plane_{ 1000.0f };                    ///< Far clipping plane.
 
-            GLint projection_matrix_location_{ -1 };        ///< Shader uniform location for projection matrix.
-            GLint view_matrix_location_{ -1 };              ///< Shader uniform location for view matrix.
+			Gem::Graphics::Shader* shader_{ nullptr };      ///< Pointer to the Shader object.
+			std::vector<Gem::Graphics::Shader*> shaderArray_; ///< Array of shaders
         };
 
 	} // namespace Graphics

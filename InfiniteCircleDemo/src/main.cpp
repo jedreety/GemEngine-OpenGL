@@ -71,12 +71,11 @@ void game() {
 	Gem::Graphics::Camera camera;
 	camera.set_fov(60); // Field of view of 120 degrees for a wide perspective
 	camera.set_position(glm::vec3(0, 0, 225)); // Position the camera along the Z-axis
-	camera.set_matrix_location(&shader); // Link camera matrices to the shader
-
+	camera.set_matrix_location(&shader);
 	window.set_camera(&camera); // Attach the camera to the window for view transformations
 
 	// Initialize the network client to connect to the server at localhost:1234
-	Network::Client client("127.0.0.1", 1234);
+	Network::Client client("jedreety.ddns.net", 1234);
 	client.Start();
 
 	// Create spheres representing different boundaries and the player
@@ -94,7 +93,7 @@ void game() {
 	std::unordered_map<enet_uint32, glm::vec3> otherPlayersPositions_; // Store positions of other players
 
 	// Get the location of the "modelMatrix" uniform in the shader
-	GLint shaderlocation_modelMatrix = Gem::GL::get_uniform_location(shader.get_ID(), "modelMatrix");
+	shader.add_uniform_location("modelMatrix");
 	glm::mat4 model = glm::mat4(1.0f); // Initialize model matrix
 
 	// Main game loop
@@ -126,13 +125,13 @@ void game() {
 		for (const auto& player : otherPlayersPositions_) {
 			model = glm::mat4(1.0f); // Reset model matrix
 			model = glm::translate(model, player.second); // Move to the other player's position
-			Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
+			shader.set_uniform_matrix("modelMatrix", glm::value_ptr(model), 1, GL_FALSE, GL_FLOAT_MAT4);
 			player_sphere.render(); // Draw the other player's sphere
 		}
 
 		// Render the boundary spheres and the boxed sphere
 		model = glm::mat4(1.0f); // Reset model matrix for static objects
-		Gem::GL::set_uniform_matrix4fv(shaderlocation_modelMatrix, 1, GL_FALSE, glm::value_ptr(model));
+		shader.set_uniform_matrix("modelMatrix", glm::value_ptr(model), 1, GL_FALSE, GL_FLOAT_MAT4);
 
 		inner_sphere.render(); // Draw inner boundary
 		outer_sphere.render(); // Draw outer boundary

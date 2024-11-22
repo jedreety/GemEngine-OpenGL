@@ -8,6 +8,7 @@ namespace Gem {
         // Constructor
         Camera::Camera() noexcept {
             // Default values are already set in the member initializer list.
+			init();
         }
 
         // Initialize the camera
@@ -16,6 +17,22 @@ namespace Gem {
                 std::cerr << "ERROR::Camera::init: Camera attributes not properly set before initialization." << std::endl;
                 throw std::runtime_error("Camera attributes not set.");
             }
+
+			shader_ = new Gem::Graphics::Shader();
+			shader_->set_path("../Engine/ThirdParty/assets/shaders/");
+
+			try {
+				shader_->add_shader(GL_VERTEX_SHADER, "GemDefaultCamera.vert"); // Add vertex shader
+				shader_->add_shader(GL_FRAGMENT_SHADER, "GemDefaultCamera.frag"); // Add fragment shader
+				shader_->link_program(); // Link shaders into a shader program
+			}
+			catch (const std::exception& e) {
+				std::cerr << "Shader compilation/linking failed: " << e.what() << std::endl;
+				exit(EXIT_FAILURE); // Exit if shaders fail to compile/link
+			}
+
+			shader_->add_uniform_location("projectionMatrix");
+			shader_->add_uniform_location("viewMatrix");
         }
 
         // Check if attributes are set
@@ -24,33 +41,39 @@ namespace Gem {
         }
 
         // Set the uniform locations for matrices
-        void Camera::set_matrix_location(const Gem::Graphics::Shader* shader) {
-            projection_matrix_location_ = GL::get_uniform_location(shader->get_ID(), "projectionMatrix");
-            view_matrix_location_ = GL::get_uniform_location(shader->get_ID(), "viewMatrix");
+        void Camera::set_matrix_location(Gem::Graphics::Shader* shader) {
 
-            if (projection_matrix_location_ == -1 || view_matrix_location_ == -1) {
-                std::cerr << "ERROR::Camera::set_matrix_location: Failed to get uniform locations." << std::endl;
-                throw std::runtime_error("Failed to get uniform locations.");
-            }
+			shader->add_uniform_location("projectionMatrix");
+			shader->add_uniform_location("viewMatrix");
+			
+			shaderArray_.push_back(shader);
         }
 
         // Update and send matrices to the shader
         void Camera::update_matrices() const {
-            // Ensure uniform locations are valid
-            if (projection_matrix_location_ == -1 || view_matrix_location_ == -1) {
-                std::cerr << "ERROR::Camera::update_matrices: Uniform locations not set. Call set_matrix_location() first." << std::endl;
-                throw std::runtime_error("Uniform locations not set.");
-            }
-
             // Calculate view matrix
             glm::mat4 view = glm::lookAt(position_, position_ + orientation_, up_);
 
             // Calculate projection matrix
             glm::mat4 projection = glm::perspective(glm::radians(fov_), static_cast<float>(width_) / height_, near_plane_, far_plane_);
 
+			if (shader_==nullptr) {
+				std::cout << "Camera Shader not linked\n";
+				return;
+			}
+			shader_->activate();
+
             // Send matrices to the shader
-            GL::set_uniform_matrix4fv(projection_matrix_location_, 1, GL_FALSE, glm::value_ptr(projection));
-            GL::set_uniform_matrix4fv(view_matrix_location_, 1, GL_FALSE, glm::value_ptr(view));
+			shader_->set_uniform_matrix("projectionMatrix", glm::value_ptr(projection), 1, GL_FALSE, GL_FLOAT_MAT4);
+			shader_->set_uniform_matrix("viewMatrix", glm::value_ptr(view), 1, GL_FALSE, GL_FLOAT_MAT4);
+			
+			for (auto shader : shaderArray_) {
+
+				shader->activate();
+				shader->set_uniform_matrix("projectionMatrix", glm::value_ptr(projection), 1, GL_FALSE, GL_FLOAT_MAT4);
+				shader->set_uniform_matrix("viewMatrix", glm::value_ptr(view), 1, GL_FALSE, GL_FLOAT_MAT4);
+			}
+
         }
 
         // Process inputs
