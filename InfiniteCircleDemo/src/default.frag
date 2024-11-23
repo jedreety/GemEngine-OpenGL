@@ -1,19 +1,22 @@
 #version 330 core
 
-// Output color
-out vec4 fragment_colour;
+// Inputs from the vertex shader
+in vec3 Normals;    // Fragment normal
 
-in vec3 Normals;   // Normal vector passed from vertex shader
+// Output color of the fragment
+out vec4 FragColor;
 
+// Uniform sampler for the 2D texture
+uniform sampler2D texture_diffuse;
 
-void main(void) {
+void main()
+{
+    // Since the object is a circle, we assume the normals are in the XY plane
+    // and are already normalized (i.e., length is 1)
+    
+    // Map normals from [-1, 1] to [0, 1] to use as texture coordinates
+    vec2 texCoord = Normals.xy * 0.5 + 0.5;
 
-    // Normalize the normal vector
-    vec3 norm = normalize(Normals);
-
-    // Map the normal components from [-1, 1] to [0, 1]
-    vec3 normalColor = (norm + 1.0) / 2.0;  // Normalize to RGB range
-
-    // Set the fragment color with alpha = 1 (fully opaque)
-    fragment_colour = vec4(normalColor, 1.0);
+    // Set the fragment color to the sampled texture color
+    FragColor = texture(texture_diffuse, texCoord);
 }

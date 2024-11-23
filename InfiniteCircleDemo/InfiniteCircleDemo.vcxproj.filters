@@ -23,4 +23,9 @@
     <None Include="src\default.vert" />
     <None Include="src\default.frag" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\dirt.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

@@ -118,6 +118,14 @@ namespace Gem {
             // Matrix uniforms
             void set_uniform_matrix(const std::string& name, const GLfloat* value, GLsizei count, GLboolean transpose, GLenum matrixType);
 
+            /**
+			 * @brief Binds a uniform block to a binding point.
+			 *
+			 * @param blockName The name of the uniform block in the shader.
+			 * @param bindingPoint The binding point to associate with the uniform block.
+			 */
+            void bind_uniform_block(const std::string& blockName, GLuint bindingPoint);
+
             // Equality operator.
             bool operator==(const Shader& other) const noexcept;
 

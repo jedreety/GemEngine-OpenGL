@@ -31,8 +31,23 @@ namespace Gem {
 				exit(EXIT_FAILURE); // Exit if shaders fail to compile/link
 			}
 
-			shader_->add_uniform_location("projectionMatrix");
-			shader_->add_uniform_location("viewMatrix");
+			// Generate the buffer
+			matrices_ubo_.generate();
+
+			// Bind the buffer
+			matrices_ubo_.bind();
+
+			// Allocate memory for the UBO (size of two mat4 matrices)
+			matrices_ubo_.set_data(sizeof(glm::mat4) * 2, nullptr, GL_DYNAMIC_DRAW);
+
+			// Bind the buffer base to the binding point
+			glBindBufferBase(GL_UNIFORM_BUFFER, matrices_binding_point_, matrices_ubo_.get_ID());
+
+			// Unbind the buffer
+			matrices_ubo_.unbind();
+
+			// Bind the uniform block in the shader to the binding point
+			shader_->bind_uniform_block("Matrices", matrices_binding_point_);
         }
 
         // Check if attributes are set
@@ -41,38 +56,33 @@ namespace Gem {
         }
 
         // Set the uniform locations for matrices
-        void Camera::set_matrix_location(Gem::Graphics::Shader* shader) {
+        void Camera::set_matrix_location(Gem::Graphics::Shader* shader) const {
 
-			shader->add_uniform_location("projectionMatrix");
-			shader->add_uniform_location("viewMatrix");
-			
-			shaderArray_.push_back(shader);
+			// Bind the uniform block 'Matrices' to the same binding point
+			shader->bind_uniform_block("Matrices", matrices_binding_point_);
         }
 
         // Update and send matrices to the shader
         void Camera::update_matrices() const {
-            // Calculate view matrix
-            glm::mat4 view = glm::lookAt(position_, position_ + orientation_, up_);
+			// Calculate view matrix
+			glm::mat4 view = glm::lookAt(position_, position_ + orientation_, up_);
 
-            // Calculate projection matrix
-            glm::mat4 projection = glm::perspective(glm::radians(fov_), static_cast<float>(width_) / height_, near_plane_, far_plane_);
+			// Calculate projection matrix
+			glm::mat4 projection = glm::perspective(glm::radians(fov_), static_cast<float>(width_) / height_, near_plane_, far_plane_);
 
-			if (shader_==nullptr) {
-				std::cout << "Camera Shader not linked\n";
-				return;
-			}
-			shader_->activate();
+			// Update the UBO with the matrices using the Buffer class
 
-            // Send matrices to the shader
-			shader_->set_uniform_matrix("projectionMatrix", glm::value_ptr(projection), 1, GL_FALSE, GL_FLOAT_MAT4);
-			shader_->set_uniform_matrix("viewMatrix", glm::value_ptr(view), 1, GL_FALSE, GL_FLOAT_MAT4);
-			
-			for (auto shader : shaderArray_) {
+			// Bind the buffer
+			matrices_ubo_.bind();
 
-				shader->activate();
-				shader->set_uniform_matrix("projectionMatrix", glm::value_ptr(projection), 1, GL_FALSE, GL_FLOAT_MAT4);
-				shader->set_uniform_matrix("viewMatrix", glm::value_ptr(view), 1, GL_FALSE, GL_FLOAT_MAT4);
-			}
+			// Update the projection matrix (offset 0)
+			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
+
+			// Update the view matrix (offset sizeof(mat4))
+			glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+
+			// Unbind the buffer
+			matrices_ubo_.unbind();
 
         }
 

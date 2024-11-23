@@ -173,6 +173,9 @@
     <None Include="src\default.frag" />
     <None Include="src\default.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\dirt.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

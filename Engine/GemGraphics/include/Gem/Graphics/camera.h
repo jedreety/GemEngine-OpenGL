@@ -8,6 +8,7 @@
 
 #include <Gem/Graphics/shader.h>
 #include <Gem/Input/inputs.h>
+#include <Gem/Graphics/buffer.h>
 
 namespace Gem {
 
@@ -42,7 +43,7 @@ namespace Gem {
              *
              * @param shader Pointer to the Shader object.
              */
-            void set_matrix_location(Gem::Graphics::Shader* shader);
+            void set_matrix_location(Gem::Graphics::Shader* shader) const;
 
             /**
              * @brief Updates and sends the view and projection matrices to the shader.
@@ -171,7 +172,9 @@ namespace Gem {
             float far_plane_{ 1000.0f };                    ///< Far clipping plane.
 
 			Gem::Graphics::Shader* shader_{ nullptr };      ///< Pointer to the Shader object.
-			std::vector<Gem::Graphics::Shader*> shaderArray_; ///< Array of shaders
+
+			Graphics::Buffer matrices_ubo_{ GL_UNIFORM_BUFFER }; ///< Buffer for matrices UBO
+			const GLuint matrices_binding_point_ = 0;            ///< Binding point for the matrices UBO.
         };
 
 	} // namespace Graphics

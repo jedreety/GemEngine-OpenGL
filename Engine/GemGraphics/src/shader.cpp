@@ -246,6 +246,18 @@ namespace Gem {
 			}
 		}
 
+		void Shader::bind_uniform_block(const std::string& blockName, GLuint bindingPoint) {
+			// Get the index of the uniform block
+			GLuint blockIndex = glGetUniformBlockIndex(ID_, blockName.c_str());
+			if (blockIndex == GL_INVALID_INDEX) {
+				std::cerr << "WARNING::SHADER::bind_uniform_block: Uniform block '" << blockName << "' not found." << std::endl;
+				return;
+			}
+
+			// Bind the uniform block to the binding point
+			glUniformBlockBinding(ID_, blockIndex, bindingPoint);
+		}
+
 		// Equality operator
 		bool Shader::operator==(const Shader& other) const noexcept {
 			return ID_ == other.ID_;

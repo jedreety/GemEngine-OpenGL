@@ -5,8 +5,12 @@ layout(location = 0) in vec3 vertex_position; // vertex position attribute
 layout(location = 1) in vec2 aTexCoord;
 layout(location = 2) in vec3 aNormal;
 
-uniform mat4 viewMatrix;
-uniform mat4 projectionMatrix;
+// Uniform block for matrices
+layout(std140) uniform Matrices {
+    mat4 projectionMatrix;
+    mat4 viewMatrix;
+};
+
 uniform mat4 modelMatrix;
 
 out vec3 Normals;

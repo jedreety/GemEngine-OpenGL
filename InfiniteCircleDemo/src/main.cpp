@@ -10,6 +10,8 @@
 #include <Gem/Core/timer.h>
 #include <Gem/Networking/network_server.h>
 #include <Gem/Networking/network_client.h>
+#include <Gem/Graphics/textures/tex_2D.h>
+#include <Gem/Core/texture_binder.h>
 
 #pragma warning(disable:4996) // Disable specific compiler warning
 
@@ -83,6 +85,29 @@ void game() {
 	Gem::Graphics::Shapes::Sphere outer_sphere(300, 500, 500); // Outer boundary with radius 100
 	Gem::Graphics::Shapes::Sphere boxed_sphere(350); // Additional sphere for visual reference
 	Gem::Graphics::Shapes::Sphere player_sphere(1); // Small sphere representing the player
+	Gem::Core::TextureBinder binder;
+
+	Gem::Graphics::Texture2D texture; // Load a texture for the player sphere
+	texture.set_path("src/");
+	texture.set_mag_filter(GL_NEAREST);
+	texture.load_texture("dirt.png");
+
+	Gem::Graphics::Texture2D texture1; // Load a texture for the player sphere
+	texture1.set_path("src/");
+	texture1.set_mag_filter(GL_NEAREST);
+	texture1.load_texture("leaves.png");
+
+
+	Gem::Graphics::Texture2D texture2; // Load a texture for the player sphere
+	texture2.set_path("src/");
+	texture2.set_mag_filter(GL_NEAREST);
+	texture2.load_texture("player.png");
+
+	binder.bind_texture(&texture, 0);
+	binder.bind_texture(&texture1, 1);
+	binder.bind_texture(&texture2, 2);
+
+	shader.add_uniform_location("texture_diffuse");
 
 	Gem::Core::Timer timer; // Timer to keep track of frame times
 
@@ -121,6 +146,8 @@ void game() {
 			oldPosition_ = moved_position; // Update the old position
 		}
 
+		shader.set_uniform("texture_diffuse", 2);
+
 		// Render all other players in the scene
 		for (const auto& player : otherPlayersPositions_) {
 			model = glm::mat4(1.0f); // Reset model matrix
@@ -133,14 +160,19 @@ void game() {
 		model = glm::mat4(1.0f); // Reset model matrix for static objects
 		shader.set_uniform_matrix("modelMatrix", glm::value_ptr(model), 1, GL_FALSE, GL_FLOAT_MAT4);
 
-		inner_sphere.render(); // Draw inner boundary
-		outer_sphere.render(); // Draw outer boundary
+		shader.set_uniform("texture_diffuse", 0);
 		boxed_sphere.render(); // Draw additional sphere
+		inner_sphere.render(); // Draw inner boundary
+
+		shader.set_uniform("texture_diffuse", 1);
+		outer_sphere.render(); // Draw outer boundary
+
 
 		window.post_frame(); // Swap buffers and poll events
 	}
 
 	// Cleanup resources after the game loop ends
+	binder.unbind_all();
 	shader.cleanup();
 	client.Stop(); // Disconnect the client from the server
 	Gem::GLFW::terminate(); // Terminate GLFW and clean up resources
